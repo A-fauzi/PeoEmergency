@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "585269502793",
+    "firebase_url": "https://peopleemergency-b8f7f-default-rtdb.firebaseio.com",
+    "project_id": "peopleemergency-b8f7f",
+    "storage_bucket": "peopleemergency-b8f7f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:585269502793:android:a53f03d440e610d6b8f098",
+        "android_client_info": {
+          "package_name": "com.afauzi.peoemergency"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "585269502793-8flvv15iahn1kl7m4eu9vgpm629iodbc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRkAW4nQMSjoSz32bsz23B8o8R7CyeZI4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "585269502793-8flvv15iahn1kl7m4eu9vgpm629iodbc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
