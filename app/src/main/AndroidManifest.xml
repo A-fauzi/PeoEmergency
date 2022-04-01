@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MySplash">
+        android:theme="@style/Theme.PeoEmergency">
         <activity
             android:name=".screen.auth.SignUpActivity"
             android:exported="false" />
@@ -23,6 +23,7 @@
             android:exported="false" />
         <activity
             android:name=".screen.LandingActivity"
+            android:theme="@style/Theme.MySplash"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
