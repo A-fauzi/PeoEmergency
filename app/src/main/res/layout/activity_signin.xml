@@ -1,9 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="@dimen/root_view_padding"
     tools:context=".screen.auth.SignInActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/sample_logo"
+        android:adjustViewBounds="true"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/outlinedTextFieldEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:boxCornerRadiusBottomEnd="20dp"
+        app:boxCornerRadiusBottomStart="20dp"
+        app:boxCornerRadiusTopEnd="20dp"
+        app:boxCornerRadiusTopStart="20dp"
+        app:hintTextColor="@color/black"
+        android:hint="Email"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_email_sign_in"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/outlinedTextFieldPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:boxCornerRadiusBottomEnd="20dp"
+        app:boxCornerRadiusBottomStart="20dp"
+        app:boxCornerRadiusTopEnd="20dp"
+        app:boxCornerRadiusTopStart="20dp"
+        app:hintTextColor="@color/black"
+        android:hint="Password"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_password_sign_in"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progres_sign_in"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:indeterminate="true"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_login_sign_in"
+        android:layout_width="@dimen/button_width"
+        android:layout_height="@dimen/button_height"
+        app:cornerRadius="@dimen/button_radius"
+        android:layout_gravity="center"
+        android:text="register"/>
+
+</LinearLayout>
