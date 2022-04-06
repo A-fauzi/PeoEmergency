@@ -70,6 +70,6 @@
         android:layout_height="@dimen/button_height"
         app:cornerRadius="@dimen/button_radius"
         android:layout_gravity="center"
-        android:text="register"/>
+        android:text="login"/>
 
 </LinearLayout>

@@ -1,42 +1,78 @@
 package com.afauzi.peoemergency.screen.auth
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.EditText
 import com.afauzi.peoemergency.databinding.ActivitySignUpBinding
 import com.afauzi.peoemergency.screen.main.MainActivity
+import com.afauzi.peoemergency.utils.FirebaseServiceInstance
+import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
+import com.afauzi.peoemergency.utils.FirebaseServiceInstance.databaseReference
+import com.afauzi.peoemergency.utils.FirebaseServiceInstance.firebaseDatabase
+import com.afauzi.peoemergency.utils.MyLog
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.HashMap
 
+@SuppressLint("SimpleDateFormat")
 class SignUpActivity : AppCompatActivity() {
 
+    private lateinit var log: MyLog
+
+    /**
+     * Declaration viewBinding
+     */
     private lateinit var binding: ActivitySignUpBinding
 
+    /**
+     * Declaration editText username
+     */
     private lateinit var username: EditText
+
+    /**
+     * Declaration editText email
+     */
     private lateinit var email: EditText
+
+    /**
+     * Declaration editText password
+     */
     private lateinit var password: EditText
+
+    /**
+     * Declaration editText password confirmation
+     */
     private lateinit var passwordConfirm: EditText
 
     /**
-     * declaration for firebase authentication
+     * Declaration simpleDateFormat milik java
      */
-    private lateinit var auth: FirebaseAuth
+    private lateinit var simpleDateFormat: SimpleDateFormat
 
     /**
-     * declaration for firebase realtimedatabase
+     * Declaration calendar milik java
      */
-    private lateinit var databaseReference: DatabaseReference
+    private lateinit var calendar: Calendar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        log = MyLog
+
+        // Todo: Initials viewBinding to signup_activity.xml
         binding = ActivitySignUpBinding.inflate(layoutInflater)
+
+        // Todo: setContentView untuk layout root
         setContentView(binding.root)
 
     }
@@ -44,94 +80,242 @@ class SignUpActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        binding.btnRegisterSignUp.setOnClickListener {
-            validate()
-        }
+        /**
+         * initials button register
+         */
+        val buttonRegister = binding.btnRegisterSignUp
 
-    }
-
-    private fun validate() {
-        username = binding.etUsernameSignUp
-        email = binding.etEmailSignUp
-        password = binding.etPasswordSignUp
-        passwordConfirm = binding.etPasswordConfirmSignUp
-
-        if (username.text.toString().trim().isEmpty()) errValidate(username, "username column is required!")
-        else if (email.text.toString().trim().isEmpty()) errValidate(email, "email column is required!")
-        else if (password.text.toString().trim().isEmpty()) errValidate(password, "password column is required!")
-        else if (passwordConfirm.text.toString().trim().isEmpty()) errValidate(passwordConfirm, "password confirmation column is required!")
-        else {
-
-            if (password.text.toString().length < 8 ) errValidate(password, "password must be 8 character!")
-            else if (passwordConfirm.text.toString().trim() != password.text.toString().trim()) errValidate(passwordConfirm, "password confirmation must be equals with password!")
-            else {
-                binding.progressInSignUp.visibility = View.VISIBLE
-                signUpUsers()
-           }
+        // Todo: Behavior if button onClick
+        buttonRegister.setOnClickListener {
+            Log.i(log.TAG, "button register clicked")
+            // Todo: Handle SignUp user
+            signUpUser()
 
         }
 
     }
 
-    private fun errValidate(inputView: EditText, msg: String) {
-        inputView.error = msg
-        inputView.requestFocus()
-    }
+    /**
+     * Function root handle user to register, have scope function in this function
+     */
+    private fun signUpUser() {
 
-    private fun clearText() {
-        username.text.clear()
-        email.text.clear()
-        password.text.clear()
-        passwordConfirm.text.clear()
-    }
+        /**
+         * Result if validation error
+         */
+        fun errValidate(inputView: EditText, msg: String) {
+            inputView.error = msg
+            inputView.requestFocus()
+        }
 
-    private fun signUpUsers() {
-        username = binding.etUsernameSignUp
-        email = binding.etEmailSignUp
-        password = binding.etPasswordSignUp
+        /**
+         * Methode to text remove or text clear in form
+         */
+        fun clearText() {
+            Log.i(log.TAG, "input clear text")
+            username.text.clear()
+            email.text.clear()
+            password.text.clear()
+            passwordConfirm.text.clear()
+        }
 
-        auth = FirebaseAuth.getInstance()
-        auth.createUserWithEmailAndPassword(email.text.toString().trim(), password.text.toString().trim()).addOnCompleteListener { authResult ->
+        /**
+         * Handle user to signup account
+         */
+        fun signUpUsers() {
+
+            //Todo: Initials editText username
+            username = binding.etUsernameSignUp
+
+            //Todo: Initials editText email
+            email = binding.etEmailSignUp
+
+            //Todo: Initials editText password
+            password = binding.etPasswordSignUp
+
+            // Todo: Mendaftarkan user dengan methode yang sudah disediakan firebase auth, yaitu createUserWithEmailPassword()
+            auth.createUserWithEmailAndPassword(
+
+                // Todo: Dalam tindakan ini email dan password yang akan di gunakan dan disimpan kedalam kredentials firebaseAuth
+                email.text.toString().trim(),
+                password.text.toString().trim()
+
+            ).addOnCompleteListener { authResult ->
+
+                //Todo: Tindakan didalam lambda yang akan menghandle penddaftaran akun
+                // saat memanggil methode addOnCompleteListener() maka akan mengembalikan authResult
+
+                // Todo: memberikan kondisi untuk menangani handle authResult
+                when {
+
+                    //Todo: handle tindakan jika authResult sukses didalam lambda
+                    authResult.isSuccessful -> {
+
+                        // Todo: Informasikan hasil kedalam log
+                        Log.i(log.TAG, "success signup authResult: ${authResult.exception?.message}")
+
+                        // Todo: Initials calendar java
+                        calendar = Calendar.getInstance()
+
+                        // Todo: Initials simpledateFormat, dan berikan pola tanggal didalam parameter Class SimpleDateFormat()
+                        simpleDateFormat = SimpleDateFormat("dd MMM yyyy")
+
+                        /**
+                         * Variabel date berisi nilai date, yang sudah di konversikan dari simpleDateFormat.format() kedalam calendar.time
+                         */
+                        val date: String = simpleDateFormat.format(calendar.time)
+
+                        /**
+                         * User dari hasil auth.currentUser, adalah data user yang telah login
+                         */
+                        val user: FirebaseUser? = auth.currentUser
+
+                        /**
+                         * Mendapatkan id user berdasarkan user dari auth.currentUser
+                         */
+                        val uid = user?.uid
+
+                        // Todo: initials databaseReference untuk mendapatkan reference dari firebaseDatabase / RealtimeDatabase
+                        databaseReference = firebaseDatabase.getReference("users").child(uid!!)
+
+                        /**
+                         * Deklarasi hashMap untuk mengirimkan data key,value yang akan dijadikan struktur data pada realtime database
+                         *
+                         * key : Sebagai reference child key
+                         *
+                         * value: Sebagai value atau nilai data pada database
+                         */
+                        val hashMap: HashMap<String, String> = HashMap()
+                        hashMap["username"] = username.text.toString().trim()
+                        hashMap["email"] = email.text.toString().trim()
+                        hashMap["date_join"] = date
+
+                        // Todo: methode setValue() dari databaseReference untuk mengirim data untuk dijadikan object json didalam struktur database
+                        databaseReference.setValue(hashMap)
+                            // Todo: dalam methode addOnCompleteListener() akan menghandle beberapa tindakan yang mengembalikan databaseResult
+                            .addOnCompleteListener(this) { databaseResult ->
+
+                                // Todo: Memberikan kondisi dan beberapa behaviour jika databaseResult Sukses
+                                if (databaseResult.isSuccessful) {
+
+                                    // Todo: Informasikan hasil kedalam log
+                                    Log.i(log.TAG, "success signup databaseResult : ${databaseResult.exception?.message}")
+
+                                    // Todo: Informasikan hasil kedalam snackbar
+                                    Snackbar.make(
+                                        binding.root,
+                                        "yeeyy account created, happy to join :)",
+                                        Snackbar.LENGTH_SHORT
+                                    ).setBackgroundTint(Color.GREEN).show()
+
+                                    /**
+                                     * Declaration Intent
+                                     */
+                                    val intent = Intent(this, MainActivity::class.java)
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                                    startActivity(intent)
+                                    finish()
+
+                                    //Todo: Call clearTextMethode
+                                    clearText()
+
+                                }
+                                // Todo: Memberikan kondisi dan beberapa behaviour jika databaseResult Not Success
+                                else {
+
+                                    // Todo: Informasikan hasil kedalam log
+                                    Log.e(log.TAG, "failed signup databaseResult : ${databaseResult.exception?.message}")
+
+                                    /**
+                                     * Deklarasi progress loading
+                                     */
+                                    val progressLoader = binding.progressInSignUp
+                                    // Todo: Sembunyikan progress loader
+                                    progressLoader.visibility = View.GONE
+
+                                    // Todo: Menampilkan info pada snackbar
+                                    Snackbar.make(
+                                        binding.root,
+                                        "${databaseResult.exception?.message}",
+                                        Snackbar.LENGTH_SHORT
+                                    ).setBackgroundTint(Color.RED).show()
+
+                                }
+
+                            }.addOnFailureListener(this) { databaseResult ->
+                                // Todo: Informasikan hasil kedalam log
+                                Log.e(log.TAG, "failed signup databasefailure : ${databaseResult.message}")
+
+                                val progressLoader = binding.progressInSignUp
+                                progressLoader.visibility = View.GONE
+
+                                Snackbar.make(
+                                    binding.root,
+                                    "${databaseResult.message}",
+                                    Snackbar.LENGTH_SHORT
+                                ).setBackgroundTint(Color.RED).show()
+                            }
+
+                    }
+                }
+            }.addOnFailureListener(this) { authExcep ->
+                // Todo: Informasikan hasil kedalam log
+                Log.e(log.TAG, "failed signup auth failure  : ${authExcep.message}")
+
+                val progressLoader = binding.progressInSignUp
+                progressLoader.visibility = View.GONE
+
+                Snackbar.make(binding.root, "${authExcep.message}", Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(Color.RED).show()
+            }
+
+        }
+
+        fun validate() {
+            username = binding.etUsernameSignUp
+            email = binding.etEmailSignUp
+            password = binding.etPasswordSignUp
+            passwordConfirm = binding.etPasswordConfirmSignUp
+
             when {
-                authResult.isSuccessful -> {
-                    val user: FirebaseUser? = auth.currentUser
-                    val uid = user?.uid
+                username.text.toString().trim().isEmpty() -> {
+                    Log.i(log.TAG, "username validation signup is empty")
+                    errValidate(username, "username column is required!")
+                }
+                email.text.toString().trim().isEmpty() -> {
+                    Log.i(log.TAG, "email validation signup is empty")
+                    errValidate(email, "email column is required!")
+                }
+                password.text.toString().trim().isEmpty() -> {
+                    Log.i(log.TAG, "password validation signup is empty")
+                    errValidate(password, "password column is required!")
+                }
+                passwordConfirm.text.toString().trim().isEmpty() -> {
+                    Log.i(log.TAG, "password confirmation validation signup is empty")
+                    errValidate(passwordConfirm, "password confirmation column is required!")
+                }
+                else -> {
 
-                    databaseReference = FirebaseDatabase.getInstance().getReference("users").child(uid!!)
-
-                    val hashMap: HashMap<String, String> = HashMap()
-                    hashMap["user_id"] = uid
-                    hashMap["username"] = username.text.toString().trim()
-                    hashMap["email"] = email.text.toString().trim()
-
-                    databaseReference.setValue(hashMap).addOnCompleteListener(this) { databaseResult ->
-
-                        if (databaseResult.isSuccessful) {
-                            Snackbar.make(binding.root, "success registry for user", Snackbar.LENGTH_SHORT).setBackgroundTint(Color.GREEN).show()
-                            val intent = Intent(this, MainActivity::class.java)
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                            startActivity(intent)
-                            finish()
-                            clearText()
-                        } else {
-                            binding.progressInSignUp.visibility = View.GONE
-                            Snackbar.make(binding.root, "failed registry for user", Snackbar.LENGTH_SHORT).setBackgroundTint(Color.RED).show()
-                            databaseResult.exception.toString()
+                    when {
+                        password.text.toString().length < 8 -> {
+                            Log.i(log.TAG, "password signup tidak kurang dari 9 character")
+                            errValidate(password, "password must be 8 character!")
                         }
-
-                    }.addOnFailureListener(this) { databaseExcep ->
-                        binding.progressInSignUp.visibility = View.GONE
-                        Snackbar.make(binding.root, "${databaseExcep.message}", Snackbar.LENGTH_SHORT).setBackgroundTint(Color.RED).show()
+                        passwordConfirm.text.toString().trim() != password.text.toString().trim() -> {
+                            Log.i(log.TAG, "password dan password confirmation signup tidak sama")
+                            errValidate(passwordConfirm, "password confirmation must be equals with password!")
+                        }
+                        else -> {
+                            Log.i(log.TAG, "success validation form signup user")
+                            binding.progressInSignUp.visibility = View.VISIBLE
+                            signUpUsers()
+                        }
                     }
 
                 }
             }
-        }.addOnFailureListener(this) { authExcep ->
-            binding.progressInSignUp.visibility = View.GONE
-            Snackbar.make(binding.root, "${authExcep.message}", Snackbar.LENGTH_SHORT).setBackgroundTint(Color.RED).show()
+
         }
-
+        validate()
     }
-
-
 }

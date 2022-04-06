@@ -16,6 +16,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PeoEmergency">
         <activity
+            android:name=".localStorage.activity.EditNoteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".localStorage.activity.NoteActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".screen.main.fragment.activity.accountProfile.EditProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".screen.auth.SignUpActivity"
             android:exported="false" />
         <activity
@@ -23,8 +33,9 @@
             android:exported="false" />
         <activity
             android:name=".screen.LandingActivity"
-            android:theme="@style/Theme.MySplash"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.MySplash">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

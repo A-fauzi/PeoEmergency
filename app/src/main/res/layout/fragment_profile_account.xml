@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".screen.main.fragment.ProfileAccountFragment">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/image_cover_profile"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:background="@color/blue_soft" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/root_view_padding"
+            android:layout_marginTop="@dimen/root_view_padding"
+            android:src="@drawable/ic_baseline_keyboard_arrow_left_24"
+            app:fabSize="mini"
+            app:rippleColor="@color/white" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_more_account_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/root_view_padding"
+            android:layout_marginEnd="@dimen/root_view_padding"
+            android:src="@drawable/ic_baseline_more_vert_24"
+            app:fabSize="mini"
+            app:rippleColor="@color/white" />
+
+        <LinearLayout
+            android:id="@+id/profile_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/image_cover_profile"
+            android:orientation="vertical"
+            android:padding="@dimen/root_view_padding">
+
+
+            <com.google.android.material.button.MaterialButton
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:id="@+id/btn_edit_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_margin="5dp"
+                android:text="Edit profile"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                app:cornerRadius="30dp"
+                app:strokeColor="#2C000000"
+                app:strokeWidth="2dp" />
+
+            <TextView
+                android:id="@+id/username_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="username"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/email_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="email" />
+
+            <TextView
+                android:id="@+id/date_join_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Joined Maret 2022"
+                android:textStyle="italic" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:text="My Post"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/black" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                tools:listitem="@layout/item_list_random_post" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="100dp"
+        android:src="@drawable/ic_baseline_person_24" />
+
+</FrameLayout>
