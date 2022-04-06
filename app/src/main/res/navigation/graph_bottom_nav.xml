@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/graph_bottom_nav.xml"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.afauzi.peoemergency.screen.main.fragment.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment2_to_emergencyFragment2"
+            app:destination="@id/emergencyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/emergencyFragment"
+        android:name="com.afauzi.peoemergency.screen.main.fragment.EmergencyFragment"
+        android:label="fragment_emergency"
+        tools:layout="@layout/fragment_emergency" >
+        <action
+            android:id="@+id/action_emergencyFragment2_to_profileAccountFragment"
+            app:destination="@id/accountFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/accountFragment"
+        android:name="com.afauzi.peoemergency.screen.main.fragment.ProfileAccountFragment"
+        android:label="fragment_profile_account"
+        tools:layout="@layout/fragment_profile_account" />
+</navigation>
