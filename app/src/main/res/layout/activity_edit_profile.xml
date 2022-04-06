@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".screen.main.fragment.activity.accountProfile.EditProfileActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/container_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/root_view_padding"
+                android:layout_marginTop="@dimen/root_view_padding"
+                android:src="@drawable/ic_baseline_keyboard_arrow_left_24"
+                app:fabSize="mini"
+                app:rippleColor="@color/white" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_save_edit_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cornerRadius="30dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="@dimen/root_view_padding"
+                android:layout_marginEnd="@dimen/root_view_padding"
+                android:text="Save"
+                app:rippleColor="@color/white" />
+        </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/container_cover_edit_profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/container_toolbar">
+
+            <ImageView
+                android:id="@+id/image_cover_edit_profile"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:scaleType="centerCrop"
+                android:background="@color/blue_soft"/>
+
+            <ImageView
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_baseline_add_photo_alternate_24"/>
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/profile_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/container_cover_edit_profile"
+            android:orientation="vertical"
+            android:padding="@dimen/root_view_padding">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="35dp"
+                android:text="Username" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_username_edit_profile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="username" />
+
+            <TextView
+                android:id="@+id/email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="35dp"
+                android:text="Email" />
+
+            <TextView
+                android:id="@+id/date_join"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="date" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/photo_profile_edit_profile"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="160dp"
+        android:layout_marginLeft="16dp"
+        android:src="@drawable/ic_baseline_person_24" />
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="180dp"
+        android:layout_marginStart="40dp"
+        android:src="@drawable/ic_baseline_add_photo_alternate_24"/>
+</FrameLayout>

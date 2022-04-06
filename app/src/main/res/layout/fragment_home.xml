@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:paddingTop="@dimen/root_view_padding"
+    android:paddingLeft="@dimen/root_view_padding"
+    android:paddingRight="@dimen/root_view_padding"
+    tools:context=".screen.main.fragment.HomeFragment">
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_list_rand_post"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:itemCount="3"
+        tools:listitem="@layout/item_list_random_post" />
+
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_gravity="bottom|end"
+            android:orientation="vertical">
+
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_emergency_post"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:clickable="true"
+                app:rippleColor="@color/white"
+                android:contentDescription="@string/button_add_post"
+                android:focusable="true"
+                app:fabSize="mini"
+                app:srcCompat="@drawable/ic_baseline_live_help_24"
+                tools:ignore="RtlHardcoded" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_random_post"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:clickable="true"
+                app:rippleColor="@color/white"
+                android:contentDescription="@string/button_add_post"
+                android:focusable="true"
+                app:fabSize="mini"
+                app:srcCompat="@drawable/ic_baseline_edit_24"
+                tools:ignore="RtlHardcoded" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                app:rippleColor="@color/white"
+                android:contentDescription="@string/button_add_post"
+                android:focusable="true"
+                app:fabSize="normal"
+                app:srcCompat="@drawable/ic_baseline_add_24" />
+
+        </LinearLayout>
+
+
+</FrameLayout>
