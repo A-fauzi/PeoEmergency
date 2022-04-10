@@ -8,9 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.Toast
-import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.databinding.ActivityEditProfileBinding
 import com.afauzi.peoemergency.screen.main.MainActivity
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
@@ -19,10 +17,7 @@ import com.afauzi.peoemergency.utils.FirebaseServiceInstance.firebaseDatabase
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.firebaseStorage
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.storageReference
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.user
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
-import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import java.io.IOException
 import java.util.*
@@ -125,7 +120,7 @@ class EditProfileActivity : AppCompatActivity() {
     private fun saveEditData() {
 
         user = auth.currentUser!!
-        val userId = user!!.uid
+        val userId = user.uid
 
         databaseReference = firebaseDatabase.getReference("users").child(userId)
 

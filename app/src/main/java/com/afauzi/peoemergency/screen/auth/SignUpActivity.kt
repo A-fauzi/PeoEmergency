@@ -10,24 +10,17 @@ import android.view.View
 import android.widget.EditText
 import com.afauzi.peoemergency.databinding.ActivitySignUpBinding
 import com.afauzi.peoemergency.screen.main.MainActivity
-import com.afauzi.peoemergency.utils.FirebaseServiceInstance
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.databaseReference
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.firebaseDatabase
-import com.afauzi.peoemergency.utils.MyLog
+import com.afauzi.peoemergency.utils.Library.TAG
+import com.afauzi.peoemergency.utils.Library.currentDate
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.collections.HashMap
 
 @SuppressLint("SimpleDateFormat")
 class SignUpActivity : AppCompatActivity() {
-
-    private lateinit var log: MyLog
 
     /**
      * Declaration viewBinding
@@ -54,20 +47,10 @@ class SignUpActivity : AppCompatActivity() {
      */
     private lateinit var passwordConfirm: EditText
 
-    /**
-     * Declaration simpleDateFormat milik java
-     */
-    private lateinit var simpleDateFormat: SimpleDateFormat
 
-    /**
-     * Declaration calendar milik java
-     */
-    private lateinit var calendar: Calendar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        log = MyLog
 
         // Todo: Initials viewBinding to signup_activity.xml
         binding = ActivitySignUpBinding.inflate(layoutInflater)
@@ -80,14 +63,9 @@ class SignUpActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        /**
-         * initials button register
-         */
-        val buttonRegister = binding.btnRegisterSignUp
-
-        // Todo: Behavior if button onClick
-        buttonRegister.setOnClickListener {
-            Log.i(log.TAG, "button register clicked")
+             // Todo: Behavior if button onClick
+            binding.btnRegisterSignUp.setOnClickListener {
+            Log.i(TAG, "button register clicked")
             // Todo: Handle SignUp user
             signUpUser()
 
@@ -112,7 +90,7 @@ class SignUpActivity : AppCompatActivity() {
          * Methode to text remove or text clear in form
          */
         fun clearText() {
-            Log.i(log.TAG, "input clear text")
+            Log.i(TAG, "input clear text")
             username.text.clear()
             email.text.clear()
             password.text.clear()
@@ -152,18 +130,7 @@ class SignUpActivity : AppCompatActivity() {
                     authResult.isSuccessful -> {
 
                         // Todo: Informasikan hasil kedalam log
-                        Log.i(log.TAG, "success signup authResult: ${authResult.exception?.message}")
-
-                        // Todo: Initials calendar java
-                        calendar = Calendar.getInstance()
-
-                        // Todo: Initials simpledateFormat, dan berikan pola tanggal didalam parameter Class SimpleDateFormat()
-                        simpleDateFormat = SimpleDateFormat("dd MMM yyyy")
-
-                        /**
-                         * Variabel date berisi nilai date, yang sudah di konversikan dari simpleDateFormat.format() kedalam calendar.time
-                         */
-                        val date: String = simpleDateFormat.format(calendar.time)
+                        Log.i(TAG, "success signup authResult: ${authResult.exception?.message}")
 
                         /**
                          * User dari hasil auth.currentUser, adalah data user yang telah login
@@ -188,7 +155,7 @@ class SignUpActivity : AppCompatActivity() {
                         val hashMap: HashMap<String, String> = HashMap()
                         hashMap["username"] = username.text.toString().trim()
                         hashMap["email"] = email.text.toString().trim()
-                        hashMap["date_join"] = date
+                        hashMap["date_join"] = currentDate
 
                         // Todo: methode setValue() dari databaseReference untuk mengirim data untuk dijadikan object json didalam struktur database
                         databaseReference.setValue(hashMap)
@@ -199,7 +166,7 @@ class SignUpActivity : AppCompatActivity() {
                                 if (databaseResult.isSuccessful) {
 
                                     // Todo: Informasikan hasil kedalam log
-                                    Log.i(log.TAG, "success signup databaseResult : ${databaseResult.exception?.message}")
+                                    Log.i(TAG, "success signup databaseResult : ${databaseResult.exception?.message}")
 
                                     // Todo: Informasikan hasil kedalam snackbar
                                     Snackbar.make(
@@ -224,7 +191,7 @@ class SignUpActivity : AppCompatActivity() {
                                 else {
 
                                     // Todo: Informasikan hasil kedalam log
-                                    Log.e(log.TAG, "failed signup databaseResult : ${databaseResult.exception?.message}")
+                                    Log.e(TAG, "failed signup databaseResult : ${databaseResult.exception?.message}")
 
                                     /**
                                      * Deklarasi progress loading
@@ -244,7 +211,7 @@ class SignUpActivity : AppCompatActivity() {
 
                             }.addOnFailureListener(this) { databaseResult ->
                                 // Todo: Informasikan hasil kedalam log
-                                Log.e(log.TAG, "failed signup databasefailure : ${databaseResult.message}")
+                                Log.e(TAG, "failed signup databasefailure : ${databaseResult.message}")
 
                                 val progressLoader = binding.progressInSignUp
                                 progressLoader.visibility = View.GONE
@@ -260,7 +227,7 @@ class SignUpActivity : AppCompatActivity() {
                 }
             }.addOnFailureListener(this) { authExcep ->
                 // Todo: Informasikan hasil kedalam log
-                Log.e(log.TAG, "failed signup auth failure  : ${authExcep.message}")
+                Log.e(TAG, "failed signup auth failure  : ${authExcep.message}")
 
                 val progressLoader = binding.progressInSignUp
                 progressLoader.visibility = View.GONE
@@ -279,34 +246,34 @@ class SignUpActivity : AppCompatActivity() {
 
             when {
                 username.text.toString().trim().isEmpty() -> {
-                    Log.i(log.TAG, "username validation signup is empty")
+                    Log.i(TAG, "username validation signup is empty")
                     errValidate(username, "username column is required!")
                 }
                 email.text.toString().trim().isEmpty() -> {
-                    Log.i(log.TAG, "email validation signup is empty")
+                    Log.i(TAG, "email validation signup is empty")
                     errValidate(email, "email column is required!")
                 }
                 password.text.toString().trim().isEmpty() -> {
-                    Log.i(log.TAG, "password validation signup is empty")
+                    Log.i(TAG, "password validation signup is empty")
                     errValidate(password, "password column is required!")
                 }
                 passwordConfirm.text.toString().trim().isEmpty() -> {
-                    Log.i(log.TAG, "password confirmation validation signup is empty")
+                    Log.i(TAG, "password confirmation validation signup is empty")
                     errValidate(passwordConfirm, "password confirmation column is required!")
                 }
                 else -> {
 
                     when {
                         password.text.toString().length < 8 -> {
-                            Log.i(log.TAG, "password signup tidak kurang dari 9 character")
+                            Log.i(TAG, "password signup tidak kurang dari 9 character")
                             errValidate(password, "password must be 8 character!")
                         }
                         passwordConfirm.text.toString().trim() != password.text.toString().trim() -> {
-                            Log.i(log.TAG, "password dan password confirmation signup tidak sama")
+                            Log.i(TAG, "password dan password confirmation signup tidak sama")
                             errValidate(passwordConfirm, "password confirmation must be equals with password!")
                         }
                         else -> {
-                            Log.i(log.TAG, "success validation form signup user")
+                            Log.i(TAG, "success validation form signup user")
                             binding.progressInSignUp.visibility = View.VISIBLE
                             signUpUsers()
                         }

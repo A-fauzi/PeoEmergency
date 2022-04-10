@@ -10,7 +10,6 @@ import com.afauzi.peoemergency.databinding.ActivitySigninBinding
 import com.afauzi.peoemergency.screen.main.MainActivity
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
 
 class SignInActivity : AppCompatActivity() {
 

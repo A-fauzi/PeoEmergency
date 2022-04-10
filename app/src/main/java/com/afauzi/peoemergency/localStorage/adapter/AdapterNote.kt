@@ -4,15 +4,12 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.localStorage.ModelNote
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class AdapterNote(
     private val notes: ArrayList<ModelNote>,
@@ -25,11 +22,11 @@ class AdapterNote(
         fun onDelete(note: ModelNote)
     }
 
-    class NoteViewHolder(val itemView: View) : RecyclerView.ViewHolder(itemView){
-        val title = itemView.findViewById<TextView>(R.id.item_title)
-        val description = itemView.findViewById<TextView>(R.id.item_description)
-        val buttonDelete = itemView.findViewById<ExtendedFloatingActionButton>(R.id.item_icon_delete)
-        val mainLayout = itemView.findViewById<RelativeLayout>(R.id.item_main_layout)
+    class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+        val title: TextView = itemView.findViewById(R.id.item_title)
+        val description: TextView = itemView.findViewById(R.id.item_description)
+        val buttonDelete: ExtendedFloatingActionButton = itemView.findViewById(R.id.item_icon_delete)
+        val mainLayout: RelativeLayout = itemView.findViewById(R.id.item_main_layout)
     }
 
     @SuppressLint("NotifyDataSetChanged")

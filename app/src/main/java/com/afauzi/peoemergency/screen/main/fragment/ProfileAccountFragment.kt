@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
-import android.widget.Toast
 import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.databinding.FragmentProfileAccountBinding
 import com.afauzi.peoemergency.screen.auth.SignInActivity
@@ -18,9 +17,6 @@ import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.databaseReference
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.firebaseDatabase
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.user
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 
 class ProfileAccountFragment : Fragment() {
@@ -30,7 +26,7 @@ class ProfileAccountFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentProfileAccountBinding.inflate(inflater, container, false)
         return binding.root

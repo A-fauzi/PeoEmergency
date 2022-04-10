@@ -3,7 +3,6 @@ package com.afauzi.peoemergency.localStorage.activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.databinding.ActivityEditNoteBinding
 import com.afauzi.peoemergency.localStorage.Constant
 import com.afauzi.peoemergency.localStorage.ModelNote
@@ -31,8 +30,7 @@ class EditNoteActivity : AppCompatActivity() {
 
     private fun setUpView() {
 //        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        val intentType = intent.getIntExtra("intent_type", 0)
-        when(intentType){
+        when(intent.getIntExtra("intent_type", 0)){
             Constant.TYPE_CREATE -> {
                 binding.buttonUpdate.visibility = View.GONE
             }
