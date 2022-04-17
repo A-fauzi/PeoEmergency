@@ -2,6 +2,7 @@ package com.afauzi.peoemergency.screen.main.fragment
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -38,6 +39,37 @@ class HomeFragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        getData()
+    }
+
+    private fun getData() {
+
+        user = auth.currentUser!!
+        val uid = user.uid
+
+        databaseReference = firebaseDatabase.getReference("users").child(uid)
+        databaseReference.keepSynced(true)
+        databaseReference.addValueEventListener(object : ValueEventListener {
+            @SuppressLint("SetTextI18n")
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    binding.tvName.text = "Hello ${snapshot.child("username").value.toString()}"
+                    if (snapshot.child("current_location").value.toString() == null){
+                        Toast.makeText(activity, "Location not detected, please on to location", Toast.LENGTH_SHORT).show()
+                    } else {
+                        binding.tvLocation.text = snapshot.child("current_location").value.toString()
+                    }
+                } else {
+                    // Handle if data null or problem network
+                }
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
     }
 
 }

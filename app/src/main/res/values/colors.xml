@@ -25,6 +25,8 @@
     <color name="yellow_soft">#ffbd69</color>
     <color name="blue_soft">#7f86ff</color>
 
+    <color name="input_disabled">#1E0E0E0E</color>
+
     <color name="transparant">#00FFFFFF</color>
 
 </resources>

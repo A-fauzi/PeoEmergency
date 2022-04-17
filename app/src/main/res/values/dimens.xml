@@ -4,4 +4,5 @@
     <dimen name="button_radius">25dp</dimen>
     <dimen name="root_view_padding">16dp</dimen>
     <dimen name="button_height">65dp</dimen>
+    <dimen name="radius_card_circle">30dp</dimen>
 </resources>

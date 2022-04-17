@@ -14,4 +14,25 @@
     <string name="text2">See Your Location</string>
     <string name="just_tap_to_button_to_call">Just tap to button to call</string>
     <string name="emergency_help_nneeded">Emergency help\nneeded?</string>
+    <string name="add_photo_profile">Add Photo Profile</string>
+    <string name="image_logo_content_desc">Image Logo</string>
+    <string name="txt_btn_sign_in">Sign In</string>
+    <string name="txt_btn_sign_up">Sign Up</string>
+    <string name="txt_input_hint_email">Email</string>
+    <string name="txt_input_hint_password">Password</string>
+    <string name="txt_warn_email">*email not valid, email is required unique character \'@\'</string>
+    <string name="txt_warn_password">*password min 8 character</string>
+    <string name="txt_input_hint_username">Username</string>
+    <string name="txt_warn_username">*username min 5 character</string>
+    <string name="txt_input_hint_pass_conf">Password Confirmation</string>
+    <string name="txt_warn_pass_conf">*confirmation password must equals</string>
+    <string name="provider_sign_up_desc">Sign Up With Provider</string>
+    <string name="heading_signup">Hello!\nSign Up to\nGet Started</string>
+    <string name="txt_signup_provider">Or Sign Up With</string>
+    <string name="txt_question_signup">If you have an account, please\ </string>
+    <string name="txt_link_to_login_page">Sign In</string>
+    <string name="txt_heading_sign_in">Hello Again!\nWelcome\nBack</string>
+    <string name="txt_sign_in_provider">Or Sign In With</string>
+    <string name="txt_question_sign_in">If you do not have an account, please\ </string>
+    <string name="txt_link_to_sign_up">Sign Up</string>
 </resources>

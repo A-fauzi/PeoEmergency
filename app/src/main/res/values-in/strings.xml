@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">PeoEmergency</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Halo di halaman kosong fragment</string>
+    <string name="item_title_home">Rumah</string>
+    <string name="item_title_emergency">Darurat</string>
+    <string name="item_title_account">Akun</string>
+    <string name="lorem">I Go On Twitte, talk to myself, then leave, I Go On Twitte, talk to myself, then leave, I Go On Twitte, talk to myself, then leave</string>
+    <string name="button_add_post">Tombol tamah postingan</string>
+    <string name="data_name">Halo Akhmad</string>
+    <string name="image_profile">Foto Profil</string>
+    <string name="text">Profil Lengkap</string>
+    <string name="data_location">Data lockasi</string>
+    <string name="text2">Lokasi Kamu</string>
+    <string name="just_tap_to_button_to_call">Tekan tombol ini untuk memanggil</string>
+    <string name="emergency_help_nneeded">Darurat membutuhkan pertolongan?</string>
+    <string name="add_photo_profile">Tambah foto profile</string>
+    <string name="image_logo_content_desc">Gambar logo</string>
+    <string name="txt_btn_sign_in">Masuk</string>
+    <string name="txt_btn_sign_up">Daftar</string>
+    <string name="txt_input_hint_email">Email</string>
+    <string name="txt_input_hint_password">Katasandi</string>
+    <string name="txt_warn_email">*email tidak valid, tidak terdapat karakter unik \'@\'</string>
+    <string name="txt_warn_password">*katasandi minimal 8 character</string>
+    <string name="txt_input_hint_username">Nama user</string>
+    <string name="txt_warn_username">*nama user minimal 5 character</string>
+    <string name="txt_input_hint_pass_conf">Konfirmasi password</string>
+    <string name="txt_warn_pass_conf">*konfirmasi password harus sama</string>
+</resources>
