@@ -59,21 +59,27 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:background="@color/white"
-                    android:src="@drawable/ic_baseline_mode_comment_24" />
+                    android:src="@drawable/ic_baseline_chat_bubble_outline_24"
+                    app:tint="@color/black"
+                    android:foreground="?attr/selectableItemBackground"/>
 
                 <ImageButton
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_marginStart="16dp"
                     android:background="@color/white"
-                    android:src="@drawable/ic_baseline_favorite_border_24" />
+                    android:src="@drawable/ic_baseline_favorite_border_24"
+                    app:tint="@color/black"
+                    android:foreground="?attr/selectableItemBackground"/>
 
                 <ImageButton
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_marginStart="16dp"
                     android:background="@color/white"
-                    android:src="@drawable/ic_baseline_share_24" />
+                    android:src="@drawable/ic_baseline_share_24"
+                    app:tint="@color/black"
+                    android:foreground="?attr/selectableItemBackground"/>
 
             </LinearLayout>
 

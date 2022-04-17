@@ -1,104 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     tools:context=".screen.main.fragment.HomeFragment">
 
-<!--  Container 1  -->
-    <RelativeLayout
-        android:id="@+id/container_1"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent">
+        android:orientation="vertical">
 
+        <include layout="@layout/item_list_random_post"/>
+        <include layout="@layout/item_list_random_post"/>
+        <include layout="@layout/item_list_random_post"/>
+        <include layout="@layout/item_list_random_post"/>
+        <include layout="@layout/item_list_random_post"/>
+        <include layout="@layout/item_list_random_post"/>
+        <include layout="@layout/item_list_random_post"/>
+    </LinearLayout>
 
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cv_image_profile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            app:cardCornerRadius="8dp"
-            android:clickable="true"
-            android:foreground="?attr/selectableItemBackground"
-            android:focusable="true">
-
-            <ImageView
-                android:id="@+id/iv_profile"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                tools:src="@tools:sample/avatars"
-                android:contentDescription="@string/image_profile" />
-
-
-        </androidx.cardview.widget.CardView>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/cv_image_profile"
-            android:orientation="vertical"
-            android:layout_centerVertical="true">
-
-            <TextView
-                android:id="@+id/tv_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
-                android:textStyle="bold"
-                android:text="Hello Name"
-                android:layout_marginBottom="8dp"/>
-
-            <TextView
-                android:id="@+id/tv_detail_profile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text"
-                android:textStyle="italic"/>
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_toStartOf="@id/ic_location"
-            android:layout_centerVertical="true">
-
-            <TextView
-                android:id="@+id/tv_location"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
-                android:textStyle="bold"
-                android:text="@string/data_location"
-                android:layout_marginBottom="8dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/text2"
-                android:textStyle="italic"/>
-        </LinearLayout>
-
-        <ImageView
-            android:id="@+id/ic_location"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:contentDescription="@string/image_profile"
-            android:src="@drawable/round_location_on_20" />
-
-
-
-    </RelativeLayout>
-
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

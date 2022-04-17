@@ -26,4 +26,13 @@
     <string name="txt_warn_username">*nama user minimal 5 character</string>
     <string name="txt_input_hint_pass_conf">Konfirmasi password</string>
     <string name="txt_warn_pass_conf">*konfirmasi password harus sama</string>
+    <string name="provider_sign_up_desc">Daftar dengan provider</string>
+    <string name="heading_signup">Halo!\nDaftar untuk\nMemulai</string>
+    <string name="txt_signup_provider">Atau daftar dengan</string>
+    <string name="txt_question_signup">Jika kamu sudah memiliki akun, silahkan\ </string>
+    <string name="txt_link_to_login_page">Masuk</string>
+    <string name="txt_heading_sign_in">Halo Lagi!\nSelamat Datang\nKembali</string>
+    <string name="txt_sign_in_provider">Atau masuk dengan</string>
+    <string name="txt_question_sign_in">Jika kamu tidak memiliki akun, silahkan\ </string>
+    <string name="txt_link_to_sign_up">Daftar</string>
 </resources>
