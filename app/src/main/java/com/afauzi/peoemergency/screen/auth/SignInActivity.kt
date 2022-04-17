@@ -31,6 +31,8 @@ class SignInActivity : AppCompatActivity() {
     private lateinit var textWarnEmail: TextView
     private lateinit var textWarnPassword: TextView
     private lateinit var linkToSignUp: TextView
+    private lateinit var emailInputLayout: TextInputLayout
+    private lateinit var passwordInputLayout: TextInputLayout
 
     private fun initView() {
         email = binding.etEmailSignIn
@@ -41,6 +43,8 @@ class SignInActivity : AppCompatActivity() {
         textWarnPassword = binding.tvWarnPassword
         textFieldPassword = binding.outlinedTextFieldPassword
         linkToSignUp = binding.tvLinkToSignUp
+        emailInputLayout = binding.outlinedTextFieldEmail
+        passwordInputLayout = binding.outlinedTextFieldPassword
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,6 +61,7 @@ class SignInActivity : AppCompatActivity() {
         super.onResume()
 
         btnLogin.setOnClickListener {
+            setFormEnable(false, R.color.input_disabled)
             signInUser()
             progressBar.visibility = View.VISIBLE
         }
@@ -84,6 +89,7 @@ class SignInActivity : AppCompatActivity() {
                 finish()
                 clearText()
             } else {
+                setFormEnable(true, R.color.white)
                 val snackbar = Snackbar.make(
                     binding.root,
                     "${authResult.exception?.message}",
@@ -94,6 +100,16 @@ class SignInActivity : AppCompatActivity() {
                 progressBar.visibility = View.GONE
             }
 
+        }.addOnFailureListener { authFailure ->
+            setFormEnable(true, R.color.white)
+            val snackbar = Snackbar.make(
+                binding.root,
+                "${authFailure.message}",
+                Snackbar.LENGTH_SHORT
+            )
+            snackbar.setBackgroundTint(Color.RED)
+            snackbar.show()
+            progressBar.visibility = View.GONE
         }
 
     }
@@ -171,5 +187,13 @@ class SignInActivity : AppCompatActivity() {
 
     }
 
+    private fun setFormEnable(condition: Boolean, setBackBoxColor: Int){
+
+        email.isEnabled = condition
+        emailInputLayout.setBoxBackgroundColorResource(setBackBoxColor)
+
+        password.isEnabled = condition
+        passwordInputLayout.setBoxBackgroundColorResource(setBackBoxColor)
+    }
 
 }
