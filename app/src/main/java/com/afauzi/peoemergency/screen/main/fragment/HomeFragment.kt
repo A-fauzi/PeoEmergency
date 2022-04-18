@@ -2,8 +2,10 @@ package com.afauzi.peoemergency.screen.main.fragment
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
@@ -44,11 +46,23 @@ class HomeFragment : Fragment(){
 
     private lateinit var layout: View
     private lateinit var binding: FragmentHomeBinding
-    private lateinit var fabAddPost: ExtendedFloatingActionButton
+    private lateinit var username: TextView
+    private lateinit var inputContentDescPost: EditText
+    private lateinit var chooseImagePost: ImageView
+    private lateinit var attachFile: ImageView
+    private lateinit var moreMenu: ImageView
+    private lateinit var imageReceiverCapture: ImageView
+    private lateinit var btnPost: Button
 
     private fun initView() {
-        fabAddPost = binding.fabAddPostRandom
         layout = binding.mainLayout
+        username = binding.usernameInDialog
+        inputContentDescPost = binding.etContentDescDialog
+        chooseImagePost = binding.inputPhotoDialog
+        attachFile = binding.attachFileDialog
+        moreMenu = binding.moreMenuDialog
+        btnPost = binding.buttonPostDialog
+        imageReceiverCapture = binding.ivReceiveImageCapture
     }
 
     override fun onCreateView(
@@ -65,24 +79,6 @@ class HomeFragment : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        fabAddPost.setOnClickListener {
-            showBottomDialogPost()
-        }
-
-    }
-
-    @SuppressLint("InflateParams")
-    private fun showBottomDialogPost(){
-        val dialog =  BottomSheetDialog(requireActivity())
-        val view = layoutInflater.inflate(R.layout.dialog_post, null)
-        val photoProfile = view.findViewById<ImageView>(R.id.image_profile_dialog)
-        val username = view.findViewById<TextView>(R.id.username_in_dialog)
-        val btnPost = view.findViewById<Button>(R.id.button_post_dialog)
-        val inputContentDescPost = view.findViewById<EditText>(R.id.et_content_desc_dialog)
-        val chooseImagePost = view.findViewById<ImageView>(R.id.input_photo_dialog)
-        val attachFile = view.findViewById<ImageView>(R.id.attach_file_dialog)
-        val moreMenu = view.findViewById<ImageView>(R.id.more_menu_dialog)
 
         // Code get username from database
         auth.currentUser.let {
@@ -132,6 +128,7 @@ class HomeFragment : Fragment(){
             return
         }
 
+
         /**
          * Menerima inputan description
          */
@@ -154,8 +151,6 @@ class HomeFragment : Fragment(){
         // Btn Post
         btnPost.setOnClickListener {
 
-            dialog.dismiss()
-
             mFusedLocation.lastLocation.addOnSuccessListener(requireActivity()
             ) { location ->
                 val latitude = location?.latitude
@@ -170,12 +165,6 @@ class HomeFragment : Fragment(){
 
             Library.clearText(inputContentDescPost)
         }
-
-
-        dialog.setContentView(view)
-        dialog.setCancelable(true)
-        dialog.show()
-
     }
 
     fun View.showSnackbar(
@@ -222,9 +211,16 @@ class HomeFragment : Fragment(){
         }
     }
 
-    fun capturePhoto() {
+    private fun capturePhoto() {
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         startActivityForResult(cameraIntent, REQUEST_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE && data != null) {
+            imageReceiverCapture.setImageBitmap(data.extras?.get("data") as Bitmap)
+        }
     }
 
 }
