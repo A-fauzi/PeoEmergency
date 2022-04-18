@@ -2,7 +2,10 @@ package com.afauzi.peoemergency.screen.main.fragment
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +14,7 @@ import android.view.Window
 import android.widget.*
 import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.databinding.FragmentHomeBinding
+import com.afauzi.peoemergency.screen.LandingActivity
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.databaseReference
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.firebaseDatabase
@@ -18,9 +22,14 @@ import com.afauzi.peoemergency.utils.FirebaseServiceInstance.user
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.*
 
 class HomeFragment : Fragment(){
+
+    companion object {
+        const val TAG = "HomeFragment"
+    }
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var fabAddPost: ExtendedFloatingActionButton
@@ -38,7 +47,6 @@ class HomeFragment : Fragment(){
 
         initView()
 
-
         return binding.root
     }
 
@@ -46,7 +54,6 @@ class HomeFragment : Fragment(){
         super.onViewCreated(view, savedInstanceState)
 
         fabAddPost.setOnClickListener {
-            Toast.makeText(activity, "Fab Clicked", Toast.LENGTH_SHORT).show()
             showBottomDialogPost()
         }
 
@@ -64,8 +71,44 @@ class HomeFragment : Fragment(){
         val attachFile = view.findViewById<ImageView>(R.id.attach_file_dialog)
         val moreMenu = view.findViewById<ImageView>(R.id.more_menu_dialog)
 
+        auth.currentUser.let {
+            if (it != null) {
+                databaseReference = firebaseDatabase.getReference("users").child(it.uid)
+                databaseReference.addValueEventListener(object : ValueEventListener{
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists()) {
+                            username.text = snapshot.child("username").value.toString()
+                        } else {
+                            username.text = null
+                        }
+                    }
+                    override fun onCancelled(error: DatabaseError) {
+                        Snackbar.make(
+                            binding.root,
+                            "Sorry, Error: ${error.message}",
+                            Snackbar.LENGTH_SHORT
+                        ).setBackgroundTint(Color.RED).show()
+                    }
+
+                })
+            } else {
+                Toast.makeText(activity, "User not authentication", Toast.LENGTH_SHORT).show()
+                val intent = Intent(requireActivity(), LandingActivity::class.java)
+                startActivity(intent)
+            }
+        }
+
+        /**
+         * Menerima inputan description
+         */
+        val receiveInputDesc = inputContentDescPost.text
+
+        btnPost.setOnClickListener {
+            Log.i(TAG, "$receiveInputDesc")
+        }
+
         dialog.setContentView(view)
-        dialog.setCancelable(false)
+        dialog.setCancelable(true)
         dialog.show()
 
     }

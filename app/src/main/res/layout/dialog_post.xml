@@ -54,7 +54,7 @@
         android:hint="Write something..."
         android:background="@color/transparant"
         android:autofillHints="About this content"
-        android:inputType="text" />
+        android:inputType="textMultiLine" />
 
     <RelativeLayout
         android:layout_width="match_parent"
