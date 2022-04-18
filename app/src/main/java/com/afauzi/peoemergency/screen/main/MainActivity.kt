@@ -1,5 +1,7 @@
 package com.afauzi.peoemergency.screen.main
 
+import android.app.Activity
+import android.content.pm.PackageManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,6 +9,8 @@ import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.afauzi.peoemergency.R
@@ -56,7 +60,7 @@ class MainActivity : AppCompatActivity() {
             when{
                 permission.getOrDefault(android.Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
                     // Precise location access granted
-                    Toast.makeText(this, "Than", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Thanks for permission access granted", Toast.LENGTH_SHORT).show()
                 }
                 permission.getOrDefault(android.Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
                     // Only approximate location access granted
@@ -73,9 +77,7 @@ class MainActivity : AppCompatActivity() {
         // rationale dialog. For more details, see Request permissions.
         locationPermissionRequest.launch(arrayOf(
             android.Manifest.permission.ACCESS_FINE_LOCATION,
-            android.Manifest.permission.ACCESS_COARSE_LOCATION))
+            android.Manifest.permission.ACCESS_COARSE_LOCATION
+        ))
     }
-
-
-
 }

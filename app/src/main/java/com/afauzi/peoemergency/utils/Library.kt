@@ -13,7 +13,10 @@ object Library {
      * Declaration simpleDateFormat milik java
      */
     @SuppressLint("SimpleDateFormat")
-    val simpleDateFormat: SimpleDateFormat = SimpleDateFormat("dd MMM yyyy")
+    private val simpleDateFormat: SimpleDateFormat = SimpleDateFormat("dd MMM yyyy")
+
+    @SuppressLint("SimpleDateFormat")
+    private val simpleDateFormatAndTime: SimpleDateFormat = SimpleDateFormat("dd MMM yyyy | hh:mm:ss zzz")
 
     /**
      * Declaration calendar milik java plus getInstance()
@@ -24,6 +27,7 @@ object Library {
      * Variabel date berisi nilai date, yang sudah di konversikan dari simpleDateFormat.format() kedalam calendar.time
      */
     val currentDate: String = simpleDateFormat.format(calendar.time)
+    val currentDateTime: String = simpleDateFormatAndTime.format(calendar.time)
 
     /**
      * LOG
