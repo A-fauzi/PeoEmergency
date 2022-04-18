@@ -53,7 +53,7 @@
                 android:text="@string/lorem" />
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardView_content_random_post"
+                android:id="@+id/item_cardView_content_random_post"
                 android:layout_width="300dp"
                 android:layout_height="150dp"
                 android:clickable="true"

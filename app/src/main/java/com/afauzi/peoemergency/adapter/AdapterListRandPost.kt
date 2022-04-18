@@ -17,11 +17,13 @@ class AdapterListRandPost(
     private val listItemRandomPost: ArrayList<ModelItemRandomPost>
     ): RecyclerView.Adapter<AdapterListRandPost.ViewHolder>() {
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        val usernameAndDate: TextView = itemView.findViewById(R.id.username_and_date_random_post)
-        val photoProfile: ImageView = itemView.findViewById(R.id.profile_photo_random_post)
-        val descPost: TextView = itemView.findViewById(R.id.descript_random_post)
-        val media: ImageView = itemView.findViewById(R.id.media_random_post)
-        val cardContent: CardView = itemView.findViewById(R.id.cardView_content_random_post)
+        val username: TextView = itemView.findViewById(R.id.item_name)
+        val photoProfile: ImageView = itemView.findViewById(R.id.item_photo_profile)
+        val postLocation: TextView = itemView.findViewById(R.id.item_location_post)
+        val postDesc: TextView = itemView.findViewById(R.id.item_description_post)
+        val postDate: TextView = itemView.findViewById(R.id.item_date_post)
+        val postImage: ImageView = itemView.findViewById(R.id.item_image_post)
+        val cardContent: CardView = itemView.findViewById(R.id.item_cardView_content_random_post)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -32,10 +34,12 @@ class AdapterListRandPost(
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentItem = listItemRandomPost[position]
-        holder.usernameAndDate.text = "${currentItem.username} | ${currentItem.date}"
-        Picasso.get().load(currentItem.profilePhoto).placeholder(R.drawable.ic_baseline_person_24).into(holder.photoProfile)
-        Picasso.get().load(currentItem.media).placeholder(R.drawable.ic_baseline_image_24).into(holder.media)
-        holder.descPost.text = currentItem.desc
+        holder.username.text = currentItem.user.username
+        Picasso.get().load(currentItem.user.photo_profile).placeholder(R.drawable.ic_baseline_person_24).into(holder.photoProfile)
+        holder.postLocation.text = currentItem.post_location
+        holder.postDesc.text = currentItem.post_desc
+        holder.postDate.text = currentItem.post_date
+        Picasso.get().load(currentItem.post_image).placeholder(R.drawable.ic_baseline_image_24).into(holder.postImage)
 
         holder.cardContent.setOnClickListener {
             callClickListener.onClickListener(currentItem)
