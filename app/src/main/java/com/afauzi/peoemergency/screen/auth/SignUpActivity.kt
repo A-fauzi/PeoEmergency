@@ -17,6 +17,7 @@ import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.databaseReference
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.firebaseDatabase
 import com.afauzi.peoemergency.utils.Library.TAG
+import com.afauzi.peoemergency.utils.Library.clearText
 import com.afauzi.peoemergency.utils.Library.currentDate
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
@@ -158,7 +159,11 @@ class SignUpActivity : AppCompatActivity() {
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                                 startActivity(intent)
                                 finish()
-                                clearText()
+
+                                clearText(username)
+                                clearText(email)
+                                clearText(password)
+                                clearText(passwordConfirm)
 
                             } else {
 
@@ -208,16 +213,6 @@ class SignUpActivity : AppCompatActivity() {
         }
 
     }
-
-
-    private fun clearText() {
-        Log.i(TAG, "input clear text")
-        username.text?.clear()
-        email.text?.clear()
-        password.text?.clear()
-        passwordConfirm.text?.clear()
-    }
-
 
     inner class GenericTextWatcher(private val view: View) : TextWatcher {
         override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}

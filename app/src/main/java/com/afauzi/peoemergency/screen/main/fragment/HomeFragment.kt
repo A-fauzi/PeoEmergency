@@ -1,7 +1,6 @@
 package com.afauzi.peoemergency.screen.main.fragment
 
 import android.annotation.SuppressLint
-import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -10,7 +9,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import android.widget.*
 import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.databinding.FragmentHomeBinding
@@ -19,6 +17,7 @@ import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.databaseReference
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.firebaseDatabase
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.user
+import com.afauzi.peoemergency.utils.Library
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -71,6 +70,7 @@ class HomeFragment : Fragment(){
         val attachFile = view.findViewById<ImageView>(R.id.attach_file_dialog)
         val moreMenu = view.findViewById<ImageView>(R.id.more_menu_dialog)
 
+        // Code get username from database
         auth.currentUser.let {
             if (it != null) {
                 databaseReference = firebaseDatabase.getReference("users").child(it.uid)
@@ -104,7 +104,9 @@ class HomeFragment : Fragment(){
         val receiveInputDesc = inputContentDescPost.text
 
         btnPost.setOnClickListener {
-            Log.i(TAG, "$receiveInputDesc")
+            Log.i(TAG, "username: ${username.text}") // data username done
+            Log.i(TAG, "content desc: $receiveInputDesc") // data description done
+            Library.clearText(inputContentDescPost)
         }
 
         dialog.setContentView(view)

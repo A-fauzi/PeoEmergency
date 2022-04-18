@@ -1,6 +1,10 @@
 package com.afauzi.peoemergency.utils
 
 import android.annotation.SuppressLint
+import android.text.Editable
+import android.util.Log
+import android.view.View
+import android.widget.EditText
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -25,5 +29,10 @@ object Library {
      * LOG
      */
     const val TAG = "myAppLog"
+
+    fun clearText(inputText: EditText) {
+        Log.i(TAG, "input clear text")
+        inputText.text?.clear()
+    }
 
 }
