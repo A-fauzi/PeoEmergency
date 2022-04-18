@@ -8,7 +8,9 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.location.Location
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -19,9 +21,11 @@ import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.databinding.FragmentHomeBinding
 import com.afauzi.peoemergency.screen.LandingActivity
+import com.afauzi.peoemergency.screen.main.fragment.activity.home.CameraAction
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.databaseReference
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.firebaseDatabase
@@ -36,8 +40,11 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.*
+import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
 
-class HomeFragment : Fragment(){
+class HomeFragment : Fragment() {
 
     companion object {
         const val TAG = "HomeFragment"
@@ -53,6 +60,8 @@ class HomeFragment : Fragment(){
     private lateinit var moreMenu: ImageView
     private lateinit var imageReceiverCapture: ImageView
     private lateinit var btnPost: Button
+
+    private lateinit var currentPhotoPath: String
 
     private fun initView() {
         layout = binding.mainLayout
@@ -84,7 +93,7 @@ class HomeFragment : Fragment(){
         auth.currentUser.let {
             if (it != null) {
                 databaseReference = firebaseDatabase.getReference("users").child(it.uid)
-                databaseReference.addValueEventListener(object : ValueEventListener{
+                databaseReference.addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         if (snapshot.exists()) {
                             username.text = snapshot.child("username").value.toString()
@@ -92,6 +101,7 @@ class HomeFragment : Fragment(){
                             username.text = null
                         }
                     }
+
                     override fun onCancelled(error: DatabaseError) {
                         Snackbar.make(
                             binding.root,
@@ -151,7 +161,8 @@ class HomeFragment : Fragment(){
         // Btn Post
         btnPost.setOnClickListener {
 
-            mFusedLocation.lastLocation.addOnSuccessListener(requireActivity()
+            mFusedLocation.lastLocation.addOnSuccessListener(
+                requireActivity()
             ) { location ->
                 val latitude = location?.latitude
                 val longitude = location?.longitude
@@ -184,23 +195,34 @@ class HomeFragment : Fragment(){
         }
     }
 
-    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
-        if (isGranted) {
-            Log.i(TAG, "Permission: Granted")
-        } else {
-            Log.i(TAG, "Permission: Denied")
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+            if (isGranted) {
+                Log.i(TAG, "Permission: Granted")
+            } else {
+                Log.i(TAG, "Permission: Denied")
+            }
         }
-    }
 
     fun onClickRequestPermission(view: View) {
         when {
-            ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED -> {
+            ContextCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED -> {
 //                layout.showSnackbar(view, getString(R.string.permission_granted), Snackbar.LENGTH_INDEFINITE, null
 //                ) {}
-                capturePhoto()
+                startActivity(Intent(requireActivity(), CameraAction::class.java))
             }
-            ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.CAMERA) -> {
-                layout.showSnackbar(view, getString(R.string.permission_required), Snackbar.LENGTH_INDEFINITE, getString(R.string.ok)
+            ActivityCompat.shouldShowRequestPermissionRationale(
+                requireActivity(),
+                Manifest.permission.CAMERA
+            ) -> {
+                layout.showSnackbar(
+                    view,
+                    getString(R.string.permission_required),
+                    Snackbar.LENGTH_INDEFINITE,
+                    getString(R.string.ok)
                 ) {
                     requestPermissionLauncher.launch(Manifest.permission.CAMERA)
                 }
@@ -210,17 +232,4 @@ class HomeFragment : Fragment(){
             }
         }
     }
-
-    private fun capturePhoto() {
-        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startActivityForResult(cameraIntent, REQUEST_CODE)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE && data != null) {
-            imageReceiverCapture.setImageBitmap(data.extras?.get("data") as Bitmap)
-        }
-    }
-
 }
