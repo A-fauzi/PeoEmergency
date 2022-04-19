@@ -79,7 +79,7 @@ class HomeFragment : Fragment() {
             if (permissionGranted) {
                 startActivity(Intent(requireActivity(), CameraAction::class.java))
             } else {
-                Snackbar.make(binding.root, "The camera permission is required", Snackbar.LENGTH_INDEFINITE).show()
+                Snackbar.make(binding.root, "The camera permission is required", Snackbar.LENGTH_SHORT).setBackgroundTint(Color.RED).show()
             }
         }
 
@@ -162,6 +162,5 @@ class HomeFragment : Fragment() {
             }
         }
     }
-
 
 }

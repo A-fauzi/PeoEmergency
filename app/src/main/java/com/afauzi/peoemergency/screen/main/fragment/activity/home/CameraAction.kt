@@ -1,5 +1,6 @@
 package com.afauzi.peoemergency.screen.main.fragment.activity.home
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
@@ -54,6 +55,11 @@ class CameraAction : AppCompatActivity() {
         binding.btnCaptureImage.setOnClickListener {
             takePhoto()
             animateFlash()
+        }
+
+        binding.btnGallery.setOnClickListener {
+            val intent = Intent(this, GalleryActivity::class.java)
+            startActivity(intent)
         }
         binding.btnSwitchCamera.setOnClickListener {
             cameraSelector = if (cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA) {

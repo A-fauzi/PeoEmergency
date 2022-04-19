@@ -25,6 +25,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PeoEmergency">
         <activity
+            android:name=".screen.main.fragment.activity.home.GalleryActivity"
+            android:exported="false" />
+        <activity
             android:name=".screen.main.fragment.activity.home.CameraAction"
             android:exported="false" />
         <activity
@@ -32,7 +35,7 @@
             android:exported="false" />
         <activity
             android:name=".localStorage.activity.NoteActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".screen.main.fragment.activity.accountProfile.EditProfileActivity"
             android:exported="false" />
