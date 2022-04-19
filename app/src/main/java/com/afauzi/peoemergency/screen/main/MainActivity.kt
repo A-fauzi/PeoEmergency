@@ -1,28 +1,31 @@
 package com.afauzi.peoemergency.screen.main
 
-import android.app.Activity
-import android.content.pm.PackageManager
+import android.Manifest
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.databinding.ActivityMainBinding
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import java.util.jar.Manifest
 
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        private const val TAG = "MainActivity"
+    }
 
     private lateinit var binding: ActivityMainBinding
 
     private lateinit var navController : NavController
+
+    private lateinit var layout: View
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,8 +37,9 @@ class MainActivity : AppCompatActivity() {
         navController = findNavController(R.id.mainFragment)
         setupSmoothBottomMenu()
 
+        layout = binding.mainLayout
 
-        checkLocationPermission()
+        checkMultiplePermission()
 
     }
 
@@ -55,29 +59,37 @@ class MainActivity : AppCompatActivity() {
 
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun checkLocationPermission() {
-        val locationPermissionRequest = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){ permission ->
+    private fun checkMultiplePermission() {
+        val applicationPermissionRequest = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){ permission ->
             when{
-                permission.getOrDefault(android.Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
+                permission.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
                     // Precise location access granted
-                    Toast.makeText(this, "Thanks for permission access granted", Toast.LENGTH_SHORT).show()
+                    Log.i(TAG, "Access location is granted")
                 }
-                permission.getOrDefault(android.Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
+                permission.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
                     // Only approximate location access granted
-                    Toast.makeText(this, "Only approximate location access granted", Toast.LENGTH_SHORT).show()
+                    Log.i(TAG, "Access location is Only approximate")
                 }
                 else -> {
                     // No Location access granted
-                    Toast.makeText(this, "Lokasi tidak diizinkan", Toast.LENGTH_SHORT).show()
+                    Log.i(TAG, "Access location not permission and is denied")
                 }
+            }
+
+            if ( permission.getOrDefault(Manifest.permission.CAMERA, false)) {
+                // Precise camera access granted
+                Log.i(TAG, "Access camera is granted")
+            } else {
+                Log.i(TAG, "Access camera is denied")
             }
         }
         // Before you perform the actual permission request, check whether your app
         // already has the permissions, and whether your app needs to show a permission
         // rationale dialog. For more details, see Request permissions.
-        locationPermissionRequest.launch(arrayOf(
-            android.Manifest.permission.ACCESS_FINE_LOCATION,
-            android.Manifest.permission.ACCESS_COARSE_LOCATION
+        applicationPermissionRequest.launch(arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.CAMERA,
         ))
     }
 }
