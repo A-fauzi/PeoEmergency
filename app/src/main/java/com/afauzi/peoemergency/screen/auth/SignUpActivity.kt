@@ -2,7 +2,6 @@ package com.afauzi.peoemergency.screen.auth
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -13,22 +12,17 @@ import android.widget.*
 import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.databinding.ActivitySignUpBinding
 import com.afauzi.peoemergency.screen.auth.registerStep.RegisterProfileDetailStep1
-import com.afauzi.peoemergency.screen.main.fragment.activity.accountProfile.EditProfileActivity
-import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
-import com.afauzi.peoemergency.utils.FirebaseServiceInstance.databaseReference
-import com.afauzi.peoemergency.utils.FirebaseServiceInstance.firebaseDatabase
-import com.afauzi.peoemergency.utils.Library.TAG
-import com.afauzi.peoemergency.utils.Library.clearText
 import com.afauzi.peoemergency.utils.Library.currentDate
-import com.afauzi.peoemergency.utils.Library.dialogErrors
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.google.firebase.auth.FirebaseUser
 import kotlin.collections.HashMap
 
 @SuppressLint("SimpleDateFormat")
 class SignUpActivity : AppCompatActivity() {
+
+    companion object {
+        const val TAG = "SignUpActivity"
+    }
 
     /**
      * Declaration viewBinding
@@ -101,12 +95,10 @@ class SignUpActivity : AppCompatActivity() {
         btnRegister.setOnClickListener {
             progressBar.visibility = View.VISIBLE
             setFormEnable(false, R.color.input_disabled)
-            signUpUsers()
+            passingData()
         }
 
         linkToSignIn.setOnClickListener {
-            val intent = Intent(this, SignInActivity::class.java)
-            startActivity(intent)
             finish()
         }
 
@@ -117,86 +109,17 @@ class SignUpActivity : AppCompatActivity() {
 
     }
 
-    private fun signUpUsers() {
-        auth.createUserWithEmailAndPassword(email.text.toString().trim(), password.text.toString().trim()).addOnCompleteListener { authResult ->
-            when {
-                authResult.isSuccessful -> {
-                    Log.i(TAG, "success signup authResult: ${authResult.exception?.message}")
+    private fun passingData() {
 
-                    val user: FirebaseUser? = auth.currentUser
+        val bundle = Bundle()
+        bundle.putString("username", username.text.toString())
+        bundle.putString("email", email.text.toString())
+        bundle.putString("password", password.text.toString())
+        bundle.putString("dateJoin", currentDate)
 
-                    val uid = user?.uid
-
-                    val hashMap: HashMap<String, String> = HashMap()
-                    hashMap["username"] = username.text.toString().trim()
-                    hashMap["email"] = email.text.toString().trim()
-                    hashMap["date_join"] = currentDate
-
-                    databaseReference = firebaseDatabase.getReference("users").child(uid!!)
-
-                    databaseReference.setValue(hashMap)
-                        .addOnCompleteListener(this) { databaseResult ->
-
-                            if (databaseResult.isSuccessful) {
-
-                                Log.i(
-                                    TAG,
-                                    "success signup databaseResult : ${databaseResult.exception?.message}"
-                                )
-
-                                Snackbar.make(
-                                    binding.root,
-                                    "yeeyy account created, happy to join :)",
-                                    Snackbar.LENGTH_SHORT
-                                ).setBackgroundTint(Color.GREEN).show()
-
-                                val intent = Intent(this, RegisterProfileDetailStep1::class.java)
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                                startActivity(intent)
-                                finish()
-
-                                clearText(username)
-                                clearText(email)
-                                clearText(password)
-                                clearText(passwordConfirm)
-
-                            } else {
-
-                                Log.e(
-                                    TAG,
-                                    "failed signup databaseResult : ${databaseResult.exception?.message}"
-                                )
-
-                                setFormEnable(true, R.color.white)
-
-                                progressBar.visibility = View.INVISIBLE
-
-                                dialogErrors(layoutInflater, this, databaseResult.exception?.localizedMessage!!)
-
-                            }
-
-                        }.addOnFailureListener(this) { databaseResult ->
-                            Log.e(
-                                TAG,
-                                "failed signup databasefailure : ${databaseResult.message}"
-                            )
-                            setFormEnable(true, R.color.white)
-
-                            progressBar.visibility = View.INVISIBLE
-
-                            dialogErrors(layoutInflater, this, databaseResult.localizedMessage!!)
-                        }
-
-                }
-            }
-        }.addOnFailureListener(this) { authExcep ->
-            Log.e(TAG, "failed signup auth message  : ${authExcep.message}")
-            setFormEnable(true, R.color.white)
-
-            progressBar.visibility = View.INVISIBLE
-
-            dialogErrors(layoutInflater, this, getString(R.string.txt_error_network))
-        }
+        val intent = Intent(this, RegisterProfileDetailStep1::class.java)
+        intent.putExtras(bundle)
+        startActivity(intent)
 
     }
 

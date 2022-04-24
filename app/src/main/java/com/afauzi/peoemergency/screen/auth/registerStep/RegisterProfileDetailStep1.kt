@@ -1,6 +1,5 @@
 package com.afauzi.peoemergency.screen.auth.registerStep
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,13 +7,6 @@ import android.util.Log
 import android.widget.*
 import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.databinding.ActivityRegisterProfileDetailStep1Binding
-import com.afauzi.peoemergency.utils.FirebaseServiceInstance
-import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
-import com.afauzi.peoemergency.utils.FirebaseServiceInstance.databaseReference
-import com.afauzi.peoemergency.utils.FirebaseServiceInstance.firebaseDatabase
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import com.hbb20.CountryCodePicker
 
 class RegisterProfileDetailStep1 : AppCompatActivity() {
@@ -44,81 +36,41 @@ class RegisterProfileDetailStep1 : AppCompatActivity() {
         setContentView(binding.root)
         initView()
 
-        getData()
+        tvUsername.text = resources.getString(R.string.hi_name, intent.extras?.getString("username"))
+
     }
 
     override fun onResume() {
         super.onResume()
 
         btnNextStep.setOnClickListener {
-            val intent = Intent(this, RegisterProfileStep2::class.java)
-            startActivity(intent)
-
-            dataToStore()
+            passingData()
         }
 
     }
 
-    private fun getData() {
-
-        // Shimmer load open animation view
-        binding.veilLayout.veil()
-
-        FirebaseServiceInstance.user = FirebaseServiceInstance.auth.currentUser!!
-        val uid = FirebaseServiceInstance.user.uid
-
-        FirebaseServiceInstance.databaseReference = FirebaseServiceInstance.firebaseDatabase.getReference("users").child(uid)
-        FirebaseServiceInstance.databaseReference.addValueEventListener(object :
-            ValueEventListener {
-            @SuppressLint("SetTextI18n")
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
-                    val usernameSnapshot = snapshot.child("username").value.toString()
-                    binding.username.text = resources.getString(R.string.hi_name, usernameSnapshot)
-                    // Shimmer load close animation view
-                    binding.veilLayout.unVeil()
-                } else {
-                    // Shimmer load close animation view
-                    binding.veilLayout.unVeil()
-                }
-
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                // Shimmer load close animation view
-                binding.veilLayout.unVeil()
-            }
-
-        })
-    }
-
-    private fun dataToStore() {
+    private fun passingData() {
         val selectOption: Int = radioGroup.checkedRadioButtonId
         val radioButton: RadioButton = findViewById(selectOption)
         val dataGender = radioButton.text
-        Log.i(TAG, "choose gender: $dataGender") // Data Gender Done
-
         val phone = "${codeCountryCodePicker.textView_selectedCountry.text}${phoneNumber.text}"
-        Log.i(TAG, "Phone number: $phone") // Data Phone Number Done
+        val userName = intent.extras?.getString("username")
+        val email = intent.extras?.getString("email")
+        val password = intent.extras?.getString("password")
+        val dateJoin = intent.extras?.getString("dateJoin")
 
+        val bundle = Bundle()
+        bundle.putString("genderStep1", "$dataGender")
+        bundle.putString("phoneStep1", phone)
+        bundle.putString("usernameStep1", userName)
+        bundle.putString("emailStep1", email)
+        bundle.putString("passwordStep1", password)
+        bundle.putString("dateJoinStep1", dateJoin)
 
-        databaseHandlerStore(dataGender, "gender")
-        databaseHandlerStore(phone, "phone")
+        val intent = Intent(this, RegisterProfileStep2::class.java)
+        intent.putExtras(bundle)
+        startActivity(intent)
 
-    }
-
-    private fun databaseHandlerStore(dataSetValue: CharSequence, userChild: String) {
-        val uid = auth.currentUser!!.uid
-        databaseReference = firebaseDatabase.getReference("users").child(uid).child(userChild)
-        databaseReference.setValue(dataSetValue.toString()).addOnCompleteListener { databaseResult ->
-            if (databaseResult.isSuccessful) {
-                Log.i(TAG, databaseResult.exception?.message.toString())
-            } else {
-                Log.i(TAG, databaseResult.exception?.message.toString())
-            }
-        }.addOnFailureListener { databaseFailure ->
-            Log.i(TAG, databaseFailure.message.toString())
-        }
     }
 
 }

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -35,48 +36,25 @@ class RegisterProfileStep2 : AppCompatActivity() {
         setContentView(binding.root)
         initView()
 
-        getData()
+        tvUsername.text = resources.getString(R.string.hi_name, intent.extras?.getString("usernameStep1"))
     }
 
     override fun onResume() {
         super.onResume()
 
         btnStep2.setOnClickListener {
-            val intent = Intent(this, RegisterDetailProfileFinish::class.java)
-            startActivity(intent)
+          passingData()
         }
     }
 
-    private fun getData() {
+    fun passingData() {
+        val username = intent.extras?.getString("usernameStep1")
+        val gender = intent.extras?.getString("genderStep1")
+        val phone = intent.extras?.getString("phoneStep1")
+        val email = intent.extras?.getString("emailStep1")
+        val password = intent.extras?.getString("passwordStep1")
+        val dateJoin = intent.extras?.getString("dateJoinStep1")
 
-        // Shimmer load open animation view
-        binding.veilLayout.veil()
-
-        FirebaseServiceInstance.user = FirebaseServiceInstance.auth.currentUser!!
-        val uid = FirebaseServiceInstance.user.uid
-
-        FirebaseServiceInstance.databaseReference = FirebaseServiceInstance.firebaseDatabase.getReference("users").child(uid)
-        FirebaseServiceInstance.databaseReference.addValueEventListener(object :
-            ValueEventListener {
-            @SuppressLint("SetTextI18n")
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
-                    val usernameSnapshot = snapshot.child("username").value.toString()
-                    binding.username.text = resources.getString(R.string.hi_name, usernameSnapshot)
-                    // Shimmer load close animation view
-                    binding.veilLayout.unVeil()
-                } else {
-                    // Shimmer load close animation view
-                    binding.veilLayout.unVeil()
-                }
-
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                // Shimmer load close animation view
-                binding.veilLayout.unVeil()
-            }
-
-        })
     }
+
 }

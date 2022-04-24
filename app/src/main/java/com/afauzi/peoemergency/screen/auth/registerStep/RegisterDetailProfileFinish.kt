@@ -35,8 +35,6 @@ class RegisterDetailProfileFinish : AppCompatActivity() {
         setContentView(binding.root)
 
         initView()
-
-        getData()
     }
 
     override fun onResume() {
@@ -45,37 +43,5 @@ class RegisterDetailProfileFinish : AppCompatActivity() {
         btnStepFinish.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
         }
-    }
-    private fun getData() {
-
-        // Shimmer load open animation view
-        binding.veilLayout.veil()
-
-        FirebaseServiceInstance.user = FirebaseServiceInstance.auth.currentUser!!
-        val uid = FirebaseServiceInstance.user.uid
-
-        FirebaseServiceInstance.databaseReference = FirebaseServiceInstance.firebaseDatabase.getReference("users").child(uid)
-        FirebaseServiceInstance.databaseReference.addValueEventListener(object :
-            ValueEventListener {
-            @SuppressLint("SetTextI18n")
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
-                    val usernameSnapshot = snapshot.child("username").value.toString()
-                    binding.tvUsername.text = resources.getString(R.string.hi_name, usernameSnapshot)
-                    // Shimmer load close animation view
-                    binding.veilLayout.unVeil()
-                } else {
-                    // Shimmer load close animation view
-                    binding.veilLayout.unVeil()
-                }
-
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                // Shimmer load close animation view
-                binding.veilLayout.unVeil()
-            }
-
-        })
     }
 }
