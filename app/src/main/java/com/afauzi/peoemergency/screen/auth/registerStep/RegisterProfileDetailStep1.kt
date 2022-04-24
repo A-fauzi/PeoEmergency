@@ -9,6 +9,9 @@ import android.widget.*
 import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.databinding.ActivityRegisterProfileDetailStep1Binding
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance
+import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
+import com.afauzi.peoemergency.utils.FirebaseServiceInstance.databaseReference
+import com.afauzi.peoemergency.utils.FirebaseServiceInstance.firebaseDatabase
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -92,12 +95,30 @@ class RegisterProfileDetailStep1 : AppCompatActivity() {
     private fun dataToStore() {
         val selectOption: Int = radioGroup.checkedRadioButtonId
         val radioButton: RadioButton = findViewById(selectOption)
-        Log.i(TAG, "choose gender: ${radioButton.text}") // Data Gender Done
+        val dataGender = radioButton.text
+        Log.i(TAG, "choose gender: $dataGender") // Data Gender Done
 
         val phone = "${codeCountryCodePicker.textView_selectedCountry.text}${phoneNumber.text}"
         Log.i(TAG, "Phone number: $phone") // Data Phone Number Done
 
 
+        databaseHandlerStore(dataGender, "gender")
+        databaseHandlerStore(phone, "phone")
+
+    }
+
+    private fun databaseHandlerStore(dataSetValue: CharSequence, userChild: String) {
+        val uid = auth.currentUser!!.uid
+        databaseReference = firebaseDatabase.getReference("users").child(uid).child(userChild)
+        databaseReference.setValue(dataSetValue.toString()).addOnCompleteListener { databaseResult ->
+            if (databaseResult.isSuccessful) {
+                Log.i(TAG, databaseResult.exception?.message.toString())
+            } else {
+                Log.i(TAG, databaseResult.exception?.message.toString())
+            }
+        }.addOnFailureListener { databaseFailure ->
+            Log.i(TAG, databaseFailure.message.toString())
+        }
     }
 
 }
