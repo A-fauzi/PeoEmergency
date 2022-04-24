@@ -47,4 +47,19 @@
     <string name="to">To</string>
     <string name="get">Get\ </string>
     <string name="started">Started</string>
+    <string name="step_1">Step 1</string>
+    <string name="laki_laki">Laki-Laki</string>
+    <string name="perempuan">Perempuan</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="image_finish_description">Image Finish Description</string>
+    <string name="step_2">Step 2</string>
+    <string name="hi_name">Hi %1$s</string>
+    <string name="next_step">Next Step</string>
+    <string name="image_step_1_description">Image Step 1 Description</string>
+    <string name="image_step_2_description">Image step 2 description</string>
+    <string name="finish">Finish</string>
+    <string name="image_profile_detail_register">Image profile detail register</string>
+    <string name="name">Name</string>
+    <string name="emailSample">Email: akhmadfauzi@gmail.com</string>
+    <string name="phoneSample">Phone: 082112966360</string>
 </resources>

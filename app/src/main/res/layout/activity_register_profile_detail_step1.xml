@@ -11,34 +11,35 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/register_step_satu"
         android:adjustViewBounds="true"
+        android:contentDescription="@string/image_step_1_description"
+        android:src="@drawable/register_step_satu"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:cardCornerRadius="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:cardCornerRadius="16dp">
+        app:layout_constraintStart_toStartOf="parent">
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
             android:orientation="vertical"
-            android:padding="@dimen/root_view_padding"
-            android:background="@color/white">
+            android:padding="@dimen/root_view_padding">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_alternates_bold"
-                android:text="Step 1"
+                android:text="@string/step_1"
                 android:textColor="#243E8A"
-                android:textSize="30dp"
+                android:textSize="30sp"
                 android:textStyle="bold" />
 
             <ProgressBar
@@ -52,25 +53,43 @@
                 android:progress="35"
                 android:progressDrawable="@drawable/progressbar_state" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hi Name"
-                android:layout_marginTop="16dp"/>
+            <com.skydoves.androidveil.VeilLayout
+                android:id="@+id/veilLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:veilLayout_baseAlpha="0.6"
+                app:veilLayout_baseColor="@android:color/holo_green_dark"
+                app:veilLayout_dropOff="0.5"
+                app:veilLayout_highlightAlpha="1.0"
+                app:veilLayout_highlightColor="@android:color/holo_green_light"
+                app:veilLayout_radius="6dp"
+                app:veilLayout_shimmerEnable="true"
+                app:veilLayout_veiled="true">
+
+                <TextView
+                    android:id="@+id/username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:textColor="@color/black"
+                    android:text="@string/hi_name" />
+            </com.skydoves.androidveil.VeilLayout>
+
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Silahkan isi informasi tambahan dibawah ini"
-                android:layout_marginTop="16dp"/>
+                android:layout_marginTop="16dp"
+                android:text="Silahkan isi informasi tambahan dibawah ini" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:fontFamily="@font/montserrat_alternates_bold"
                 android:text="Pilih jenis kelamin"
-                android:textColor="@color/black"
-                android:layout_marginTop="16dp"/>
+                android:textColor="@color/black" />
+
             <RadioGroup
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -80,12 +99,12 @@
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Laki-Laki"/>
+                    android:text="@string/laki_laki" />
 
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Perempuan"/>
+                    android:text="@string/perempuan" />
 
             </RadioGroup>
 
@@ -99,44 +118,44 @@
                     android:id="@+id/codeCountryPicker"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:ccp_contentColor="@color/black"
+                    android:background="@drawable/background_shape_radius"
                     android:clickable="true"
                     android:focusable="true"
-                    app:ccp_autoDetectCountry="true"
-                    app:ccp_autoFormatNumber="true"
-                    app:ccp_autoDetectLanguage="true"
                     app:ccpDialog_cornerRadius="16dp"
-                    app:ccp_showNameCode="false"
-                    android:background="@drawable/background_shape_radius"/>
+                    app:ccp_autoDetectCountry="true"
+                    app:ccp_autoDetectLanguage="true"
+                    app:ccp_autoFormatNumber="true"
+                    app:ccp_contentColor="@color/black"
+                    app:ccp_showNameCode="false" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/outlinedTextFieldPhoneNumber"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:hint="@string/phone_number"
                     app:boxCornerRadiusBottomEnd="20dp"
                     app:boxCornerRadiusBottomStart="20dp"
                     app:boxCornerRadiusTopEnd="20dp"
                     app:boxCornerRadiusTopStart="20dp"
-                    android:layout_marginLeft="16dp"
-                    app:hintTextColor="@color/black"
-                    android:hint="Phone Number"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                    app:hintTextColor="@color/black">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="phone"/>
+                        android:inputType="phone" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
-          <com.google.android.material.button.MaterialButton
-              android:id="@+id/btn_step_1"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:text="Selanjutnya"
-              android:layout_marginTop="16dp"
-              app:cornerRadius="@dimen/radius_card_circle"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_step_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/next_step"
+                app:cornerRadius="@dimen/radius_card_circle" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

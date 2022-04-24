@@ -35,10 +35,10 @@ class ProfileAccountFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        getData()
+        getData()
 
         binding.fabMoreAccountProfile.setOnClickListener {
-//            popupMenu()
+            popupMenu()
         }
 
         binding.btnEditProfile.setOnClickListener {

@@ -79,9 +79,10 @@ dependencies {
     implementation 'com.github.ibrahimsn98:SmoothBottomBar:1.7.9'
     // circle image
     implementation 'de.hdodenhof:circleimageview:3.1.0'
-//    //Shimmer Recyclerview
-//    implementation 'com.github.sharish:ShimmerRecyclerView:v1.3'
-
+    //Shimmer Recyclerview
+    implementation 'com.github.sharish:ShimmerRecyclerView:v1.3'
+    /// Shimmer Text
+    implementation "com.github.skydoves:androidveil:1.1.2"
     // Image Library Uri
     implementation 'com.squareup.picasso:picasso:2.71828'
 

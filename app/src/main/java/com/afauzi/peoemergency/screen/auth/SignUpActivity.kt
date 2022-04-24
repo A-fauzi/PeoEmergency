@@ -101,10 +101,7 @@ class SignUpActivity : AppCompatActivity() {
         btnRegister.setOnClickListener {
             progressBar.visibility = View.VISIBLE
             setFormEnable(false, R.color.input_disabled)
-//            signUpUsers()
-
-            //contoh
-            startActivity(Intent(this, RegisterProfileDetailStep1::class.java))
+            signUpUsers()
         }
 
         linkToSignIn.setOnClickListener {

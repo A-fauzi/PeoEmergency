@@ -14,7 +14,8 @@
         android:adjustViewBounds="true"
         android:src="@drawable/register_finish"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/image_finish_description" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -36,9 +37,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_alternates_bold"
-                android:text="Finish"
+                android:text="@string/finish"
                 android:textColor="#243E8A"
-                android:textSize="30dp"
+                android:textSize="30sp"
                 android:textStyle="bold" />
 
             <ProgressBar
@@ -52,13 +53,28 @@
                 android:progress="100"
                 android:progressDrawable="@drawable/progressbar_state" />
 
+            <com.skydoves.androidveil.VeilLayout
+                android:id="@+id/veilLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:veilLayout_baseAlpha="0.6"
+                app:veilLayout_baseColor="@android:color/holo_green_dark"
+                app:veilLayout_dropOff="0.5"
+                app:veilLayout_highlightAlpha="1.0"
+                app:veilLayout_highlightColor="@android:color/holo_green_light"
+                app:veilLayout_radius="6dp"
+                app:veilLayout_shimmerEnable="true"
+                app:veilLayout_veiled="true">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Hi Name"
-                android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/tvUsername"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/hi_name"
+                    android:textColor="@color/black" />
+            </com.skydoves.androidveil.VeilLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -90,50 +106,53 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        tools:ignore="UselessParent">
 
 
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            tools:ignore="UseCompoundDrawables">
 
                             <ImageView
                                 android:id="@+id/iv_profile_detail"
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
                                 android:adjustViewBounds="true"
-                                android:src="@drawable/sample_logo" />
+                                android:src="@drawable/sample_logo"
+                                android:contentDescription="@string/image_profile_detail_register" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Name"
+                                android:text="@string/name"
                                 android:textColor="@color/black" />
                         </LinearLayout>
 
                         <View
                             android:layout_width="1dp"
                             android:layout_height="100dp"
-                            android:layout_marginLeft="16dp"
+                            android:layout_marginStart="16dp"
                             android:background="@color/black" />
 
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="16dp"
+                            android:layout_marginStart="16dp"
                             android:orientation="vertical">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Email: akhmadfauzi@gmail.com" />
+                                android:text="@string/emailSample" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Phone: 082112966360" />
+                                android:text="@string/phoneSample" />
 
 
                             <TextView
@@ -167,7 +186,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Finish"
+                android:text="@string/finish"
                 app:cornerRadius="@dimen/radius_card_circle" />
 
 

@@ -10,6 +10,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.afauzi.peoemergency.databinding.ActivityLandingBinding
 import com.afauzi.peoemergency.screen.auth.SignInActivity
 import com.afauzi.peoemergency.screen.auth.SignUpActivity
+import com.afauzi.peoemergency.screen.auth.registerStep.RegisterProfileDetailStep1
 import com.afauzi.peoemergency.screen.main.MainActivity
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
 import com.afauzi.peoemergency.utils.Library.TAG
@@ -48,7 +49,7 @@ class LandingActivity : AppCompatActivity() {
         auth.currentUser.let {
             if (it != null) {
                 Log.i(TAG, "user logged in")
-                startActivity(Intent(this, MainActivity::class.java))
+                startActivity(Intent(this, RegisterProfileDetailStep1::class.java))
                 finish()
             } else {
                 Log.i(TAG, "user not login")

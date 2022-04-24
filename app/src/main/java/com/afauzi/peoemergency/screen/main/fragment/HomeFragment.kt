@@ -83,7 +83,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // GetData USer
-//        getUserData()
+        getUserData()
 
         if (requireActivity().intent.extras != null) {
             Picasso
