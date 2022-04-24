@@ -5,10 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.RadioButton
-import android.widget.RadioGroup
-import android.widget.TextView
+import android.widget.*
 import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.databinding.ActivityRegisterProfileDetailStep1Binding
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance
@@ -28,12 +25,14 @@ class RegisterProfileDetailStep1 : AppCompatActivity() {
     private lateinit var tvUsername: TextView
     private lateinit var radioGroup: RadioGroup
     private lateinit var codeCountryCodePicker: CountryCodePicker
+    private lateinit var phoneNumber: EditText
 
     private fun initView() {
         btnNextStep = binding.btnStep1
         tvUsername = binding.username
         radioGroup = binding.enableRadioGroup
         codeCountryCodePicker = binding.codeCountryPicker
+        phoneNumber = binding.phoneNumber
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -94,7 +93,10 @@ class RegisterProfileDetailStep1 : AppCompatActivity() {
         val selectOption: Int = radioGroup.checkedRadioButtonId
         val radioButton: RadioButton = findViewById(selectOption)
         Log.i(TAG, "choose gender: ${radioButton.text}") // Data Gender Done
-        Log.i(TAG, "codeCountry: ${ codeCountryCodePicker.textView_selectedCountry.text}") // Data Gender Done
+
+        val phone = "${codeCountryCodePicker.textView_selectedCountry.text}${phoneNumber.text}"
+        Log.i(TAG, "Phone number: $phone") // Data Phone Number Done
+
 
     }
 
