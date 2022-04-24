@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:id="@+id/main_layout"
     android:padding="@dimen/root_view_padding"
@@ -16,15 +17,15 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/image_profile_dialog"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:src="@drawable/sample_logo" />
 
         <LinearLayout
             android:id="@+id/text_dalog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
+            android:layout_toEndOf="@id/image_profile_dialog"
             android:orientation="vertical">
 
             <TextView
@@ -47,6 +48,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            app:cornerRadius="@dimen/button_radius"
             android:text="Post" />
 
     </RelativeLayout>
@@ -56,15 +59,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Write something..."
+        android:layout_marginTop="16dp"
         android:background="@color/transparant"
         android:autofillHints="About this content"
         android:inputType="textMultiLine" />
 
-    <ImageView
-        android:id="@+id/iv_receive_image_capture"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"/>
+   <androidx.cardview.widget.CardView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_marginTop="16dp"
+       android:layout_marginLeft="8dp"
+       android:layout_marginRight="8dp"
+       android:layout_marginBottom="8dp"
+       android:elevation="2dp"
+       app:cardCornerRadius="16dp">
+
+       <ImageView
+           android:id="@+id/iv_receive_image_capture"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:adjustViewBounds="true"/>
+   </androidx.cardview.widget.CardView>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -85,8 +100,8 @@
             android:id="@+id/attach_file_dialog"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginLeft="16dp"
-            android:layout_toRightOf="@id/input_photo_dialog"
+            android:layout_marginStart="16dp"
+            android:layout_toEndOf="@id/input_photo_dialog"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
@@ -103,6 +118,12 @@
             android:src="@drawable/ic_baseline_more_vert_24" />
 
     </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black"
+        android:layout_marginTop="16dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_post_random"

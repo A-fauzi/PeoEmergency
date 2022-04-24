@@ -40,4 +40,5 @@
     <string name="ok">OK</string>
     <string name="permission_granted">Permission is granted. You can use the camera now</string>
     <string name="txt_error_network">please check your network</string>
+    <string name="logout">Logout</string>
 </resources>

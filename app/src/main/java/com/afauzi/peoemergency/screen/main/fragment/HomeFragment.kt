@@ -83,12 +83,13 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // GetData USer
-        getUserData()
+//        getUserData()
+
         if (requireActivity().intent.extras != null) {
             Picasso
                 .get()
                 .load(requireActivity().intent.extras?.getString("resultCapturePostRandom"))
-                .resize(0, 300)
+                .resize(500, 500)
                 .centerCrop()
                 .into(imageReceiverCapture)
         }
