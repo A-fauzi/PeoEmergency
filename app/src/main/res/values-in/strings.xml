@@ -39,4 +39,11 @@
     <string name="ok">baik</string>
     <string name="permission_granted">perizinan di aktifkan, kamu bisa aktifkan kamera sekarang</string>
     <string name="txt_error_network">mohon periksa koneksi jaringan</string>
+    <string name="logout">Keluar</string>
+    <string name="hello">Halo!</string>
+    <string name="welcome_nback">Selamat datang \nKembali</string>
+    <string name="sign_up">Daftar\ </string>
+    <string name="to">Untuk</string>
+    <string name="get">Dapat\ </string>
+    <string name="started">Memulai</string>
 </resources>

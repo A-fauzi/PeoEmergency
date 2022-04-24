@@ -41,4 +41,10 @@
     <string name="permission_granted">Permission is granted. You can use the camera now</string>
     <string name="txt_error_network">please check your network</string>
     <string name="logout">Logout</string>
+    <string name="hello">Hello!</string>
+    <string name="welcome_nback">Welcome \nBack</string>
+    <string name="sign_up">Sign Up\ </string>
+    <string name="to">To</string>
+    <string name="get">Get\ </string>
+    <string name="started">Started</string>
 </resources>

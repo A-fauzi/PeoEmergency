@@ -16,8 +16,16 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/txt_heading_sign_in"
+            android:text="@string/hello"
             android:textColor="@color/black"
+            android:fontFamily="@font/roboto_bold"
+            android:textSize="36sp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/welcome_nback"
+            android:textColor="@color/blue_soft"
             android:fontFamily="@font/roboto_bold"
             android:textSize="36sp"/>
 

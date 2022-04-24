@@ -92,13 +92,22 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <com.google.android.material.chip.Chip
+                <com.hbb20.CountryCodePicker
+                    android:id="@+id/codeCountryPicker"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="+62"
-                    android:theme="@style/Theme.MaterialComponents.Light"/>
+                    app:ccp_contentColor="@color/black"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:ccp_autoDetectCountry="true"
+                    app:ccp_autoFormatNumber="true"
+                    app:ccp_autoDetectLanguage="true"
+                    app:ccpDialog_cornerRadius="16dp"
+                    app:ccp_showNameCode="false"
+                    android:background="@drawable/background_shape_radius"/>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/outlinedTextFieldPhoneNumber"
@@ -110,15 +119,13 @@
                     app:boxCornerRadiusTopStart="20dp"
                     android:layout_marginLeft="16dp"
                     app:hintTextColor="@color/black"
-                    android:hint="@string/txt_input_hint_email"
-                    app:boxBackgroundColor="@color/input_disabled"
+                    android:hint="Phone Number"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="phone"
-                        android:enabled="false"/>
+                        android:inputType="phone"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>

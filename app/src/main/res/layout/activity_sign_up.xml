@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_bold"
-            android:text="Hello!"
+            android:text="@string/hello"
             android:textColor="@color/black"
             android:textSize="36sp" />
         <LinearLayout
@@ -31,14 +31,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_bold"
-                android:text="Sign Up "
+                android:text="@string/sign_up"
                 android:textColor="@color/blue_soft"
                 android:textSize="36sp" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_bold"
-                android:text="To"
+                android:text="@string/to"
                 android:textColor="@color/black"
                 android:textSize="36sp" />
 
@@ -53,7 +53,7 @@
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:fontFamily="@font/roboto_bold"
-               android:text="Get "
+               android:text="@string/get"
                android:textColor="@color/black"
                android:textSize="36sp" />
 
@@ -61,7 +61,7 @@
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:fontFamily="@font/roboto_bold"
-               android:text="Started"
+               android:text="@string/started"
                android:textColor="@color/blue_soft"
                android:textSize="36sp" />
        </LinearLayout>
