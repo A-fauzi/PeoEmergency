@@ -4,7 +4,10 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.TextView
 import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.databinding.ActivityRegisterProfileDetailStep1Binding
@@ -12,16 +15,25 @@ import com.afauzi.peoemergency.utils.FirebaseServiceInstance
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import com.hbb20.CountryCodePicker
 
 class RegisterProfileDetailStep1 : AppCompatActivity() {
+
+    companion object {
+        const val TAG = "RegisterProfileDetailStep1"
+    }
 
     private lateinit var binding: ActivityRegisterProfileDetailStep1Binding
     private lateinit var btnNextStep: Button
     private lateinit var tvUsername: TextView
+    private lateinit var radioGroup: RadioGroup
+    private lateinit var codeCountryCodePicker: CountryCodePicker
 
     private fun initView() {
         btnNextStep = binding.btnStep1
         tvUsername = binding.username
+        radioGroup = binding.enableRadioGroup
+        codeCountryCodePicker = binding.codeCountryPicker
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +41,7 @@ class RegisterProfileDetailStep1 : AppCompatActivity() {
         binding = ActivityRegisterProfileDetailStep1Binding.inflate(layoutInflater)
         setContentView(binding.root)
         initView()
+
         getData()
     }
 
@@ -39,6 +52,7 @@ class RegisterProfileDetailStep1 : AppCompatActivity() {
             val intent = Intent(this, RegisterProfileStep2::class.java)
             startActivity(intent)
 
+            dataToStore()
         }
 
     }
@@ -75,4 +89,13 @@ class RegisterProfileDetailStep1 : AppCompatActivity() {
 
         })
     }
+
+    private fun dataToStore() {
+        val selectOption: Int = radioGroup.checkedRadioButtonId
+        val radioButton: RadioButton = findViewById(selectOption)
+        Log.i(TAG, "choose gender: ${radioButton.text}") // Data Gender Done
+        Log.i(TAG, "codeCountry: ${ codeCountryCodePicker.textView_selectedCountry.text}") // Data Gender Done
+
+    }
+
 }

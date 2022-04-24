@@ -17,6 +17,10 @@ import com.google.firebase.database.ValueEventListener
 
 class RegisterProfileStep2 : AppCompatActivity() {
 
+    companion object {
+        const val TAG = "RegisterProfileStep2"
+    }
+
     private lateinit var binding: ActivityRegisterProfileStep2Binding
     private lateinit var btnStep2: Button
     private lateinit var tvUsername: TextView

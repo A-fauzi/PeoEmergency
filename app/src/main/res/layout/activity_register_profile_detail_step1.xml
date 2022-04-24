@@ -91,17 +91,21 @@
                 android:textColor="@color/black" />
 
             <RadioGroup
+                android:id="@+id/enableRadioGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="10dp"
                 android:orientation="vertical">
 
                 <RadioButton
+                    android:id="@+id/rbMan"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/laki_laki" />
+                    android:text="@string/laki_laki"
+                    android:checked="true"/>
 
                 <RadioButton
+                    android:id="@+id/rbWoman"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/perempuan" />
@@ -142,6 +146,7 @@
                     app:hintTextColor="@color/black">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/phoneNumber"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="phone" />
