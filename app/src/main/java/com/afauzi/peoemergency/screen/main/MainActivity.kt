@@ -57,10 +57,10 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
-
     @RequiresApi(Build.VERSION_CODES.N)
     private fun checkMultiplePermission() {
         val applicationPermissionRequest = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){ permission ->
+           // Location Permission
             when{
                 permission.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
                     // Precise location access granted
@@ -76,6 +76,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
+            // Camera Permission
             if ( permission.getOrDefault(Manifest.permission.CAMERA, false)) {
                 // Precise camera access granted
                 Log.i(TAG, "Access camera is granted")
@@ -83,6 +84,7 @@ class MainActivity : AppCompatActivity() {
                 Log.i(TAG, "Access camera is denied")
             }
         }
+
         // Before you perform the actual permission request, check whether your app
         // already has the permissions, and whether your app needs to show a permission
         // rationale dialog. For more details, see Request permissions.

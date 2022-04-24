@@ -12,6 +12,7 @@ import android.view.View
 import android.widget.*
 import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.databinding.ActivitySignUpBinding
+import com.afauzi.peoemergency.screen.auth.registerStep.RegisterProfileDetailStep1
 import com.afauzi.peoemergency.screen.main.fragment.activity.accountProfile.EditProfileActivity
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.databaseReference
@@ -19,6 +20,7 @@ import com.afauzi.peoemergency.utils.FirebaseServiceInstance.firebaseDatabase
 import com.afauzi.peoemergency.utils.Library.TAG
 import com.afauzi.peoemergency.utils.Library.clearText
 import com.afauzi.peoemergency.utils.Library.currentDate
+import com.afauzi.peoemergency.utils.Library.dialogErrors
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -99,7 +101,10 @@ class SignUpActivity : AppCompatActivity() {
         btnRegister.setOnClickListener {
             progressBar.visibility = View.VISIBLE
             setFormEnable(false, R.color.input_disabled)
-            signUpUsers()
+//            signUpUsers()
+
+            //contoh
+            startActivity(Intent(this, RegisterProfileDetailStep1::class.java))
         }
 
         linkToSignIn.setOnClickListener {
@@ -116,15 +121,8 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun signUpUsers() {
-        auth.createUserWithEmailAndPassword(
-
-            email.text.toString().trim(),
-            password.text.toString().trim()
-
-        ).addOnCompleteListener { authResult ->
-
+        auth.createUserWithEmailAndPassword(email.text.toString().trim(), password.text.toString().trim()).addOnCompleteListener { authResult ->
             when {
-
                 authResult.isSuccessful -> {
                     Log.i(TAG, "success signup authResult: ${authResult.exception?.message}")
 
@@ -155,7 +153,7 @@ class SignUpActivity : AppCompatActivity() {
                                     Snackbar.LENGTH_SHORT
                                 ).setBackgroundTint(Color.GREEN).show()
 
-                                val intent = Intent(this, EditProfileActivity::class.java)
+                                val intent = Intent(this, RegisterProfileDetailStep1::class.java)
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                                 startActivity(intent)
                                 finish()
@@ -176,11 +174,7 @@ class SignUpActivity : AppCompatActivity() {
 
                                 progressBar.visibility = View.INVISIBLE
 
-                                Snackbar.make(
-                                    binding.root,
-                                    "${databaseResult.exception?.message}",
-                                    Snackbar.LENGTH_SHORT
-                                ).setBackgroundTint(Color.RED).show()
+                                dialogErrors(layoutInflater, this, databaseResult.exception?.localizedMessage!!)
 
                             }
 
@@ -193,23 +187,18 @@ class SignUpActivity : AppCompatActivity() {
 
                             progressBar.visibility = View.INVISIBLE
 
-                            Snackbar.make(
-                                binding.root,
-                                "${databaseResult.message}",
-                                Snackbar.LENGTH_SHORT
-                            ).setBackgroundTint(Color.RED).show()
+                            dialogErrors(layoutInflater, this, databaseResult.localizedMessage!!)
                         }
 
                 }
             }
         }.addOnFailureListener(this) { authExcep ->
-            Log.e(TAG, "failed signup auth failure  : ${authExcep.message}")
+            Log.e(TAG, "failed signup auth message  : ${authExcep.message}")
             setFormEnable(true, R.color.white)
 
             progressBar.visibility = View.INVISIBLE
 
-            Snackbar.make(binding.root, "${authExcep.message}", Snackbar.LENGTH_SHORT)
-                .setBackgroundTint(Color.RED).show()
+            dialogErrors(layoutInflater, this, getString(R.string.txt_error_network))
         }
 
     }
@@ -250,7 +239,7 @@ class SignUpActivity : AppCompatActivity() {
                     }
                 }
                 R.id.et_email_sign_up -> {
-                    if (text.contains('@')) {
+                    if (text.contains("@gmail.com")) {
                         inputValidate(
                             setCompDrawIsCorrect = email,
                             textWarnGone = textWarnEmail,

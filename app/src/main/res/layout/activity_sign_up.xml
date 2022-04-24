@@ -19,14 +19,58 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_bold"
-            android:text="@string/heading_signup"
+            android:text="Hello!"
             android:textColor="@color/black"
             android:textSize="36sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_bold"
+                android:text="Sign Up "
+                android:textColor="@color/blue_soft"
+                android:textSize="36sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_bold"
+                android:text="To"
+                android:textColor="@color/black"
+                android:textSize="36sp" />
+
+        </LinearLayout>
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="horizontal">
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:fontFamily="@font/roboto_bold"
+               android:text="Get "
+               android:textColor="@color/black"
+               android:textSize="36sp" />
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:fontFamily="@font/roboto_bold"
+               android:text="Started"
+               android:textColor="@color/blue_soft"
+               android:textSize="36sp" />
+       </LinearLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/outlinedTextFieldUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             app:boxCornerRadiusBottomEnd="20dp"
             app:boxCornerRadiusBottomStart="20dp"
             app:boxCornerRadiusTopEnd="20dp"
@@ -94,6 +138,7 @@
             app:hintTextColor="@color/black"
             android:hint="@string/txt_input_hint_password"
             app:boxBackgroundColor="@color/input_disabled"
+            app:endIconMode="password_toggle"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
 
@@ -126,6 +171,7 @@
             app:hintTextColor="@color/black"
             android:hint="@string/txt_input_hint_pass_conf"
             app:boxBackgroundColor="@color/input_disabled"
+            app:endIconMode="password_toggle"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText

@@ -20,7 +20,7 @@
     <string name="txt_btn_sign_up">Sign Up</string>
     <string name="txt_input_hint_email">Email</string>
     <string name="txt_input_hint_password">Password</string>
-    <string name="txt_warn_email">*email not valid, email is required unique character \'@\'</string>
+    <string name="txt_warn_email">*email not valid, email is required unique character \'@gmail.com\'</string>
     <string name="txt_warn_password">*password min 8 character</string>
     <string name="txt_input_hint_username">Username</string>
     <string name="txt_warn_username">*username min 5 character</string>
@@ -39,4 +39,5 @@
     <string name="permission_required">Camera access is required to display the camera preview.</string>
     <string name="ok">OK</string>
     <string name="permission_granted">Permission is granted. You can use the camera now</string>
+    <string name="txt_error_network">please check your network</string>
 </resources>

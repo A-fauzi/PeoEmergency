@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -15,17 +16,27 @@ import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import androidx.core.net.toUri
 import com.afauzi.peoemergency.databinding.FragmentHomeBinding
 import com.afauzi.peoemergency.screen.LandingActivity
 import com.afauzi.peoemergency.screen.main.fragment.activity.home.CameraAction
+import com.afauzi.peoemergency.utils.FirebaseServiceInstance
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.databaseReference
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.firebaseDatabase
+import com.afauzi.peoemergency.utils.FirebaseServiceInstance.firebaseStorage
+import com.afauzi.peoemergency.utils.FirebaseServiceInstance.storageReference
+import com.afauzi.peoemergency.utils.FirebaseServiceInstance.user
 import com.afauzi.peoemergency.utils.Library
 import com.afauzi.peoemergency.utils.Library.currentDateTime
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
+import com.squareup.picasso.Picasso
+import java.io.File
+import java.util.*
+import kotlin.collections.HashMap
 
 class HomeFragment : Fragment() {
 
@@ -73,20 +84,65 @@ class HomeFragment : Fragment() {
 
         // GetData USer
         getUserData()
-
-        // Check Permission
-        val permissionProviderResult = registerForActivityResult(ActivityResultContracts.RequestPermission()) { permissionGranted ->
-            if (permissionGranted) {
-                startActivity(Intent(requireActivity(), CameraAction::class.java))
-            } else {
-                Snackbar.make(binding.root, "The camera permission is required", Snackbar.LENGTH_SHORT).setBackgroundTint(Color.RED).show()
-            }
+        if (requireActivity().intent.extras != null) {
+            Picasso
+                .get()
+                .load(requireActivity().intent.extras?.getString("resultCapturePostRandom"))
+                .resize(0, 300)
+                .centerCrop()
+                .into(imageReceiverCapture)
         }
+
+        val permissionRequestLocation =
+            registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permission ->
+                // Location Permission
+                when {
+                    permission.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
+                        // Precise location access granted
+                        Log.i(TAG, "Access location is granted")
+                    }
+                    permission.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
+                        // Only approximate location access granted
+                        Log.i(TAG, "Access location is Only approximate")
+                    }
+                    else -> {
+                        // No Location access granted
+                        Snackbar.make(
+                            binding.root,
+                            "to access location, please turn on location  permission",
+                            Snackbar.LENGTH_SHORT
+                        )
+                            .setBackgroundTint(Color.RED)
+                            .show()
+                        Log.i(TAG, "Access location not permission and is denied")
+                    }
+                }
+            }
+
+        val permissionRequestCamera =
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+                if (it) {
+                    startActivity(Intent(requireActivity(), CameraAction::class.java))
+                    requireActivity().finish()
+                    Log.i(TAG, "Access camera is granted")
+                } else {
+                    Snackbar.make(
+                        binding.root,
+                        "to access camera, please turn on camera permission",
+                        Snackbar.LENGTH_SHORT
+                    )
+                        .setBackgroundTint(Color.RED)
+                        .show()
+                    Log.i(TAG, "Access camera is denied")
+                }
+            }
 
         // Btn Choose Image on Camera
         chooseImagePost.setOnClickListener {
             // Launch the popup permission
-            permissionProviderResult.launch(Manifest.permission.CAMERA)
+            permissionRequestCamera.launch(
+                Manifest.permission.CAMERA
+            )
         }
 
         // Btn attachFile
@@ -99,36 +155,18 @@ class HomeFragment : Fragment() {
             Toast.makeText(activity, "More Menu clicked", Toast.LENGTH_SHORT).show()
         }
 
-
-        // Get Location coordinate
-        val mFusedLocation = LocationServices.getFusedLocationProviderClient(requireActivity())
-        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return
-        }
-
         // Btn Post
         btnPost.setOnClickListener {
-
-            mFusedLocation.lastLocation.addOnSuccessListener(
-                requireActivity()
-            ) { location ->
-                val latitude = location?.latitude
-                val longitude = location?.longitude
-                val locationCoordinate = "$latitude, $longitude"
-                Log.i(TAG, "location: $locationCoordinate") // get Data location coordinate done
-            }
-            /**
-             * Menerima inputan description
-             */
-            val receiveInputDesc = inputContentDescPost.text
-            Log.i(TAG, "content desc: $receiveInputDesc") // data description done
-
-            Log.i(TAG, "date post: $currentDateTime") // current Date Post Done
-
-            Library.clearText(inputContentDescPost)
+            storeData()
+            // Launch the popup permission
+            permissionRequestLocation.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+            )
         }
+
     }
 
     private fun getUserData() {
@@ -153,7 +191,6 @@ class HomeFragment : Fragment() {
                             Snackbar.LENGTH_SHORT
                         ).setBackgroundTint(Color.RED).show()
                     }
-
                 })
             } else {
                 Toast.makeText(activity, "User not authentication", Toast.LENGTH_SHORT).show()
@@ -163,4 +200,117 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun getCurrentLocation(locationCoordinate: String) {
+        Log.i(TAG, "location: $locationCoordinate") // get Data location coordinate done
+    }
+
+    private fun setUpDatabase(
+        username: String,
+        photoProfile: String,
+        postLocation: String,
+        postText: String,
+        postDate: String,
+        imagePost: Uri
+    ) {
+        val uid = auth.currentUser!!.uid
+        val postId = UUID.randomUUID().toString()
+        val referencePath = "postRandom"
+        databaseReference = firebaseDatabase.getReference(referencePath).child(uid).child(postId)
+
+        val hashMap: HashMap<String, String> = HashMap()
+        hashMap["username"] = username
+        hashMap["photoProfile"] = photoProfile
+        hashMap["postLocation"] = postLocation
+        hashMap["postText"] = postText
+        hashMap["postDate"] = postDate
+        hashMap["imagePost"] = imagePost.toString()
+
+        databaseReference.setValue(hashMap).addOnCompleteListener {
+            if (it.isSuccessful) {
+                uploadImageServer(uid, imagePost, postId)
+                Toast.makeText(activity, "Data Post Success in Saved", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(activity, "Data Post Failed Saved", Toast.LENGTH_SHORT).show()
+            }
+        }.addOnFailureListener {
+            Toast.makeText(activity, "${it.message}", Toast.LENGTH_SHORT).show()
+        }
+
+    }
+
+    private fun uploadImageServer(childUid: String,imageUri: Uri,  childPostId: String) {
+        val imgId = UUID.randomUUID().toString()
+        val referencePath = "postRandom"
+
+        storageReference = firebaseStorage.reference
+        storageReference.child("post_image/$imgId")
+        storageReference.putFile(imageUri).addOnSuccessListener { taskSnap ->
+            taskSnap.storage.downloadUrl.addOnSuccessListener { uri ->
+                databaseReference = firebaseDatabase.getReference(referencePath).child(childUid).child(childPostId).child("imagePost")
+                databaseReference.setValue(uri.toString()).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        Log.i(TAG, "upload: Successful")
+                    } else {
+                        Log.i(TAG, "upload: Errors")
+                    }
+                }.addOnFailureListener {
+                    Toast.makeText(activity, "${it.message}", Toast.LENGTH_SHORT).show()
+                }
+            }.addOnFailureListener {
+                Toast.makeText(activity, "${it.message}", Toast.LENGTH_SHORT).show()
+            }
+        }.addOnFailureListener {
+            Toast.makeText(activity, "${it.message}", Toast.LENGTH_SHORT).show()
+        }
+
+    }
+
+    private fun storeData() {
+        // Get Location coordinate
+        val mFusedLocation = LocationServices.getFusedLocationProviderClient(requireActivity())
+
+        if (ActivityCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+
+
+
+        /**
+         * Menerima inputan description
+         */
+        val receiveInputDesc = inputContentDescPost.text
+        Log.i(TAG, "content desc: $receiveInputDesc") // data description done
+        Log.i(TAG, "date post: $currentDateTime") // current Date Post Done
+        val bundle = requireActivity().intent.extras
+        Log.i(TAG, "image uri: ${bundle?.getString("resultCapturePostRandom")}") // image uri done
+
+//        val getImage: File = Uri.fromFile(bundle?.getString("resultCapturePostRandom").toString())
+
+        mFusedLocation.lastLocation.addOnSuccessListener(requireActivity()) { location ->
+            val latitude = location?.latitude
+            val longitude = location?.longitude
+            val locationCoordinate = "$latitude, $longitude"
+            getCurrentLocation(locationCoordinate)
+
+            setUpDatabase(
+                username.text.toString(),
+                "",
+                locationCoordinate,
+                receiveInputDesc.toString(),
+                currentDateTime,
+                bundle?.getString("resultCapturePostRandom")!!.toUri()
+            )
+
+        }
+
+        Library.clearText(inputContentDescPost)
+
+    }
 }

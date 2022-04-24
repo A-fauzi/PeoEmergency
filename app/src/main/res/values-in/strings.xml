@@ -20,7 +20,7 @@
     <string name="txt_btn_sign_up">Daftar</string>
     <string name="txt_input_hint_email">Email</string>
     <string name="txt_input_hint_password">Katasandi</string>
-    <string name="txt_warn_email">*email tidak valid, tidak terdapat karakter unik \'@\'</string>
+    <string name="txt_warn_email">*email tidak valid, tidak terdapat karakter unik \'@gmail.com\'</string>
     <string name="txt_warn_password">*katasandi minimal 8 character</string>
     <string name="txt_input_hint_username">Nama user</string>
     <string name="txt_warn_username">*nama user minimal 5 character</string>
@@ -35,4 +35,8 @@
     <string name="txt_sign_in_provider">Atau masuk dengan</string>
     <string name="txt_question_sign_in">Jika kamu tidak memiliki akun, silahkan\ </string>
     <string name="txt_link_to_sign_up">Daftar</string>
+    <string name="permission_required">dibutuhkan perizinan akses kamera untuk membuka kamera</string>
+    <string name="ok">baik</string>
+    <string name="permission_granted">perizinan di aktifkan, kamu bisa aktifkan kamera sekarang</string>
+    <string name="txt_error_network">mohon periksa koneksi jaringan</string>
 </resources>

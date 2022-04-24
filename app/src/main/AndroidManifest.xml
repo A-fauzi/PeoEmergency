@@ -25,6 +25,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PeoEmergency">
         <activity
+            android:name=".screen.auth.registerStep.RegisterDetailProfileFinish"
+            android:exported="false" />
+        <activity
+            android:name=".screen.auth.registerStep.RegisterProfileStep2"
+            android:exported="false" />
+        <activity
+            android:name=".screen.auth.registerStep.RegisterProfileDetailStep1"
+            android:exported="false" />
+        <activity
             android:name=".screen.main.fragment.activity.home.GalleryActivity"
             android:exported="false" />
         <activity

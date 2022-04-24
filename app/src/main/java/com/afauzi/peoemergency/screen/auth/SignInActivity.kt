@@ -15,6 +15,8 @@ import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.databinding.ActivitySigninBinding
 import com.afauzi.peoemergency.screen.main.MainActivity
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
+import com.afauzi.peoemergency.utils.Library
+import com.afauzi.peoemergency.utils.Library.dialogErrors
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 
@@ -90,25 +92,13 @@ class SignInActivity : AppCompatActivity() {
                 clearText()
             } else {
                 setFormEnable(true, R.color.white)
-                val snackbar = Snackbar.make(
-                    binding.root,
-                    "${authResult.exception?.message}",
-                    Snackbar.LENGTH_SHORT
-                )
-                snackbar.setBackgroundTint(Color.RED)
-                snackbar.show()
+                dialogErrors(layoutInflater, this, authResult.exception?.localizedMessage!!)
                 progressBar.visibility = View.GONE
             }
 
         }.addOnFailureListener { authFailure ->
             setFormEnable(true, R.color.white)
-            val snackbar = Snackbar.make(
-                binding.root,
-                "${authFailure.message}",
-                Snackbar.LENGTH_SHORT
-            )
-            snackbar.setBackgroundTint(Color.RED)
-            snackbar.show()
+            dialogErrors(layoutInflater, this, authFailure.localizedMessage!!)
             progressBar.visibility = View.GONE
         }
 
