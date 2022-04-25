@@ -54,6 +54,10 @@
     <string name="image_finish_description">Image Finish Description</string>
     <string name="step_2">Step 2</string>
     <string name="hi_name">Hi %1$s</string>
+    <string name="email_detail_register">Email: %1$s</string>
+    <string name="phone_detail_register">Phone: %1$s</string>
+    <string name="gender_detail_register">Gender: %1$s</string>
+    <string name="birthday_detail_register">Birthday: %1$s</string>
     <string name="next_step">Next Step</string>
     <string name="image_step_1_description">Image Step 1 Description</string>
     <string name="image_step_2_description">Image step 2 description</string>

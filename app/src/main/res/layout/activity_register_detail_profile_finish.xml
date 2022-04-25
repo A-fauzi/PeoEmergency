@@ -102,15 +102,14 @@
                             android:orientation="vertical"
                             tools:ignore="UseCompoundDrawables">
 
-                            <ImageView
-                                android:id="@+id/iv_profile_detail"
+                            <de.hdodenhof.circleimageview.CircleImageView
+                                android:id="@+id/ivProfileDetail"
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
-                                android:adjustViewBounds="true"
-                                android:src="@drawable/sample_logo"
-                                android:contentDescription="@string/image_profile_detail_register" />
+                                android:src="@drawable/sample_logo"/>
 
                             <TextView
+                                android:id="@+id/name_profile_detail"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/name"
@@ -130,25 +129,33 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/emailDetailProfile"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/emailSample" />
+                                android:text="@string/emailSample"
+                                android:textColor="@color/black"/>
 
                             <TextView
+                                android:id="@+id/phoneDetailProfile"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/phoneSample" />
+                                android:text="@string/phoneSample"
+                                android:textColor="@color/black"/>
 
 
                             <TextView
+                                android:id="@+id/genderDetailProfile"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Jenis Kelamin: Laki-Laki" />
+                                android:text="Jenis Kelamin: Laki-Laki"
+                                android:textColor="@color/black"/>
 
                             <TextView
+                                android:id="@+id/birthdayDetailProfile"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Tanggal Lahir: 24-mar-1997" />
+                                android:text="Tanggal Lahir: 24-mar-1997"
+                                android:textColor="@color/black"/>
 
                         </LinearLayout>
 
@@ -165,15 +172,29 @@
                 android:text="Jika ada kesalahan data, kamu bisa update di bagian profile nanti"
                 android:textColor="@color/black" />
 
+          <RelativeLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_step_finish"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/finish"
-                app:cornerRadius="@dimen/radius_card_circle" />
+              <com.google.android.material.progressindicator.CircularProgressIndicator
+                  android:id="@+id/progress_in_register_finish"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_centerHorizontal="true"
+                  android:layout_marginTop="16dp"
+                  android:layout_marginBottom="16dp"
+                  android:visibility="invisible"
+                  android:indeterminate="true"/>
 
+              <com.google.android.material.button.MaterialButton
+                  android:id="@+id/btn_step_finish"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginTop="16dp"
+                  android:text="@string/finish"
+                  app:cornerRadius="@dimen/radius_card_circle" />
+
+          </RelativeLayout>
 
         </LinearLayout>
 

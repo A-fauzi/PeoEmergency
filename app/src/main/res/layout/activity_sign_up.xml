@@ -191,15 +191,6 @@
             android:textColor="@color/pink_soft"
             android:visibility="invisible"/>
 
-        <com.google.android.material.progressindicator.LinearProgressIndicator
-            android:id="@+id/progress_in_sign_up"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:visibility="invisible"
-            android:indeterminate="true"/>
-
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_register_sign_up"
             android:layout_width="@dimen/button_width"

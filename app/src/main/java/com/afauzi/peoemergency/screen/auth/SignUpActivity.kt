@@ -58,7 +58,6 @@ class SignUpActivity : AppCompatActivity() {
     private lateinit var textWarnPassword: TextView
     private lateinit var textWarnPasswordConfirm: TextView
     private lateinit var btnRegister: Button
-    private lateinit var progressBar: ProgressBar
     private lateinit var linkToSignIn: TextView
 
     private fun initView() {
@@ -71,7 +70,6 @@ class SignUpActivity : AppCompatActivity() {
         textWarnPassword = binding.tvWarnPassword
         textWarnPasswordConfirm = binding.tvWarnPasswordConfirmation
         btnRegister = binding.btnRegisterSignUp
-        progressBar = binding.progressInSignUp
         emailInputLayout = binding.outlinedTextFieldEmail
         passwordInputLayout = binding.outlinedTextFieldPass
         passwordConfirmInputLayout = binding.outlinedTextFieldPassConfirm
@@ -93,7 +91,6 @@ class SignUpActivity : AppCompatActivity() {
         super.onResume()
 
         btnRegister.setOnClickListener {
-            progressBar.visibility = View.VISIBLE
             setFormEnable(false, R.color.input_disabled)
             passingData()
         }

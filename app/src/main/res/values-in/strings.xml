@@ -62,4 +62,9 @@
     <string name="name">Nama</string>
     <string name="emailSample">Email: akhmadfauzi@gmail.com</string>
     <string name="phoneSample">Phone: 082112966360</string>
+
+    <string name="email_detail_register">Email: %1$s</string>
+    <string name="phone_detail_register">Telepone: %1$s</string>
+    <string name="gender_detail_register">Jenis Kelamin: %1$s</string>
+    <string name="birthday_detail_register">Ulang tahun: %1$s</string>
 </resources>
