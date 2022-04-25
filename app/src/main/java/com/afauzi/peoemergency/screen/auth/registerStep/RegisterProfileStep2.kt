@@ -21,7 +21,10 @@ import com.afauzi.peoemergency.screen.main.fragment.HomeFragment
 import com.afauzi.peoemergency.screen.main.fragment.activity.home.CameraAction
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.storageReference
+import com.afauzi.peoemergency.utils.Library
+import com.afauzi.peoemergency.utils.Library.simpleDateFormat
 import com.google.android.material.chip.Chip
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -29,6 +32,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.StorageReference
 import de.hdodenhof.circleimageview.CircleImageView
 import java.io.IOException
+import java.text.SimpleDateFormat
 import java.util.*
 
 class RegisterProfileStep2 : AppCompatActivity() {
@@ -42,6 +46,8 @@ class RegisterProfileStep2 : AppCompatActivity() {
     private lateinit var btnStep2: Button
     private lateinit var tvUsername: TextView
     private lateinit var btnChooseImage: Chip
+    private lateinit var btnDatePicker: Chip
+    private lateinit var tvDateReceived: TextView
     private lateinit var ivSetImageProfile: CircleImageView
     private lateinit var fillPath: Uri
 
@@ -50,7 +56,8 @@ class RegisterProfileStep2 : AppCompatActivity() {
         tvUsername = binding.username
         btnChooseImage = binding.btnChipChoosePhoto
         ivSetImageProfile = binding.ivSetPhotoProfile
-
+        btnDatePicker = binding.btnChipDatePicker
+        tvDateReceived = binding.tvReceivedBirthday
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -99,6 +106,10 @@ class RegisterProfileStep2 : AppCompatActivity() {
         val dateJoin = intent.extras?.getString("dateJoinStep1")
         val imgProfileUri = fileUri.toString()
 
+        btnDatePicker.setOnClickListener {
+            datePickerDialog()
+        }
+
         btnStep2.setOnClickListener {
            val bundle = Bundle()
             bundle.putString("usernameStep2", username)
@@ -108,12 +119,30 @@ class RegisterProfileStep2 : AppCompatActivity() {
             bundle.putString("passwordStep2", password)
             bundle.putString("dateJoinStep2", dateJoin)
             bundle.putString("imgUriStep2", imgProfileUri)
+            bundle.putString("userBirthdayStep2", "${tvDateReceived.text}")
 
             val intent = Intent(this, RegisterDetailProfileFinish::class.java)
             intent.putExtras(bundle)
             startActivity(intent)
         }
 
+    }
+
+    private fun datePickerDialog() {
+        val datePicker = MaterialDatePicker.Builder.datePicker()
+            .setTitleText("Select date")
+            .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+            .build()
+
+        datePicker.addOnPositiveButtonClickListener {
+            val utc = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+            utc.timeInMillis = it
+            val format = simpleDateFormat
+            val formatted: String = format.format(utc.time)
+            tvDateReceived.text = formatted
+
+        }
+        datePicker.show(supportFragmentManager, TAG)
     }
 
 }

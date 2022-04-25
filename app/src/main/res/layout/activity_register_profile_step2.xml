@@ -87,12 +87,29 @@
                    style="@style/Theme.MaterialComponents.Light"/>
            </LinearLayout>
 
-            <com.google.android.material.chip.Chip
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Masukan tanggal lahir"
-                app:chipIcon="@drawable/ic_baseline_calendar_today_24"
-                style="@style/Theme.MaterialComponents.Light"/>
+          <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal">
+
+              <com.google.android.material.chip.Chip
+                  android:id="@+id/btnChipDatePicker"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="Tanggal lahir"
+                  app:chipIcon="@drawable/ic_baseline_calendar_today_24"
+                  style="@style/Theme.MaterialComponents.Light"/>
+              <ImageView
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:src="@drawable/ic_birthday"/>
+              <TextView
+                  android:id="@+id/tv_received_birthday"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="your birthday"
+                  android:textColor="@color/black"/>
+          </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_step_2"

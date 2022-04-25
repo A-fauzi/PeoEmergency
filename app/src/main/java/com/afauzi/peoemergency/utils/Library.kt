@@ -20,10 +20,10 @@ object Library {
      * Declaration simpleDateFormat milik java
      */
     @SuppressLint("SimpleDateFormat")
-    private val simpleDateFormat: SimpleDateFormat = SimpleDateFormat("dd MMM yyyy")
+    val simpleDateFormat: SimpleDateFormat = SimpleDateFormat("dd MMM yyyy")
 
     @SuppressLint("SimpleDateFormat")
-    private val simpleDateFormatAndTime: SimpleDateFormat = SimpleDateFormat("dd MMM yyyy | hh:mm:ss zzz")
+    val simpleDateFormatAndTime: SimpleDateFormat = SimpleDateFormat("dd MMM yyyy | hh:mm:ss zzz")
 
     /**
      * Declaration calendar milik java plus getInstance()

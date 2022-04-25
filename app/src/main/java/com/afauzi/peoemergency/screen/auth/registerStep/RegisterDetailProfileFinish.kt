@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import com.afauzi.peoemergency.R
@@ -15,6 +16,10 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 
 class RegisterDetailProfileFinish : AppCompatActivity() {
+
+    companion object {
+        const val TAG = "RegisterDetailProfileFinish"
+    }
 
     private lateinit var binding: ActivityRegisterDetailProfileFinishBinding
 
@@ -35,6 +40,31 @@ class RegisterDetailProfileFinish : AppCompatActivity() {
         setContentView(binding.root)
 
         initView()
+
+        tvUsername.text = resources.getString(R.string.hi_name, intent.extras?.getString("usernameStep2"))
+        val username = intent.extras?.getString("usernameStep2")
+        val gender = intent.extras?.getString("genderStep2")
+        val phone = intent.extras?.getString("phoneStep2")
+        val email = intent.extras?.getString("emailStep2")
+        val password = intent.extras?.getString("passwordStep2")
+        val dateJoin = intent.extras?.getString("dateJoinStep2")
+        val imgUri = intent.extras?.getString("imgUriStep2")
+        val birthday = intent.extras?.getString("userBirthdayStep2")
+
+        val arr = arrayOf(
+            username,
+            gender,
+            phone,
+            email,
+            password,
+            dateJoin,
+            imgUri,
+            birthday,
+        )
+        for (i in arr) {
+            Log.i(TAG, i.toString())
+        }
+
     }
 
     override fun onResume() {
