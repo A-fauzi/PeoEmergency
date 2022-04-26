@@ -7,4 +7,6 @@
     <dimen name="radius_card_circle">30dp</dimen>
     <dimen name="width_icon">25dp</dimen>
     <dimen name="height_icon">25dp</dimen>
+    <dimen name="photo_profile_width">50dp</dimen>
+    <dimen name="photo_profile_height">50dp</dimen>
 </resources>

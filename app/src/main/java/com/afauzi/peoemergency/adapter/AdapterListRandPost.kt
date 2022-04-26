@@ -34,12 +34,18 @@ class AdapterListRandPost(
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentItem = listItemRandomPost[position]
-        holder.username.text = currentItem.user.username
-        Picasso.get().load(currentItem.user.photo_profile).placeholder(R.drawable.ic_baseline_person_24).into(holder.photoProfile)
-        holder.postLocation.text = currentItem.post_location
-        holder.postDesc.text = currentItem.post_desc
-        holder.postDate.text = currentItem.post_date
-        Picasso.get().load(currentItem.post_image).placeholder(R.drawable.ic_baseline_image_24).into(holder.postImage)
+        holder.username.text = currentItem.username
+        holder.postLocation.text = currentItem.postLocationCityName
+        holder.postDesc.text = currentItem.postText
+        holder.postDate.text = currentItem.postDate
+
+        Picasso.get().load(currentItem.photoProfile).fit().placeholder(R.drawable.ic_baseline_person_24).into(holder.photoProfile)
+
+        if (currentItem.photoPost == null || currentItem.photoPost == "") {
+            holder.postImage.setImageResource(0)
+        } else {
+            Picasso.get().load(currentItem.photoPost).resize(500, 500).placeholder(R.drawable.ic_baseline_image_24).into(holder.postImage)
+        }
 
         holder.cardContent.setOnClickListener {
             callClickListener.onClickListener(currentItem)

@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:padding="8dp"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -11,8 +12,8 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/item_photo_profile"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
+            android:layout_width="@dimen/photo_profile_width"
+            android:layout_height="@dimen/photo_profile_height"
             android:src="@drawable/sample_logo" />
 
         <LinearLayout
@@ -21,64 +22,69 @@
             android:layout_toEndOf="@id/item_photo_profile"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/item_name"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_marginLeft="8dp"
+                android:text="Akhmad Fauzi | "
+                android:textColor="@color/black"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/item_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Akhmad Fauzi | "
-                    android:textColor="@color/black"/>
-                <ImageView
-                    android:id="@+id/ic_location"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/round_location_on_20"/>
-                <TextView
-                    android:id="@+id/item_location_post"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Jakarta"
-                    android:textColor="@color/black"/>
-
-            </LinearLayout>
+            <TextView
+                android:id="@+id/item_date_post"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:text="24 mar 2022 | 07:00 wib" />
 
             <TextView
                 android:id="@+id/item_description_post"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/lorem" />
+                android:layout_marginTop="16dp"
+                android:textColor="@color/black"/>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/item_cardView_content_random_post"
-                android:layout_width="300dp"
-                android:layout_height="150dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
                 android:clickable="true"
                 android:focusable="true"
-                android:layout_margin="8dp"
                 app:cardCornerRadius="16dp">
 
                 <ImageView
                     android:id="@+id/item_image_post"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:src="@drawable/sample_logo" />
+                    android:adjustViewBounds="true" />
             </androidx.cardview.widget.CardView>
-            <TextView
-                android:id="@+id/item_date_post"
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="24 mar 2022 | 07:00 wib"
-                android:textColor="@color/black"
-                android:layout_gravity="end"/>
+                android:layout_gravity="end"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/round_location_on_20" />
+
+                <TextView
+                    android:id="@+id/item_location_post"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Jakarta jsadbasbdjabsjdbajsbdjasbdjabdsjabsghasdhgjad"
+                    app:chipIcon="@drawable/round_location_on_20"
+                    android:layout_marginLeft="8dp"/>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:orientation="horizontal">
 
                 <ImageButton
@@ -86,8 +92,8 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:background="@color/white"
-                    android:src="@drawable/ic_baseline_chat_bubble_outline_24"
-                    android:foreground="?attr/selectableItemBackground"/>
+                    android:foreground="?attr/selectableItemBackground"
+                    android:src="@drawable/ic_baseline_chat_bubble_outline_24" />
 
                 <ImageButton
                     android:id="@+id/item_to_like_post"
@@ -95,8 +101,8 @@
                     android:layout_height="25dp"
                     android:layout_marginStart="16dp"
                     android:background="@color/white"
-                    android:src="@drawable/ic_baseline_favorite_border_24"
-                    android:foreground="?attr/selectableItemBackground"/>
+                    android:foreground="?attr/selectableItemBackground"
+                    android:src="@drawable/ic_baseline_favorite_border_24" />
 
                 <ImageButton
                     android:id="@+id/item_to_share_post"
@@ -104,8 +110,8 @@
                     android:layout_height="25dp"
                     android:layout_marginStart="16dp"
                     android:background="@color/white"
-                    android:src="@drawable/ic_baseline_share_24"
-                    android:foreground="?attr/selectableItemBackground"/>
+                    android:foreground="?attr/selectableItemBackground"
+                    android:src="@drawable/ic_baseline_share_24" />
 
             </LinearLayout>
 

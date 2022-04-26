@@ -16,8 +16,8 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/image_profile"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/photo_profile_width"
+            android:layout_height="@dimen/photo_profile_height"
             android:src="@drawable/sample_logo" />
 
         <LinearLayout
@@ -56,7 +56,7 @@
 
     </RelativeLayout>
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/et_content_desc_dialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -138,11 +138,24 @@
         android:background="@color/black"
         android:layout_marginTop="16dp"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_post_random"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        tools:listitem="@layout/item_list_random_post"/>
+        android:layout_height="match_parent">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animationView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:lottie_rawRes="@raw/landing_background_anim"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            android:visibility="invisible"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_post_random"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"/>
+    </FrameLayout>
 
 </LinearLayout>

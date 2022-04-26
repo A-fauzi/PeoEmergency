@@ -1,11 +1,13 @@
 package com.afauzi.peoemergency.dataModel
 
 data class ModelItemRandomPost(
-    var user: ModelUser,
-    var post_location: String,
-    var post_date: String,
-    var post_desc: String,
-    var post_image: Int = 1,
-    var post_comment: List<ModelUser>,
-    var post_like: List<ModelUser>,
+    var username: String? = null,
+    var photoProfile: String? = null,
+    var postLocationCityName: String? = null,
+    var postText: String? = null,
+    var postDate: String? = null,
+    var photoPost: String? = null,
+    var postId: String? = null,
+    var postLocationCoordinate: String? = null,
+    var userId: String? = null,
 )

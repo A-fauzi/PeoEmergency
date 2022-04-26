@@ -9,6 +9,7 @@ import android.location.Geocoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -20,6 +21,11 @@ import androidx.annotation.RequiresApi
 import androidx.core.R
 import androidx.core.app.ActivityCompat
 import androidx.core.net.toUri
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.afauzi.peoemergency.adapter.AdapterListRandPost
+import com.afauzi.peoemergency.dataModel.ModelItemRandomPost
 import com.afauzi.peoemergency.databinding.FragmentHomeBinding
 import com.afauzi.peoemergency.screen.LandingActivity
 import com.afauzi.peoemergency.screen.main.fragment.activity.home.CameraAction
@@ -32,9 +38,11 @@ import com.afauzi.peoemergency.utils.FirebaseServiceInstance.storageReference
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.user
 import com.afauzi.peoemergency.utils.Library
 import com.afauzi.peoemergency.utils.Library.currentDateTime
+import com.airbnb.lottie.LottieAnimationView
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
@@ -46,9 +54,10 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.security.SecureRandom
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
 
     companion object {
         private const val TAG = "HomeFragment"
@@ -58,7 +67,7 @@ class HomeFragment : Fragment() {
     private lateinit var layout: View
     private lateinit var binding: FragmentHomeBinding
     private lateinit var username: TextView
-    private lateinit var inputContentDescPost: EditText
+    private lateinit var inputContentDescPost: TextInputEditText
     private lateinit var chooseImagePost: ImageView
     private lateinit var attachFile: ImageView
     private lateinit var moreMenu: ImageView
@@ -70,6 +79,9 @@ class HomeFragment : Fragment() {
     private lateinit var postId: UUID
     private lateinit var photoProfileUri: String
     private lateinit var photoPostUri: Uri
+    private lateinit var rvPostRandom: RecyclerView
+    private lateinit var listRandomPost: ArrayList<ModelItemRandomPost>
+    private lateinit var animationView: LottieAnimationView
 
     private fun initView() {
         layout = binding.mainLayout
@@ -88,6 +100,7 @@ class HomeFragment : Fragment() {
         if (requireActivity().intent.extras != null) {
             photoPostUri = requireActivity().intent.extras?.getString("resultCapturePostRandom")!!.toUri()
         }
+        animationView = binding.animationView
     }
 
     override fun onCreateView(
@@ -111,6 +124,10 @@ class HomeFragment : Fragment() {
         // get current Location
         getCurrentLocation()
 
+        // Get List Post
+        recyclerViewListRandPost()
+
+
         // Received Capture Image
         if (requireActivity().intent.extras != null) {
             Picasso
@@ -131,7 +148,6 @@ class HomeFragment : Fragment() {
                         // Precise location access granted
                         Log.i(TAG, "Access location is granted")
                         progressLoaderPostContent.visibility = View.VISIBLE
-                        inputContentDescPost.text.clear()
 
                         if (requireActivity().intent.extras != null) {
                             Log.d(TAG, "uploadImageServer")
@@ -401,6 +417,7 @@ class HomeFragment : Fragment() {
                                 databaseReference.setValue(hashMap).addOnCompleteListener { postResult ->
                                     if (postResult.isSuccessful) {
                                         Log.i(TAG, "data post saved in database")
+                                        inputContentDescPost.text?.clear()
                                         imageReceiverCapture.setImageResource(0)
                                         progressLoaderPostContent.visibility = View.INVISIBLE
                                         Toast.makeText(activity, "Post Success!", Toast.LENGTH_SHORT).show()
@@ -434,10 +451,73 @@ class HomeFragment : Fragment() {
             }
     }
 
-    fun randomString(len: Int): String {
+    private fun randomString(len: Int): String {
         val random = SecureRandom()
         val chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".toCharArray()
         return (1..len).map { chars[random.nextInt(chars.size)] }.joinToString("")
     }
 
+    private fun recyclerViewListRandPost() {
+        rvPostRandom = binding.rvPostRandom
+        listRandomPost = arrayListOf()
+        rvPostRandom.setHasFixedSize(true)
+        rvPostRandom.layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
+        getListPostRandom()
+    }
+
+    private fun getListPostRandom() {
+        val uid = auth.currentUser!!.uid
+        databaseReference = firebaseDatabase.getReference("postRandom")
+        databaseReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    listRandomPost.clear()
+                    for (listRandPost in snapshot.children) {
+                        val list = listRandPost.getValue(ModelItemRandomPost::class.java)
+                        listRandomPost.add(list!!)
+                        animationView.visibility = View.INVISIBLE
+
+                    }
+                    rvPostRandom.adapter = AdapterListRandPost(this@HomeFragment, listRandomPost)
+                } else {
+                    animationView.visibility = View.VISIBLE
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
+    }
+
+
+    override fun onClickListener(data: ModelItemRandomPost) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onLongClickListener(data: ModelItemRandomPost) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onClickRemove(data: ModelItemRandomPost) {
+        TODO("Not yet implemented")
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
