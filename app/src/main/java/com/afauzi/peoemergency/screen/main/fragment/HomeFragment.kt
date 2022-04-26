@@ -113,23 +113,46 @@ class HomeFragment : Fragment() {
             val locationCoordinate = "$latitude, $longitude"
 
             val geocoder = Geocoder(requireActivity(), Locale.getDefault())
-            val addresses: List<Address>?
             val address: Address?
             var fullAddress = ""
 
-            addresses = geocoder.getFromLocation(latitude!!, longitude!!, 1)
-            if (addresses.isNotEmpty()) {
+            val addresses: List<Address>? = geocoder.getFromLocation(latitude!!, longitude!!, 1)
+            if (addresses!!.isNotEmpty()) {
                 address = addresses[0]
                 fullAddress = address.getAddressLine(0)
                 val city = address.locality
                 val state = address.adminArea
                 val country = address.countryName
-                var postalCode = address.postalCode
+                val postalCode = address.postalCode
+                val knownName = address.featureName
 
                 Log.i(TAG, "FullAddress: $fullAddress")
                 Log.i(TAG, "City: $city")
                 Log.i(TAG, "State: $state")
                 Log.i(TAG, "Country: $country")
+                Log.i(TAG, "postal code: $postalCode")
+                Log.i(TAG, "knowName: $knownName")
+
+
+                val uid = auth.currentUser!!.uid
+                databaseReference = firebaseDatabase.getReference("users").child(uid).child("currentLocation")
+                val hashMap: HashMap<String, String> = HashMap()
+                hashMap["fullAddress"] = fullAddress
+                hashMap["city"] = city
+                hashMap["state"] = state
+                hashMap["country"] = country
+                hashMap["locationCoordinate"] = locationCoordinate
+
+                databaseReference.setValue(hashMap).addOnCompleteListener { locationResult ->
+                    if (locationResult.isSuccessful) {
+                        Log.i(TAG, "locationResult saved in database")
+                    } else {
+                        Log.i(TAG, "locationResult failed ${locationResult.exception?.message}")
+                    }
+                }.addOnFailureListener { e ->
+                    Log.i(TAG, "location not saved in database -> ${e.message}")
+                }
+
             } else {
                 Toast.makeText(activity, "location not found", Toast.LENGTH_SHORT).show()
                 Log.w(TAG, "location not found")
