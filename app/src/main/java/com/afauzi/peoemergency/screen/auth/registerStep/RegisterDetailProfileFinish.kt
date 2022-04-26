@@ -158,7 +158,7 @@ class RegisterDetailProfileFinish : AppCompatActivity() {
     ) {
         if (fileUri != null) {
             val fileName = UUID.randomUUID().toString() + ".jpg"
-            val refStorage = firebaseStorage.reference.child("imagesProfile/$fileName")
+            val refStorage = firebaseStorage.reference.child("imagesProfile/${auth.currentUser!!.email}/$fileName")
             refStorage.putFile(fileUri).addOnSuccessListener { taskSnapshot ->
                 taskSnapshot.storage.downloadUrl.addOnSuccessListener { uri ->
                     databaseReference = firebaseDatabase.getReference("users").child(userId)

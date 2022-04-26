@@ -24,34 +24,35 @@
             android:id="@+id/text_dalog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_toEndOf="@id/image_profile"
-            android:orientation="vertical"
-            android:layout_marginStart="8dp">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/username"
                 android:layout_width="wrap_content"
-                android:layout_height="29dp"
+                android:layout_height="wrap_content"
                 android:text="Akhmad Fauzi"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 
-            <TextView
+            <com.google.android.material.chip.Chip
                 android:id="@+id/current_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:chipIcon="@drawable/round_location_on_20"
                 android:text="Jakarta" />
 
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_post_dialog"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            app:cornerRadius="@dimen/button_radius"
-            android:text="Post" />
+            android:text="Post"
+            app:cornerRadius="@dimen/button_radius" />
 
     </RelativeLayout>
 
@@ -81,6 +82,14 @@
            android:layout_height="wrap_content"
            android:adjustViewBounds="true"/>
    </androidx.cardview.widget.CardView>
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progress_post_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:visibility="invisible"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

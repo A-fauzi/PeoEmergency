@@ -21,9 +21,21 @@ class LandingActivity : AppCompatActivity() {
      * Declaration viewBinding
      */
     private lateinit var binding: ActivityLandingBinding
+
+    /**
+     * Declaration btn Sign in
+     */
+
     private lateinit var btnToSignInActivity: Button
+
+    /**
+     * Declaration btn Sign up
+     */
     private lateinit var btnToSignUpActivity: Button
 
+    /**
+     * Initials views
+     */
     private fun initView() {
         btnToSignInActivity = binding.btnToSignInActivity
         btnToSignUpActivity = binding.btnToSignUpActivity
@@ -39,6 +51,7 @@ class LandingActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
+        // init views
         initView()
 
     }
@@ -46,6 +59,19 @@ class LandingActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
+        // Current User
+        currentUser()
+
+        // onClick to second activity
+        onClickBtn(btnToSignInActivity, SignInActivity::class.java)
+        onClickBtn(btnToSignUpActivity, SignUpActivity::class.java)
+
+    }
+
+    /**
+     * Handle current user
+     */
+    private fun currentUser() {
         auth.currentUser.let {
             if (it != null) {
                 Log.i(TAG, "user logged in")
@@ -55,10 +81,6 @@ class LandingActivity : AppCompatActivity() {
                 Log.i(TAG, "user not login")
             }
         }
-
-        onClickBtn(btnToSignInActivity, SignInActivity::class.java)
-        onClickBtn(btnToSignUpActivity, SignUpActivity::class.java)
-
     }
 
     /**

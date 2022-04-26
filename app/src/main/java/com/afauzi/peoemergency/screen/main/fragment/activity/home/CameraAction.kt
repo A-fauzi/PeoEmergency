@@ -114,8 +114,8 @@ class CameraAction : AppCompatActivity() {
 
             it.takePicture(outputFileOptions, imageCaptureExecutor, object : ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                    Log.i(TAG, "The image has been save in ${outputFileResults.savedUri}")
 
+                    Log.i(TAG, "The image has been save in ${outputFileResults.savedUri}")
                     val bundle = Bundle()
                     bundle.putString("resultCapturePostRandom", outputFileResults.savedUri.toString())
 

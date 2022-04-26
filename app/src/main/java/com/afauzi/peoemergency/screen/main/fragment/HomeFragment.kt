@@ -33,11 +33,16 @@ import com.afauzi.peoemergency.utils.FirebaseServiceInstance.user
 import com.afauzi.peoemergency.utils.Library
 import com.afauzi.peoemergency.utils.Library.currentDateTime
 import com.google.android.gms.location.LocationServices
+import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*
 import kotlin.collections.HashMap
@@ -59,6 +64,8 @@ class HomeFragment : Fragment() {
     private lateinit var imageReceiverCapture: ImageView
     private lateinit var btnPost: Button
     private lateinit var imgProfile: CircleImageView
+    private lateinit var currentLocation: TextView
+    private lateinit var progressLoaderPostContent: LinearProgressIndicator
 
     private fun initView() {
         layout = binding.mainLayout
@@ -70,6 +77,8 @@ class HomeFragment : Fragment() {
         btnPost = binding.buttonPostDialog
         imageReceiverCapture = binding.ivReceiveImageCapture
         imgProfile = binding.imageProfile
+        currentLocation = binding.currentLocation
+        progressLoaderPostContent = binding.progressPostContent
     }
 
     override fun onCreateView(
@@ -126,6 +135,8 @@ class HomeFragment : Fragment() {
                 val postalCode = address.postalCode
                 val knownName = address.featureName
 
+                currentLocation.text = city
+
                 Log.i(TAG, "FullAddress: $fullAddress")
                 Log.i(TAG, "City: $city")
                 Log.i(TAG, "State: $state")
@@ -135,7 +146,8 @@ class HomeFragment : Fragment() {
 
 
                 val uid = auth.currentUser!!.uid
-                databaseReference = firebaseDatabase.getReference("users").child(uid).child("currentLocation")
+                databaseReference =
+                    firebaseDatabase.getReference("users").child(uid).child("currentLocation")
                 val hashMap: HashMap<String, String> = HashMap()
                 hashMap["fullAddress"] = fullAddress
                 hashMap["city"] = city
@@ -156,14 +168,17 @@ class HomeFragment : Fragment() {
             } else {
                 Toast.makeText(activity, "location not found", Toast.LENGTH_SHORT).show()
                 Log.w(TAG, "location not found")
+                currentLocation.text =
+                    getString(com.afauzi.peoemergency.R.string.not_detect_current_location)
             }
 
         }
 
 
-            // GetData USer
+        // GetData USer
         getUserData()
 
+        // Received Capture Image
         if (requireActivity().intent.extras != null) {
             Picasso
                 .get()
@@ -179,6 +194,7 @@ class HomeFragment : Fragment() {
                 when {
                     permission.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
                         // Precise location access granted
+//                        uploadImageServer()
                         Log.i(TAG, "Access location is granted")
                     }
                     permission.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
@@ -237,7 +253,6 @@ class HomeFragment : Fragment() {
 
         // Btn Post
         btnPost.setOnClickListener {
-//            storeData()
             // Launch the popup permission
             permissionRequestLocation.launch(
                 arrayOf(
@@ -267,13 +282,13 @@ class HomeFragment : Fragment() {
                                 Picasso
                                     .get()
                                     .load(photoUri)
-                                    .placeholder(com.afauzi.peoemergency.R.drawable.boy_image_place_holder )
+                                    .placeholder(com.afauzi.peoemergency.R.drawable.boy_image_place_holder)
                                     .into(imgProfile)
                             } else {
                                 Picasso
                                     .get()
                                     .load(photoUri)
-                                    .placeholder(com.afauzi.peoemergency.R.drawable.girl_image_place_holder )
+                                    .placeholder(com.afauzi.peoemergency.R.drawable.girl_image_place_holder)
                                     .into(imgProfile)
                             }
                             Log.i(TAG, "Photo Uri: $photoUri") // data username done
@@ -298,115 +313,46 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun getCurrentLocation(locationCoordinate: String) {
-        Log.i(TAG, "location: $locationCoordinate") // get Data location coordinate done
-    }
+//    val hashMap: HashMap<String, String> = HashMap()
+//    hashMap["username"] = username
+//    hashMap["photoProfile"] = photoProfile
+//    hashMap["postLocation"] = postLocation
+//    hashMap["postText"] = postText
+//    hashMap["postDate"] = postDate
+//    hashMap["imagePost"] = imagePost.toString()
 
-    private fun setUpDatabase(
-        username: String,
-        photoProfile: String,
-        postLocation: String,
-        postText: String,
-        postDate: String,
-        imagePost: Uri
-    ) {
+    private fun uploadImageServer() {
+        progressLoaderPostContent.visibility = View.VISIBLE
+
+        val imgId = UUID.randomUUID().toString() + ".jpg"
         val uid = auth.currentUser!!.uid
-        val postId = UUID.randomUUID().toString()
-        val referencePath = "postRandom"
-        databaseReference = firebaseDatabase.getReference(referencePath).child(uid).child(postId)
-
-        val hashMap: HashMap<String, String> = HashMap()
-        hashMap["username"] = username
-        hashMap["photoProfile"] = photoProfile
-        hashMap["postLocation"] = postLocation
-        hashMap["postText"] = postText
-        hashMap["postDate"] = postDate
-        hashMap["imagePost"] = imagePost.toString()
-
-        databaseReference.setValue(hashMap).addOnCompleteListener {
-            if (it.isSuccessful) {
-                uploadImageServer(uid, imagePost, postId)
-                Toast.makeText(activity, "Data Post Success in Saved", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(activity, "Data Post Failed Saved", Toast.LENGTH_SHORT).show()
-            }
-        }.addOnFailureListener {
-            Toast.makeText(activity, "${it.message}", Toast.LENGTH_SHORT).show()
-        }
-
-    }
-
-    private fun uploadImageServer(childUid: String,imageUri: Uri,  childPostId: String) {
-        val imgId = UUID.randomUUID().toString()
-        val referencePath = "postRandom"
-
-        storageReference = firebaseStorage.reference
-        storageReference.child("post_image/$imgId")
+        val imageUri: Uri = requireActivity().intent.extras?.getString("resultCapturePostRandom")!!.toUri()
+        Log.i(TAG, "Image Post : $imageUri")
+        storageReference = firebaseStorage.reference.child("post_image/${auth.currentUser!!.email}/$imgId")
         storageReference.putFile(imageUri).addOnSuccessListener { taskSnap ->
+
+            var currentProgress = 0
+            currentProgress += 10
+
+            progressLoaderPostContent.progress = currentProgress
+            progressLoaderPostContent.max = 100
+
+            imageReceiverCapture.setImageResource(0)
+            progressLoaderPostContent.visibility = View.INVISIBLE
+            Toast.makeText(activity, "Post Success!", Toast.LENGTH_SHORT).show()
+
+            Log.i(TAG, "upload image post: Successful")
+
             taskSnap.storage.downloadUrl.addOnSuccessListener { uri ->
-                databaseReference = firebaseDatabase.getReference(referencePath).child(childUid).child(childPostId).child("imagePost")
-                databaseReference.setValue(uri.toString()).addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        Log.i(TAG, "upload: Successful")
-                    } else {
-                        Log.i(TAG, "upload: Errors")
-                    }
-                }.addOnFailureListener {
-                    Toast.makeText(activity, "${it.message}", Toast.LENGTH_SHORT).show()
-                }
-            }.addOnFailureListener {
-                Toast.makeText(activity, "${it.message}", Toast.LENGTH_SHORT).show()
+                Log.i(TAG, "Uri: $uri")
+            }.addOnFailureListener { uriFailure ->
+                Toast.makeText(activity, "${uriFailure.message}", Toast.LENGTH_SHORT).show()
             }
-        }.addOnFailureListener {
-            Toast.makeText(activity, "${it.message}", Toast.LENGTH_SHORT).show()
+
+        }.addOnFailureListener { snapshotFailure ->
+            Toast.makeText(activity, "${snapshotFailure.message}", Toast.LENGTH_SHORT).show()
         }
 
-    }
-
-    private fun storeData() {
-        // Get Location coordinate
-        val mFusedLocation = LocationServices.getFusedLocationProviderClient(requireActivity())
-
-        if (ActivityCompat.checkSelfPermission(
-                requireActivity(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                requireActivity(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return
-        }
-
-            /**
-         * Menerima inputan description
-         */
-        val receiveInputDesc = inputContentDescPost.text
-        Log.i(TAG, "content desc: $receiveInputDesc") // data description done
-        Log.i(TAG, "date post: $currentDateTime") // current Date Post Done
-        val bundle = requireActivity().intent.extras
-        Log.i(TAG, "image uri: ${bundle?.getString("resultCapturePostRandom")}") // image uri done
-
-//        val getImage: File = Uri.fromFile(bundle?.getString("resultCapturePostRandom").toString())
-
-        mFusedLocation.lastLocation.addOnSuccessListener(requireActivity()) { location ->
-            val latitude = location?.latitude
-            val longitude = location?.longitude
-            val locationCoordinate = "$latitude, $longitude"
-            getCurrentLocation(locationCoordinate)
-
-            setUpDatabase(
-                username.text.toString(),
-                "",
-                locationCoordinate,
-                receiveInputDesc.toString(),
-                currentDateTime,
-                bundle?.getString("resultCapturePostRandom")!!.toUri()
-            )
-
-        }
-
-        Library.clearText(inputContentDescPost)
 
     }
 }

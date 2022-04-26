@@ -21,6 +21,9 @@ import kotlin.collections.HashMap
 class SignUpActivity : AppCompatActivity() {
 
     companion object {
+        /**
+         * constant variable to TAG
+         */
         const val TAG = "SignUpActivity"
     }
 
@@ -33,33 +36,75 @@ class SignUpActivity : AppCompatActivity() {
      * Declaration editText username
      */
     private lateinit var username: TextInputEditText
+
+    /**
+     * Declaration TextInputLayout username
+     */
     private lateinit var usernameInputLayout: TextInputLayout
 
     /**
      * Declaration editText email
      */
     private lateinit var email: TextInputEditText
+
+    /**
+     * Declaration TextInputLayout email
+     */
     private lateinit var emailInputLayout: TextInputLayout
 
     /**
      * Declaration editText password
      */
     private lateinit var password: TextInputEditText
+
+    /**
+     * Declaration TextInputLayout password
+     */
     private lateinit var passwordInputLayout: TextInputLayout
 
     /**
      * Declaration editText password confirmation
      */
     private lateinit var passwordConfirm: TextInputEditText
+
+    /**
+     * Declaration TextInputLayout password confirmation
+     */
     private lateinit var passwordConfirmInputLayout: TextInputLayout
 
+    /**
+     * Declaration Text Warning username
+     */
     private lateinit var textWarnUsername: TextView
+
+    /**
+     * Declaration Text Warning email
+     */
     private lateinit var textWarnEmail: TextView
+
+    /**
+     * Declaration Text Warning password
+     */
     private lateinit var textWarnPassword: TextView
+
+    /**
+     * Declaration Text Warning password confirmation
+     */
     private lateinit var textWarnPasswordConfirm: TextView
+
+    /**
+     * Declaration btn register
+     */
     private lateinit var btnRegister: Button
+
+    /**
+     * Declaration text link to move sign in activity
+     */
     private lateinit var linkToSignIn: TextView
 
+    /**
+     * Initials view
+     */
     private fun initView() {
         username = binding.etUsernameSignUp
         email = binding.etEmailSignUp
@@ -84,42 +129,69 @@ class SignUpActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
+        // Initials views
         initView()
     }
 
     override fun onResume() {
         super.onResume()
 
+        // btn register to behavior
         btnRegister.setOnClickListener {
             setFormEnable(false, R.color.input_disabled)
             passingData()
         }
 
+        // link to move sign in activity
         linkToSignIn.setOnClickListener {
+            startActivity(Intent(this, SignInActivity::class.java))
             finish()
         }
 
+        // =============================== Add Text Watcher On EditText ===========================================
         username.addTextChangedListener(GenericTextWatcher(username))
         email.addTextChangedListener(GenericTextWatcher(email))
         password.addTextChangedListener(GenericTextWatcher(password))
         passwordConfirm.addTextChangedListener(GenericTextWatcher(passwordConfirm))
+        // =============================== End ===========================================
 
     }
 
+    /**
+     * Handle to passing data on second activity
+     */
     private fun passingData() {
 
+        // ======================================= Passing data on bundle ==================================
+        /**
+         * Declaration variable Bundle()
+         */
         val bundle = Bundle()
         bundle.putString("username", username.text.toString())
         bundle.putString("email", email.text.toString())
         bundle.putString("password", password.text.toString())
         bundle.putString("dateJoin", currentDate)
 
+        // ======================================= End ==================================
+
+        // ====================================== Intent Main ===========================
+        /**
+         * Intent Action Target to second class activity
+         */
         val intent = Intent(this, RegisterProfileDetailStep1::class.java)
+
+        // data passing on bundle to passing in activity target
         intent.putExtras(bundle)
+
         startActivity(intent)
+
+        // ====================================== End ===================================
 
     }
 
+    /**
+     * GenericTextWatcher class to views editText in this activity
+     */
     inner class GenericTextWatcher(private val view: View) : TextWatcher {
         override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(editable: CharSequence, start: Int, before: Int, count: Int) {}
@@ -210,6 +282,9 @@ class SignUpActivity : AppCompatActivity() {
             }
         }
 
+        /**
+         * Validate on ediText to use in GenericTextWatcher class
+         */
         private fun inputValidate(
             setCompDrawIsCorrect: EditText? = null,
             setCompDrawNotCorrect: EditText? = null,
@@ -221,12 +296,7 @@ class SignUpActivity : AppCompatActivity() {
             setBackBoxTextFieldDisable: TextInputLayout? = null,
             requestFocus: View? = null
         ) {
-            setCompDrawIsCorrect?.setCompoundDrawablesWithIntrinsicBounds(
-                0,
-                0,
-                R.drawable.ic_correct,
-                0
-            )
+            setCompDrawIsCorrect?.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_correct, 0)
             setCompDrawNotCorrect?.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
             textWarnVisible?.visibility = View.VISIBLE
             textWarnGone?.visibility = View.INVISIBLE
@@ -239,17 +309,20 @@ class SignUpActivity : AppCompatActivity() {
 
     }
 
-    private fun setFormEnable(condition: Boolean, setBackBoxColor: Int){
-            username.isEnabled = condition
-            usernameInputLayout.setBoxBackgroundColorResource(setBackBoxColor)
+    /**
+     * Handle form enabling condition
+     */
+    private fun setFormEnable(condition: Boolean, setBackBoxColor: Int) {
+        username.isEnabled = condition
+        usernameInputLayout.setBoxBackgroundColorResource(setBackBoxColor)
 
-            email.isEnabled = condition
-            emailInputLayout.setBoxBackgroundColorResource(setBackBoxColor)
+        email.isEnabled = condition
+        emailInputLayout.setBoxBackgroundColorResource(setBackBoxColor)
 
-            password.isEnabled = condition
-            passwordInputLayout.setBoxBackgroundColorResource(setBackBoxColor)
+        password.isEnabled = condition
+        passwordInputLayout.setBoxBackgroundColorResource(setBackBoxColor)
 
-            passwordConfirm.isEnabled = condition
-            passwordConfirmInputLayout.setBoxBackgroundColorResource(setBackBoxColor)
+        passwordConfirm.isEnabled = condition
+        passwordConfirmInputLayout.setBoxBackgroundColorResource(setBackBoxColor)
     }
 }
