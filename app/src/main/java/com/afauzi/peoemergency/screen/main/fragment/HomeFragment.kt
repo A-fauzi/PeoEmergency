@@ -44,6 +44,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
+import java.security.SecureRandom
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -66,6 +67,9 @@ class HomeFragment : Fragment() {
     private lateinit var imgProfile: CircleImageView
     private lateinit var currentLocation: TextView
     private lateinit var progressLoaderPostContent: LinearProgressIndicator
+    private lateinit var postId: UUID
+    private lateinit var photoProfileUri: String
+    private lateinit var photoPostUri: Uri
 
     private fun initView() {
         layout = binding.mainLayout
@@ -79,6 +83,11 @@ class HomeFragment : Fragment() {
         imgProfile = binding.imageProfile
         currentLocation = binding.currentLocation
         progressLoaderPostContent = binding.progressPostContent
+        postId = UUID.randomUUID()
+        photoProfileUri = ""
+        if (requireActivity().intent.extras != null) {
+            photoPostUri = requireActivity().intent.extras?.getString("resultCapturePostRandom")!!.toUri()
+        }
     }
 
     override fun onCreateView(
@@ -96,96 +105,22 @@ class HomeFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        // Get current location
-        val mFusedLocation = LocationServices.getFusedLocationProviderClient(requireActivity())
-        if (ActivityCompat.checkSelfPermission(
-                requireActivity(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                requireActivity(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return
-        }
-        mFusedLocation.lastLocation.addOnSuccessListener(requireActivity()) { location ->
-            val latitude = location?.latitude
-            val longitude = location?.longitude
-            val locationCoordinate = "$latitude, $longitude"
-
-            val geocoder = Geocoder(requireActivity(), Locale.getDefault())
-            val address: Address?
-            var fullAddress = ""
-
-            val addresses: List<Address>? = geocoder.getFromLocation(latitude!!, longitude!!, 1)
-            if (addresses!!.isNotEmpty()) {
-                address = addresses[0]
-                fullAddress = address.getAddressLine(0)
-                val city = address.locality
-                val state = address.adminArea
-                val country = address.countryName
-                val postalCode = address.postalCode
-                val knownName = address.featureName
-
-                currentLocation.text = city
-
-                Log.i(TAG, "FullAddress: $fullAddress")
-                Log.i(TAG, "City: $city")
-                Log.i(TAG, "State: $state")
-                Log.i(TAG, "Country: $country")
-                Log.i(TAG, "postal code: $postalCode")
-                Log.i(TAG, "knowName: $knownName")
-
-
-                val uid = auth.currentUser!!.uid
-                databaseReference =
-                    firebaseDatabase.getReference("users").child(uid).child("currentLocation")
-                val hashMap: HashMap<String, String> = HashMap()
-                hashMap["fullAddress"] = fullAddress
-                hashMap["city"] = city
-                hashMap["state"] = state
-                hashMap["country"] = country
-                hashMap["locationCoordinate"] = locationCoordinate
-
-                databaseReference.setValue(hashMap).addOnCompleteListener { locationResult ->
-                    if (locationResult.isSuccessful) {
-                        Log.i(TAG, "locationResult saved in database")
-                    } else {
-                        Log.i(TAG, "locationResult failed ${locationResult.exception?.message}")
-                    }
-                }.addOnFailureListener { e ->
-                    Log.i(TAG, "location not saved in database -> ${e.message}")
-                }
-
-            } else {
-                Toast.makeText(activity, "location not found", Toast.LENGTH_SHORT).show()
-                Log.w(TAG, "location not found")
-                currentLocation.text =
-                    getString(com.afauzi.peoemergency.R.string.not_detect_current_location)
-            }
-
-        }
-
-
         // GetData USer
         getUserData()
+
+        // get current Location
+        getCurrentLocation()
 
         // Received Capture Image
         if (requireActivity().intent.extras != null) {
             Picasso
                 .get()
-                .load(requireActivity().intent.extras?.getString("resultCapturePostRandom"))
+                .load(photoPostUri)
                 .resize(500, 500)
                 .centerCrop()
                 .into(imageReceiverCapture)
+
+            Log.i(TAG, "image capture received: $photoPostUri")
         }
 
         val permissionRequestLocation =
@@ -194,8 +129,18 @@ class HomeFragment : Fragment() {
                 when {
                     permission.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
                         // Precise location access granted
-//                        uploadImageServer()
                         Log.i(TAG, "Access location is granted")
+                        progressLoaderPostContent.visibility = View.VISIBLE
+                        inputContentDescPost.text.clear()
+
+                        if (requireActivity().intent.extras != null) {
+                            Log.d(TAG, "uploadImageServer")
+                            uploadImageServer()
+                        } else {
+                            Log.d(TAG, "storeDataPostInDatabase")
+                            storeDataPostInDatabase()
+                        }
+
                     }
                     permission.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
                         // Only approximate location access granted
@@ -264,6 +209,83 @@ class HomeFragment : Fragment() {
 
     }
 
+    private fun getCurrentLocation() {
+        // Get current location
+        val mFusedLocation = LocationServices.getFusedLocationProviderClient(requireActivity())
+        if (ActivityCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        mFusedLocation.lastLocation.addOnSuccessListener(requireActivity()) { location ->
+            val latitude = location?.latitude
+            val longitude = location?.longitude
+            val locationCoordinate = "$latitude, $longitude"
+
+            val geocoder = Geocoder(requireActivity(), Locale.getDefault())
+            val address: Address?
+
+            val addresses: List<Address>? = geocoder.getFromLocation(latitude!!, longitude!!, 1)
+            if (addresses!!.isNotEmpty()) {
+                address = addresses[0]
+                val fullAddress = address.getAddressLine(0)
+                val city = address.locality
+                val state = address.adminArea
+                val country = address.countryName
+                val postalCode = address.postalCode
+                val knownName = address.featureName
+
+                currentLocation.text = city
+
+                Log.i(TAG, "FullAddress: $fullAddress")
+                Log.i(TAG, "City: $city")
+                Log.i(TAG, "State: $state")
+                Log.i(TAG, "Country: $country")
+                Log.i(TAG, "postal code: $postalCode")
+                Log.i(TAG, "knowName: $knownName")
+
+                storeDataLocation(fullAddress, city, state, country, locationCoordinate)
+
+            }
+
+        }
+
+    }
+
+    private fun storeDataLocation(fullAddress: String, city: String, state: String, country: String, locationCoordinate: String) {
+        val uid = auth.currentUser!!.uid
+        databaseReference =
+            firebaseDatabase.getReference("users").child(uid).child("currentLocation")
+        val hashMap: HashMap<String, String> = HashMap()
+        hashMap["fullAddress"] = fullAddress
+        hashMap["city"] = city
+        hashMap["state"] = state
+        hashMap["country"] = country
+        hashMap["locationCoordinate"] = locationCoordinate
+
+        databaseReference.setValue(hashMap).addOnCompleteListener { locationResult ->
+            if (locationResult.isSuccessful) {
+                Log.i(TAG, "locationResult saved in database")
+            } else {
+                Log.i(TAG, "locationResult failed ${locationResult.exception?.message}")
+            }
+        }.addOnFailureListener { e ->
+            Log.i(TAG, "location not saved in database -> ${e.message}")
+        }
+    }
+
     private fun getUserData() {
         // Code get username from database
         auth.currentUser.let {
@@ -276,22 +298,22 @@ class HomeFragment : Fragment() {
 
                             username.text = snapshot.child("username").value.toString()
                             Log.i(TAG, "username: ${username.text}") // data username done
-                            val photoUri = snapshot.child("photoProfile").value.toString()
+                            photoProfileUri = snapshot.child("photoProfile").value.toString()
 
                             if (gender == "Laki-Laki") {
                                 Picasso
                                     .get()
-                                    .load(photoUri)
+                                    .load(photoProfileUri)
                                     .placeholder(com.afauzi.peoemergency.R.drawable.boy_image_place_holder)
                                     .into(imgProfile)
                             } else {
                                 Picasso
                                     .get()
-                                    .load(photoUri)
+                                    .load(photoProfileUri)
                                     .placeholder(com.afauzi.peoemergency.R.drawable.girl_image_place_holder)
                                     .into(imgProfile)
                             }
-                            Log.i(TAG, "Photo Uri: $photoUri") // data username done
+                            Log.i(TAG, "Photo Profile Uri: $photoProfileUri") // data username done
                         } else {
                             username.text = null
                         }
@@ -313,38 +335,24 @@ class HomeFragment : Fragment() {
         }
     }
 
-//    val hashMap: HashMap<String, String> = HashMap()
-//    hashMap["username"] = username
-//    hashMap["photoProfile"] = photoProfile
-//    hashMap["postLocation"] = postLocation
-//    hashMap["postText"] = postText
-//    hashMap["postDate"] = postDate
-//    hashMap["imagePost"] = imagePost.toString()
-
     private fun uploadImageServer() {
         progressLoaderPostContent.visibility = View.VISIBLE
 
         val imgId = UUID.randomUUID().toString() + ".jpg"
-        val uid = auth.currentUser!!.uid
-        val imageUri: Uri = requireActivity().intent.extras?.getString("resultCapturePostRandom")!!.toUri()
-        Log.i(TAG, "Image Post : $imageUri")
-        storageReference = firebaseStorage.reference.child("post_image/${auth.currentUser!!.email}/$imgId")
-        storageReference.putFile(imageUri).addOnSuccessListener { taskSnap ->
+//        val uid = auth.currentUser!!.uid
 
-            var currentProgress = 0
-            currentProgress += 10
-
-            progressLoaderPostContent.progress = currentProgress
-            progressLoaderPostContent.max = 100
-
-            imageReceiverCapture.setImageResource(0)
-            progressLoaderPostContent.visibility = View.INVISIBLE
-            Toast.makeText(activity, "Post Success!", Toast.LENGTH_SHORT).show()
+        Log.i(TAG, "Image Post : $photoPostUri")
+        storageReference =
+            firebaseStorage.reference.child("post_image/${auth.currentUser!!.email}/$imgId")
+        storageReference.putFile(photoPostUri).addOnSuccessListener { taskSnap ->
 
             Log.i(TAG, "upload image post: Successful")
 
             taskSnap.storage.downloadUrl.addOnSuccessListener { uri ->
-                Log.i(TAG, "Uri: $uri")
+
+                Log.i(TAG, "Uri image post: $uri")
+                storeDataPostInDatabase(uri.toString())
+
             }.addOnFailureListener { uriFailure ->
                 Toast.makeText(activity, "${uriFailure.message}", Toast.LENGTH_SHORT).show()
             }
@@ -355,4 +363,81 @@ class HomeFragment : Fragment() {
 
 
     }
+
+    private fun storeDataPostInDatabase(photoPostUriToDatabase: String = "") {
+            // get user location
+            auth.currentUser.let {
+                if (it != null) {
+                    databaseReference = firebaseDatabase.getReference("users").child(it.uid).child("currentLocation")
+                    databaseReference.addValueEventListener(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            if (snapshot.exists()) {
+                                val uid = auth.currentUser!!.uid
+                                val randStr = randomString(25)
+                                
+                                databaseReference = firebaseDatabase.getReference("postRandom").child(randStr)
+
+                                Log.i(TAG, "dataPostUid: $uid")
+                                Log.i(TAG, "dataPostUsername: ${username.text}")
+                                Log.i(TAG, "dataPostPhotoProfile: $photoProfileUri")
+                                Log.i(TAG, "dataPostImage: $photoPostUriToDatabase")
+                                Log.i(TAG, "dataPostLocCoordinate: ${snapshot.child("locationCoordinate").value.toString()}")
+                                Log.i(TAG, "dataPostLocCityName: ${snapshot.child("fullAddress").value.toString()}")
+                                Log.i(TAG, "dataPostText: ${inputContentDescPost.text}")
+                                Log.i(TAG, "dataPostDate: $currentDateTime")
+                                Log.i(TAG, "dataPostId: $randStr")
+
+                                val hashMap: HashMap<String, String> = HashMap()
+                                hashMap["userId"] = uid
+                                hashMap["username"] = username.text.toString()
+                                hashMap["photoProfile"] = photoProfileUri
+                                hashMap["photoPost"] = photoPostUriToDatabase
+                                hashMap["postLocationCoordinate"] = snapshot.child("locationCoordinate").value.toString()
+                                hashMap["postLocationCityName"] = snapshot.child("fullAddress").value.toString()
+                                hashMap["postText"] = inputContentDescPost.text.toString()
+                                hashMap["postDate"] = currentDateTime
+                                hashMap["postId"] = postId.toString()
+
+                                databaseReference.setValue(hashMap).addOnCompleteListener { postResult ->
+                                    if (postResult.isSuccessful) {
+                                        Log.i(TAG, "data post saved in database")
+                                        imageReceiverCapture.setImageResource(0)
+                                        progressLoaderPostContent.visibility = View.INVISIBLE
+                                        Toast.makeText(activity, "Post Success!", Toast.LENGTH_SHORT).show()
+                                        requireActivity().intent.removeExtra("resultCapturePostRandom")
+
+                                    } else {
+                                        Log.i(TAG, "data post not saved in database: ${postResult.exception?.message}")
+                                    }
+                                }.addOnFailureListener { postResultFailure ->
+                                    Log.i(TAG, "data post to database failure: ${postResultFailure.message}")
+                                }
+
+                            } else {
+                                username.text = null
+                            }
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                            Snackbar.make(
+                                binding.root,
+                                "Sorry, Error: ${error.message}",
+                                Snackbar.LENGTH_SHORT
+                            ).setBackgroundTint(Color.RED).show()
+                        }
+                    })
+                } else {
+                    Toast.makeText(activity, "User not authentication", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(requireActivity(), LandingActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+    }
+
+    fun randomString(len: Int): String {
+        val random = SecureRandom()
+        val chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".toCharArray()
+        return (1..len).map { chars[random.nextInt(chars.size)] }.joinToString("")
+    }
+
 }

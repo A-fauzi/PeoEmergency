@@ -296,7 +296,12 @@ class SignUpActivity : AppCompatActivity() {
             setBackBoxTextFieldDisable: TextInputLayout? = null,
             requestFocus: View? = null
         ) {
-            setCompDrawIsCorrect?.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_correct, 0)
+            setCompDrawIsCorrect?.setCompoundDrawablesWithIntrinsicBounds(
+                0,
+                0,
+                R.drawable.ic_correct,
+                0
+            )
             setCompDrawNotCorrect?.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
             textWarnVisible?.visibility = View.VISIBLE
             textWarnGone?.visibility = View.INVISIBLE
