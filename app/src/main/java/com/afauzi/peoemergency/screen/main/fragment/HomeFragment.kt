@@ -4,6 +4,8 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.location.Address
+import android.location.Geocoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -15,6 +17,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.core.R
 import androidx.core.app.ActivityCompat
 import androidx.core.net.toUri
 import com.afauzi.peoemergency.databinding.FragmentHomeBinding
@@ -34,6 +37,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
+import de.hdodenhof.circleimageview.CircleImageView
 import java.io.File
 import java.util.*
 import kotlin.collections.HashMap
@@ -54,16 +58,18 @@ class HomeFragment : Fragment() {
     private lateinit var moreMenu: ImageView
     private lateinit var imageReceiverCapture: ImageView
     private lateinit var btnPost: Button
+    private lateinit var imgProfile: CircleImageView
 
     private fun initView() {
         layout = binding.mainLayout
-        username = binding.usernameInDialog
+        username = binding.username
         inputContentDescPost = binding.etContentDescDialog
         chooseImagePost = binding.inputPhotoDialog
         attachFile = binding.attachFileDialog
         moreMenu = binding.moreMenuDialog
         btnPost = binding.buttonPostDialog
         imageReceiverCapture = binding.ivReceiveImageCapture
+        imgProfile = binding.imageProfile
     }
 
     override fun onCreateView(
@@ -82,7 +88,57 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // GetData USer
+        // Get current location
+        val mFusedLocation = LocationServices.getFusedLocationProviderClient(requireActivity())
+        if (ActivityCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        mFusedLocation.lastLocation.addOnSuccessListener(requireActivity()) { location ->
+            val latitude = location?.latitude
+            val longitude = location?.longitude
+            val locationCoordinate = "$latitude, $longitude"
+
+            val geocoder = Geocoder(requireActivity(), Locale.getDefault())
+            val addresses: List<Address>?
+            val address: Address?
+            var fullAddress = ""
+
+            addresses = geocoder.getFromLocation(latitude!!, longitude!!, 1)
+            if (addresses.isNotEmpty()) {
+                address = addresses[0]
+                fullAddress = address.getAddressLine(0)
+                val city = address.locality
+                val state = address.adminArea
+                val country = address.countryName
+                var postalCode = address.postalCode
+
+                Log.i(TAG, "FullAddress: $fullAddress")
+                Log.i(TAG, "City: $city")
+                Log.i(TAG, "State: $state")
+                Log.i(TAG, "Country: $country")
+            } else {
+                Toast.makeText(activity, "location not found", Toast.LENGTH_SHORT).show()
+                Log.w(TAG, "location not found")
+            }
+
+        }
+
+
+            // GetData USer
         getUserData()
 
         if (requireActivity().intent.extras != null) {
@@ -158,7 +214,7 @@ class HomeFragment : Fragment() {
 
         // Btn Post
         btnPost.setOnClickListener {
-            storeData()
+//            storeData()
             // Launch the popup permission
             permissionRequestLocation.launch(
                 arrayOf(
@@ -178,8 +234,26 @@ class HomeFragment : Fragment() {
                 databaseReference.addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         if (snapshot.exists()) {
+                            val gender = snapshot.child("gender").value.toString()
+
                             username.text = snapshot.child("username").value.toString()
                             Log.i(TAG, "username: ${username.text}") // data username done
+                            val photoUri = snapshot.child("photoProfile").value.toString()
+
+                            if (gender == "Laki-Laki") {
+                                Picasso
+                                    .get()
+                                    .load(photoUri)
+                                    .placeholder(com.afauzi.peoemergency.R.drawable.boy_image_place_holder )
+                                    .into(imgProfile)
+                            } else {
+                                Picasso
+                                    .get()
+                                    .load(photoUri)
+                                    .placeholder(com.afauzi.peoemergency.R.drawable.girl_image_place_holder )
+                                    .into(imgProfile)
+                            }
+                            Log.i(TAG, "Photo Uri: $photoUri") // data username done
                         } else {
                             username.text = null
                         }
@@ -281,9 +355,7 @@ class HomeFragment : Fragment() {
             return
         }
 
-
-
-        /**
+            /**
          * Menerima inputan description
          */
         val receiveInputDesc = inputContentDescPost.text

@@ -9,14 +9,13 @@
     android:padding="@dimen/root_view_padding"
     tools:context=".screen.main.fragment.HomeFragment">
 
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/image_profile_dialog"
+            android:id="@+id/image_profile"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@drawable/sample_logo" />
@@ -25,21 +24,23 @@
             android:id="@+id/text_dalog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/image_profile_dialog"
-            android:orientation="vertical">
+            android:layout_toEndOf="@id/image_profile"
+            android:orientation="vertical"
+            android:layout_marginStart="8dp">
 
             <TextView
-                android:id="@+id/username_in_dialog"
+                android:id="@+id/username"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="29dp"
                 android:text="Akhmad Fauzi"
-                android:textSize="18sp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                android:textSize="18sp" />
 
             <TextView
+                android:id="@+id/current_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Public" />
+                android:text="Jakarta" />
 
         </LinearLayout>
 
@@ -89,33 +90,35 @@
 
         <ImageView
             android:id="@+id/input_photo_dialog"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/width_icon"
+            android:layout_height="@dimen/height_icon"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
-            android:src="@drawable/ic_baseline_add_a_photo_24" />
+            android:src="@drawable/ic_camera_capture" />
 
         <ImageView
             android:id="@+id/attach_file_dialog"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/width_icon"
+            android:layout_height="@dimen/height_icon"
             android:layout_marginStart="16dp"
             android:layout_toEndOf="@id/input_photo_dialog"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
-            android:src="@drawable/ic_baseline_attach_file_24" />
+            android:src="@drawable/ic_baseline_attach_file_24"
+            app:tint="@color/black" />
 
         <ImageView
             android:id="@+id/more_menu_dialog"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/width_icon"
+            android:layout_height="@dimen/height_icon"
             android:layout_alignParentEnd="true"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
-            android:src="@drawable/ic_baseline_more_vert_24" />
+            android:src="@drawable/ic_baseline_more_vert_24"
+            app:tint="@color/black" />
 
     </RelativeLayout>
 

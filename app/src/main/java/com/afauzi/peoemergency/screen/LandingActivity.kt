@@ -49,7 +49,7 @@ class LandingActivity : AppCompatActivity() {
         auth.currentUser.let {
             if (it != null) {
                 Log.i(TAG, "user logged in")
-                startActivity(Intent(this, RegisterProfileDetailStep1::class.java))
+                startActivity(Intent(this, MainActivity::class.java))
                 finish()
             } else {
                 Log.i(TAG, "user not login")
