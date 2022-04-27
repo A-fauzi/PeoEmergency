@@ -1,23 +1,36 @@
 package com.afauzi.peoemergency.screen.auth
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.databinding.ActivitySigninBinding
 import com.afauzi.peoemergency.screen.main.MainActivity
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
 import com.afauzi.peoemergency.utils.Library.dialogErrors
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.GoogleAuthProvider
 
 class SignInActivity : AppCompatActivity() {
+
+    companion object {
+        private const val TAG = "SignInActivity"
+    }
 
 
     private lateinit var binding: ActivitySigninBinding
@@ -32,6 +45,10 @@ class SignInActivity : AppCompatActivity() {
     private lateinit var linkToSignUp: TextView
     private lateinit var emailInputLayout: TextInputLayout
     private lateinit var passwordInputLayout: TextInputLayout
+    private lateinit var btnSignInGoogle: CardView
+
+    private lateinit var mGoogleSignInClient: GoogleSignInClient
+    val reqCode: Int = 123
 
     private fun initView() {
         email = binding.etEmailSignIn
@@ -44,6 +61,7 @@ class SignInActivity : AppCompatActivity() {
         linkToSignUp = binding.tvLinkToSignUp
         emailInputLayout = binding.outlinedTextFieldEmail
         passwordInputLayout = binding.outlinedTextFieldPassword
+        btnSignInGoogle = binding.cvBtnSignInGoogle
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,7 +72,113 @@ class SignInActivity : AppCompatActivity() {
 
         initView()
 
+        val gso = GoogleSignInOptions
+            .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.client_id))
+            .requestEmail()
+            .build()
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
+
     }
+
+    private fun signInGoogle() {
+        val signInIntent: Intent = mGoogleSignInClient.signInIntent
+        startActivityForResult(signInIntent, reqCode)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == reqCode) {
+            val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
+            handleResult(task)
+        }
+    }
+
+    private fun handleResult(completeTask: Task<GoogleSignInAccount>) {
+        try {
+            val account: GoogleSignInAccount? = completeTask.getResult(ApiException::class.java)
+            if (account != null) {
+                UpdateUi(account)
+            }
+        }catch (e: ApiException) {
+            Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    object SavedPreference {
+
+        const val EMAIL= "email"
+        const val USERNAME="username"
+
+        private  fun getSharedPreference(ctx: Context?): SharedPreferences? {
+            return PreferenceManager.getDefaultSharedPreferences(ctx)
+        }
+
+        private fun  editor(context: Context, const:String, string: String){
+            getSharedPreference(
+                context
+            )?.edit()?.putString(const,string)?.apply()
+        }
+
+        fun getEmail(context: Context)= getSharedPreference(
+            context
+        )?.getString(EMAIL,"")
+
+        fun setEmail(context: Context, email: String){
+            editor(
+                context,
+                EMAIL,
+                email
+            )
+        }
+
+        fun setUsername(context: Context, username:String){
+            editor(
+                context,
+                USERNAME,
+                username
+            )
+        }
+
+        fun getUsername(context: Context) = getSharedPreference(
+            context
+        )?.getString(USERNAME,"")
+
+    }
+
+    private fun UpdateUi(account: GoogleSignInAccount) {
+        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+        auth.signInWithCredential(credential).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+
+                Log.i(TAG, "sign in with credential: ${task.exception?.localizedMessage}")
+
+                SavedPreference.setEmail(this, account.email.toString())
+                Log.i(TAG, "SavedPreference: ${SavedPreference.setEmail(this, account.email.toString())}")
+
+                SavedPreference.setUsername(this, account.displayName.toString())
+                Log.i(TAG, "SavedPreference: ${SavedPreference.setUsername(this, account.displayName.toString())}")
+
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                finish()
+
+            } else {
+                Log.i(TAG, "sign in with credential: ${task.exception?.localizedMessage}")
+            }
+        }.addOnFailureListener { signInCredentialFailure ->
+            Log.i(TAG, "sign in with credential: ${signInCredentialFailure.localizedMessage}")
+        }
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        if (GoogleSignIn.getLastSignedInAccount(this) != null) {
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        }
+    }
+
 
     override fun onResume() {
         super.onResume()
@@ -71,10 +195,15 @@ class SignInActivity : AppCompatActivity() {
             finish()
         }
 
+        btnSignInGoogle.setOnClickListener {
+            signInGoogle()
+        }
+
         email.addTextChangedListener(GenericTextWatcher(email))
         password.addTextChangedListener(GenericTextWatcher(password))
 
     }
+
 
     private fun signInUser() {
         auth.signInWithEmailAndPassword(
@@ -187,5 +316,4 @@ class SignInActivity : AppCompatActivity() {
         password.isEnabled = condition
         passwordInputLayout.setBoxBackgroundColorResource(setBackBoxColor)
     }
-
 }
