@@ -20,7 +20,6 @@ import com.afauzi.peoemergency.utils.FirebaseServiceInstance.databaseReference
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.firebaseDatabase
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.firebaseStorage
 import com.afauzi.peoemergency.utils.Library
-import com.afauzi.peoemergency.utils.Library.currentDate
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.firebase.database.DataSnapshot

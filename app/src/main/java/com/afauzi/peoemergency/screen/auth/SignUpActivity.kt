@@ -12,9 +12,11 @@ import android.widget.*
 import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.databinding.ActivitySignUpBinding
 import com.afauzi.peoemergency.screen.auth.registerStep.RegisterProfileDetailStep1
-import com.afauzi.peoemergency.utils.Library.currentDate
+import com.afauzi.peoemergency.utils.Library
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.collections.HashMap
 
 @SuppressLint("SimpleDateFormat")
@@ -170,7 +172,7 @@ class SignUpActivity : AppCompatActivity() {
         bundle.putString("username", username.text.toString())
         bundle.putString("email", email.text.toString())
         bundle.putString("password", password.text.toString())
-        bundle.putString("dateJoin", currentDate)
+        bundle.putString("dateJoin", "${SimpleDateFormat("dd MMM yyyy | hh:mm:ss zzz").format(Date(System.currentTimeMillis()))}")
 
         // ======================================= End ==================================
 

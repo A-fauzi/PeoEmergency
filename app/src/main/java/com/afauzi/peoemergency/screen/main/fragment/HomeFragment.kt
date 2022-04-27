@@ -1,6 +1,7 @@
 package com.afauzi.peoemergency.screen.main.fragment
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -37,7 +38,6 @@ import com.afauzi.peoemergency.utils.FirebaseServiceInstance.firebaseStorage
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.storageReference
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.user
 import com.afauzi.peoemergency.utils.Library
-import com.afauzi.peoemergency.utils.Library.currentDateTime
 import com.airbnb.lottie.LottieAnimationView
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.progressindicator.LinearProgressIndicator
@@ -53,6 +53,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
 import java.security.SecureRandom
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -113,8 +114,10 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
         initView()
 
         return binding.root
+
     }
 
+    @SuppressLint("SimpleDateFormat")
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -148,6 +151,8 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
                         // Precise location access granted
                         Log.i(TAG, "Access location is granted")
                         progressLoaderPostContent.visibility = View.VISIBLE
+
+                        Log.i(TAG, "Coba time: ${SimpleDateFormat("dd MMM yyyy | hh:mm:ss zzz").format(Date(System.currentTimeMillis()))}")
 
                         if (requireActivity().intent.extras != null) {
                             Log.d(TAG, "uploadImageServer")
@@ -400,7 +405,7 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
                                 Log.i(TAG, "dataPostLocCoordinate: ${snapshot.child("locationCoordinate").value.toString()}")
                                 Log.i(TAG, "dataPostLocCityName: ${snapshot.child("fullAddress").value.toString()}")
                                 Log.i(TAG, "dataPostText: ${inputContentDescPost.text}")
-                                Log.i(TAG, "dataPostDate: $currentDateTime")
+                                Log.i(TAG, "dataPostDate: ${SimpleDateFormat("dd MMM yyyy | hh:mm:ss zzz").format(Date(System.currentTimeMillis()))}")
                                 Log.i(TAG, "dataPostId: $randStr")
 
                                 val hashMap: HashMap<String, String> = HashMap()
@@ -411,7 +416,7 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
                                 hashMap["postLocationCoordinate"] = snapshot.child("locationCoordinate").value.toString()
                                 hashMap["postLocationCityName"] = snapshot.child("fullAddress").value.toString()
                                 hashMap["postText"] = inputContentDescPost.text.toString()
-                                hashMap["postDate"] = currentDateTime
+                                hashMap["postDate"] = "${SimpleDateFormat("dd MMM yyyy | hh:mm:ss zzz").format(Date(System.currentTimeMillis()))}"
                                 hashMap["postId"] = postId.toString()
 
                                 databaseReference.setValue(hashMap).addOnCompleteListener { postResult ->
@@ -472,7 +477,7 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
                     listRandomPost.clear()
-                    for (listRandPost in snapshot.children) {
+                    for (listRandPost in snapshot.children.sortedByDescending { it.child("postDate").value.toString() }) {
                         val list = listRandPost.getValue(ModelItemRandomPost::class.java)
                         listRandomPost.add(list!!)
                         animationView.visibility = View.INVISIBLE

@@ -22,7 +22,6 @@ import com.afauzi.peoemergency.screen.main.fragment.activity.home.CameraAction
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.storageReference
 import com.afauzi.peoemergency.utils.Library
-import com.afauzi.peoemergency.utils.Library.simpleDateFormat
 import com.google.android.material.chip.Chip
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
@@ -128,6 +127,7 @@ class RegisterProfileStep2 : AppCompatActivity() {
 
     }
 
+    @SuppressLint("SimpleDateFormat")
     private fun datePickerDialog() {
         val datePicker = MaterialDatePicker.Builder.datePicker()
             .setTitleText("Select date")
@@ -137,7 +137,7 @@ class RegisterProfileStep2 : AppCompatActivity() {
         datePicker.addOnPositiveButtonClickListener {
             val utc = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
             utc.timeInMillis = it
-            val format = simpleDateFormat
+            val format = SimpleDateFormat("dd MMM yyyy | hh:mm:ss zzz")
             val formatted: String = format.format(utc.time)
             tvDateReceived.text = formatted
 
