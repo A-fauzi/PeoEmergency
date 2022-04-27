@@ -9,7 +9,7 @@
         android:id="@+id/homeFragment"
         android:name="com.afauzi.peoemergency.screen.main.fragment.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment2_to_emergencyFragment2"
             app:destination="@id/emergencyFragment" />
@@ -18,7 +18,7 @@
         android:id="@+id/emergencyFragment"
         android:name="com.afauzi.peoemergency.screen.main.fragment.EmergencyFragment"
         android:label="fragment_emergency"
-        tools:layout="@layout/fragment_emergency" >
+        tools:layout="@layout/fragment_emergency">
         <action
             android:id="@+id/action_emergencyFragment2_to_profileAccountFragment"
             app:destination="@id/accountFragment" />

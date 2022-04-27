@@ -1,16 +1,15 @@
 package com.afauzi.peoemergency.screen
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.afauzi.peoemergency.databinding.ActivityLandingBinding
 import com.afauzi.peoemergency.screen.auth.SignInActivity
 import com.afauzi.peoemergency.screen.auth.SignUpActivity
-import com.afauzi.peoemergency.screen.auth.registerStep.RegisterProfileDetailStep1
 import com.afauzi.peoemergency.screen.main.MainActivity
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
 import com.afauzi.peoemergency.utils.Library.TAG

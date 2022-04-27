@@ -26,13 +26,14 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_toEndOf="@id/image_profile"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            tools:ignore="RelativeOverlap">
 
             <TextView
                 android:id="@+id/username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Akhmad Fauzi"
+                android:text="@string/tv_name_frag_home"
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 
@@ -41,7 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:chipIcon="@drawable/round_location_on_20"
-                android:text="Jakarta" />
+                android:text="@string/tv_sample_city" />
 
         </LinearLayout>
 
@@ -51,8 +52,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:text="Post"
-            app:cornerRadius="@dimen/button_radius" />
+            android:text="@string/btn_text_post"
+            app:cornerRadius="@dimen/button_radius"
+            tools:ignore="RelativeOverlap" />
 
     </RelativeLayout>
 
@@ -60,28 +62,29 @@
         android:id="@+id/et_content_desc_dialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Write something..."
+        android:hint="@string/tv_input_desc_post"
         android:layout_marginTop="16dp"
         android:background="@color/transparant"
         android:autofillHints="About this content"
         android:inputType="textMultiLine" />
 
-   <androidx.cardview.widget.CardView
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_marginTop="16dp"
-       android:layout_marginLeft="8dp"
-       android:layout_marginRight="8dp"
-       android:layout_marginBottom="8dp"
-       android:elevation="2dp"
-       app:cardCornerRadius="16dp">
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:elevation="2dp"
+        app:cardCornerRadius="16dp">
 
-       <ImageView
-           android:id="@+id/iv_receive_image_capture"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:adjustViewBounds="true"/>
-   </androidx.cardview.widget.CardView>
+        <ImageView
+            android:id="@+id/iv_receive_image_capture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/iv_desc_post_content" />
+    </androidx.cardview.widget.CardView>
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/progress_post_content"
@@ -90,7 +93,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:visibility="invisible"
-        android:indeterminate="true"/>
+        android:indeterminate="true" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -105,7 +108,8 @@
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
-            android:src="@drawable/ic_camera_capture" />
+            android:src="@drawable/ic_camera_capture"
+            android:contentDescription="@string/iv_icon_camera" />
 
         <ImageView
             android:id="@+id/attach_file_dialog"
@@ -117,7 +121,8 @@
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
             android:src="@drawable/ic_baseline_attach_file_24"
-            app:tint="@color/black" />
+            app:tint="@color/black"
+            android:contentDescription="@string/iv_ic_attach_file" />
 
         <ImageView
             android:id="@+id/more_menu_dialog"
@@ -128,7 +133,8 @@
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
             android:src="@drawable/ic_baseline_more_vert_24"
-            app:tint="@color/black" />
+            app:tint="@color/black"
+            android:contentDescription="@string/iv_ic_more_menu" />
 
     </RelativeLayout>
 
@@ -136,7 +142,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/black"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="16dp" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -149,13 +155,13 @@
             app:lottie_rawRes="@raw/landing_background_anim"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
-            android:visibility="invisible"/>
+            android:visibility="invisible" />
 
-        <androidx.recyclerview.widget.RecyclerView
+        <com.cooltechworks.views.shimmer.ShimmerRecyclerView
             android:id="@+id/rv_post_random"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp" />
     </FrameLayout>
 
 </LinearLayout>

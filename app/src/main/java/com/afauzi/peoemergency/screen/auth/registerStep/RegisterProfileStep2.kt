@@ -1,34 +1,17 @@
 package com.afauzi.peoemergency.screen.auth.registerStep
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Color
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import com.afauzi.peoemergency.R
-import com.afauzi.peoemergency.databinding.ActivityRegisterProfileDetailStep1Binding
 import com.afauzi.peoemergency.databinding.ActivityRegisterProfileStep2Binding
-import com.afauzi.peoemergency.screen.main.fragment.HomeFragment
-import com.afauzi.peoemergency.screen.main.fragment.activity.home.CameraAction
-import com.afauzi.peoemergency.utils.FirebaseServiceInstance
-import com.afauzi.peoemergency.utils.FirebaseServiceInstance.storageReference
-import com.afauzi.peoemergency.utils.Library
 import com.google.android.material.chip.Chip
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.storage.StorageReference
 import de.hdodenhof.circleimageview.CircleImageView
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -83,14 +66,15 @@ class RegisterProfileStep2 : AppCompatActivity() {
         intent.type = "image/*"
         startActivityForResult(intent, REQUEST_CODE)
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE){
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE) {
             fillPath = data?.data!!
             try {
                 ivSetImageProfile.setImageURI(data.data) // handle chosen image
                 passingData(fillPath)
-            }catch (e: IOException) {
+            } catch (e: IOException) {
                 e.printStackTrace()
             }
         }
@@ -110,7 +94,7 @@ class RegisterProfileStep2 : AppCompatActivity() {
         }
 
         btnStep2.setOnClickListener {
-           val bundle = Bundle()
+            val bundle = Bundle()
             bundle.putString("usernameStep2", username)
             bundle.putString("genderStep2", gender)
             bundle.putString("phoneStep2", phone)

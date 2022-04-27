@@ -19,7 +19,7 @@
         app:iconGravity="textEnd"
         app:iconSize="50dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_switch_camera"
@@ -28,14 +28,14 @@
         android:layout_margin="2dp"
         android:text="Switch Cam"
         app:icon="@drawable/ic_baseline_flip_camera_android_24"
-        android:layout_alignParentEnd="true"/>
+        android:layout_alignParentEnd="true" />
 
-<!--    <com.google.android.material.button.MaterialButton-->
-<!--        android:id="@+id/btn_gallery"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:backgroundTint="@color/sekal_farros_red"-->
-<!--        android:text="Gallery"-->
-<!--        app:cornerRadius="30dp"/>-->
+    <!--    <com.google.android.material.button.MaterialButton-->
+    <!--        android:id="@+id/btn_gallery"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:backgroundTint="@color/sekal_farros_red"-->
+    <!--        android:text="Gallery"-->
+    <!--        app:cornerRadius="30dp"/>-->
 
 </RelativeLayout>

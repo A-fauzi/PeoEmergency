@@ -1,19 +1,13 @@
 package com.afauzi.peoemergency.utils
 
-import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
-import android.text.Editable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import com.afauzi.peoemergency.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import java.text.SimpleDateFormat
-import java.util.*
 
 object Library {
     /**

@@ -4,17 +4,16 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
 import com.afauzi.peoemergency.databinding.ActivityCameraActionBinding
 import com.afauzi.peoemergency.screen.main.MainActivity
 import com.google.common.util.concurrent.ListenableFuture
@@ -91,7 +90,7 @@ class CameraAction : AppCompatActivity() {
             try {
                 cameraProvider.unbindAll()
                 cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
-            }catch (e: Exception) {
+            } catch (e: Exception) {
                 Log.d(TAG, "Use case binding failed")
             }
         }, ContextCompat.getMainExecutor(this))
@@ -112,24 +111,34 @@ class CameraAction : AppCompatActivity() {
             // Mendapatkan data file
             uploadImageToFirestore(file)
 
-            it.takePicture(outputFileOptions, imageCaptureExecutor, object : ImageCapture.OnImageSavedCallback {
-                override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+            it.takePicture(
+                outputFileOptions,
+                imageCaptureExecutor,
+                object : ImageCapture.OnImageSavedCallback {
+                    override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
 
-                    Log.i(TAG, "The image has been save in ${outputFileResults.savedUri}")
-                    val bundle = Bundle()
-                    bundle.putString("resultCapturePostRandom", outputFileResults.savedUri.toString())
+                        Log.i(TAG, "The image has been save in ${outputFileResults.savedUri}")
+                        val bundle = Bundle()
+                        bundle.putString(
+                            "resultCapturePostRandom",
+                            outputFileResults.savedUri.toString()
+                        )
 
-                    val intent = Intent(this@CameraAction, MainActivity::class.java)
-                    intent.putExtras(bundle)
-                    startActivity(intent)
-                }
+                        val intent = Intent(this@CameraAction, MainActivity::class.java)
+                        intent.putExtras(bundle)
+                        startActivity(intent)
+                    }
 
-                override fun onError(exception: ImageCaptureException) {
-                    Toast.makeText(binding.root.context, "Error Taking Photo", Toast.LENGTH_SHORT).show()
-                    Log.e(TAG, "Error Taking Photo: $exception")
-                }
+                    override fun onError(exception: ImageCaptureException) {
+                        Toast.makeText(
+                            binding.root.context,
+                            "Error Taking Photo",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        Log.e(TAG, "Error Taking Photo: $exception")
+                    }
 
-            })
+                })
         }
     }
 

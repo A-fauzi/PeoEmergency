@@ -1,20 +1,9 @@
 <resources>
     <string name="app_name">PeoEmergency</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Halo di halaman kosong fragment</string>
     <string name="item_title_home">Rumah</string>
     <string name="item_title_emergency">Darurat</string>
     <string name="item_title_account">Akun</string>
-    <string name="lorem">I Go On Twitte, talk to myself, then leave, I Go On Twitte, talk to myself, then leave, I Go On Twitte, talk to myself, then leave</string>
-    <string name="button_add_post">Tombol tamah postingan</string>
-    <string name="data_name">Halo Akhmad</string>
-    <string name="image_profile">Foto Profil</string>
-    <string name="text">Profil Lengkap</string>
-    <string name="data_location">Data lockasi</string>
-    <string name="text2">Lokasi Kamu</string>
-    <string name="just_tap_to_button_to_call">Tekan tombol ini untuk memanggil</string>
-    <string name="emergency_help_nneeded">Darurat membutuhkan pertolongan?</string>
-    <string name="add_photo_profile">Tambah foto profile</string>
     <string name="image_logo_content_desc">Gambar logo</string>
     <string name="txt_btn_sign_in">Masuk</string>
     <string name="txt_btn_sign_up">Daftar</string>
@@ -27,18 +16,12 @@
     <string name="txt_input_hint_pass_conf">Konfirmasi password</string>
     <string name="txt_warn_pass_conf">*konfirmasi password harus sama</string>
     <string name="provider_sign_up_desc">Daftar dengan provider</string>
-    <string name="heading_signup">Halo!\nDaftar untuk\nMemulai</string>
     <string name="txt_signup_provider">Atau daftar dengan</string>
     <string name="txt_question_signup">Jika kamu sudah memiliki akun, silahkan\ </string>
     <string name="txt_link_to_login_page">Masuk</string>
-    <string name="txt_heading_sign_in">Halo Lagi!\nSelamat Datang\nKembali</string>
     <string name="txt_sign_in_provider">Atau masuk dengan</string>
     <string name="txt_question_sign_in">Jika kamu tidak memiliki akun, silahkan\ </string>
     <string name="txt_link_to_sign_up">Daftar</string>
-    <string name="permission_required">dibutuhkan perizinan akses kamera untuk membuka kamera</string>
-    <string name="ok">baik</string>
-    <string name="permission_granted">perizinan di aktifkan, kamu bisa aktifkan kamera sekarang</string>
-    <string name="txt_error_network">mohon periksa koneksi jaringan</string>
     <string name="logout">Keluar</string>
     <string name="hello">Halo!</string>
     <string name="welcome_nback">Selamat datang \nKembali</string>
@@ -48,8 +31,8 @@
     <string name="started">Memulai</string>
 
     <string name="step_1">Langkah 1</string>
-    <string name="laki_laki">Laki-Laki</string>
-    <string name="perempuan">Perempuan</string>
+    <string name="man">Laki-Laki</string>
+    <string name="woman">Perempuan</string>
     <string name="phone_number">Phone Number</string>
     <string name="image_finish_description">Deskripsi gambar selesai</string>
     <string name="step_2">Langkah 2</string>
@@ -58,7 +41,6 @@
     <string name="image_step_1_description">Deskripsi gambar langkah 1</string>
     <string name="image_step_2_description">Deskripsi gambar langkah 2</string>
     <string name="finish">Selesai</string>
-    <string name="image_profile_detail_register">Gambar profil daftar lengkap</string>
     <string name="name">Nama</string>
     <string name="emailSample">Email: akhmadfauzi@gmail.com</string>
     <string name="phoneSample">Phone: 082112966360</string>

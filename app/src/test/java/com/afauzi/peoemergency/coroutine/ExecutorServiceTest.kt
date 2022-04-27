@@ -6,9 +6,9 @@ import java.util.concurrent.Executors
 
 class ExecutorServiceTest {
     @Test
-    fun testSingleThread(){
+    fun testSingleThread() {
         val executorsService = Executors.newSingleThreadExecutor()
-        repeat(10){
+        repeat(10) {
             val runnable = Runnable {
                 Thread.sleep(1000)
                 println("Done $it ${Thread.currentThread().name} ${Date()}")
@@ -21,10 +21,11 @@ class ExecutorServiceTest {
         Thread.sleep(11000)
         println("Selesai")
     }
+
     @Test
-    fun testFixThreadPool(){
+    fun testFixThreadPool() {
         val executorsService = Executors.newFixedThreadPool(3)
-        repeat(10){
+        repeat(10) {
             val runnable = Runnable {
                 Thread.sleep(1000)
                 println("Done $it ${Thread.currentThread().name} ${Date()}")

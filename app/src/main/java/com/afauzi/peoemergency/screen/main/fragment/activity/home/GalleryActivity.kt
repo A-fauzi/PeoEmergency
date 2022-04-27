@@ -1,7 +1,7 @@
 package com.afauzi.peoemergency.screen.main.fragment.activity.home
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.afauzi.peoemergency.adapter.AdapterListGallery
 import com.afauzi.peoemergency.databinding.ActivityGalleryBinding
 import java.io.File

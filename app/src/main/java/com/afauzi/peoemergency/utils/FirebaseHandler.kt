@@ -5,7 +5,7 @@ import android.app.Application
 /**
  * Offline data on disk firebase
  */
-class FirebaseHandler: Application() {
+class FirebaseHandler : Application() {
     override fun onCreate() {
         super.onCreate()
 

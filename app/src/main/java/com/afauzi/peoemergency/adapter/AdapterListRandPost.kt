@@ -15,8 +15,8 @@ import com.squareup.picasso.Picasso
 class AdapterListRandPost(
     private val callClickListener: CallClickListener,
     private val listItemRandomPost: ArrayList<ModelItemRandomPost>
-    ): RecyclerView.Adapter<AdapterListRandPost.ViewHolder>() {
-    class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+) : RecyclerView.Adapter<AdapterListRandPost.ViewHolder>() {
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val username: TextView = itemView.findViewById(R.id.item_name)
         val photoProfile: ImageView = itemView.findViewById(R.id.item_photo_profile)
         val postLocation: TextView = itemView.findViewById(R.id.item_location_post)
@@ -27,7 +27,8 @@ class AdapterListRandPost(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_list_random_post, parent, false)
+        val itemView = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_list_random_post, parent, false)
         return ViewHolder(itemView)
     }
 
@@ -39,12 +40,15 @@ class AdapterListRandPost(
         holder.postDesc.text = currentItem.postText
         holder.postDate.text = currentItem.postDate
 
-        Picasso.get().load(currentItem.photoProfile).fit().placeholder(R.drawable.ic_baseline_person_24).into(holder.photoProfile)
+        Picasso.get().load(currentItem.photoProfile).placeholder(R.drawable.person_place_holder)
+            .into(holder.photoProfile)
 
         if (currentItem.photoPost == null || currentItem.photoPost == "") {
             holder.postImage.setImageResource(0)
         } else {
-            Picasso.get().load(currentItem.photoPost).resize(500, 500).placeholder(R.drawable.ic_baseline_image_24).into(holder.postImage)
+            Picasso.get().load(currentItem.photoPost)
+                .placeholder(R.drawable.image_post_place_holder).resize(500, 500)
+                .into(holder.postImage)
         }
 
         holder.cardContent.setOnClickListener {

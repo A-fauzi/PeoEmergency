@@ -8,10 +8,13 @@ import com.afauzi.peoemergency.databinding.ItemListGalleryExampleBinding
 import com.squareup.picasso.Picasso
 import java.io.File
 
-class AdapterListGallery(private val fileArray: Array<File>): RecyclerView.Adapter<AdapterListGallery.ViewHolder>() {
-    class ViewHolder(private val binding: ItemListGalleryExampleBinding): RecyclerView.ViewHolder(binding.root) {
+class AdapterListGallery(private val fileArray: Array<File>) :
+    RecyclerView.Adapter<AdapterListGallery.ViewHolder>() {
+    class ViewHolder(private val binding: ItemListGalleryExampleBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(file: File) {
-            Picasso.get().load(file).placeholder(R.drawable.ic_baseline_image_24).into(binding.localImage)
+            Picasso.get().load(file).placeholder(R.drawable.ic_baseline_image_24)
+                .into(binding.localImage)
         }
     }
 

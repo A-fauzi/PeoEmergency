@@ -19,7 +19,7 @@
             android:text="@string/hello"
             android:textColor="@color/black"
             android:fontFamily="@font/roboto_bold"
-            android:textSize="36sp"/>
+            android:textSize="36sp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -27,7 +27,7 @@
             android:text="@string/welcome_nback"
             android:textColor="@color/blue_soft"
             android:fontFamily="@font/roboto_bold"
-            android:textSize="36sp"/>
+            android:textSize="36sp" />
 
         <ImageView
             android:layout_width="200dp"
@@ -53,9 +53,10 @@
                 android:id="@+id/et_email_sign_in"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"/>
+                android:inputType="textEmailAddress" />
 
         </com.google.android.material.textfield.TextInputLayout>
+
         <TextView
             android:id="@+id/tv_warn_email"
             android:layout_width="wrap_content"
@@ -64,7 +65,7 @@
             android:layout_gravity="start"
             android:textSize="12sp"
             android:textColor="@color/pink_soft"
-            android:visibility="invisible"/>
+            android:visibility="invisible" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/outlinedTextFieldPassword"
@@ -85,8 +86,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:enabled="false"/>
+                android:enabled="false" />
         </com.google.android.material.textfield.TextInputLayout>
+
         <TextView
             android:id="@+id/tv_warn_password"
             android:layout_width="wrap_content"
@@ -95,7 +97,7 @@
             android:layout_gravity="start"
             android:textSize="12sp"
             android:textColor="@color/pink_soft"
-            android:visibility="invisible"/>
+            android:visibility="invisible" />
 
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
@@ -103,7 +105,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="invisible"
-            android:indeterminate="true"/>
+            android:indeterminate="true" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_login_sign_in"
@@ -113,12 +115,13 @@
             android:layout_gravity="center"
             android:text="@string/txt_btn_sign_in"
             android:textAllCaps="false"
-            android:enabled="false"/>
+            android:enabled="false" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/txt_sign_in_provider"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -189,7 +192,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/txt_question_sign_in"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/tv_link_to_sign_up"
@@ -197,7 +200,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/txt_link_to_sign_up"
                 android:textStyle="bold"
-                android:textColor="@color/blue_soft"/>
+                android:textColor="@color/blue_soft" />
 
         </LinearLayout>
     </LinearLayout>

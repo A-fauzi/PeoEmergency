@@ -15,7 +15,8 @@
             android:id="@+id/image_cover_profile"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:background="@color/blue_soft" />
+            android:background="@color/blue_soft"
+            android:contentDescription="@string/iv_profile_account_cover" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:layout_width="wrap_content"
@@ -24,7 +25,8 @@
             android:layout_marginTop="@dimen/root_view_padding"
             android:src="@drawable/ic_baseline_keyboard_arrow_left_24"
             app:fabSize="mini"
-            app:rippleColor="@color/white" />
+            app:rippleColor="@color/white"
+            android:contentDescription="@string/btn_back_press" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_more_account_profile"
@@ -35,7 +37,9 @@
             android:layout_marginEnd="@dimen/root_view_padding"
             android:src="@drawable/ic_baseline_more_vert_24"
             app:fabSize="mini"
-            app:rippleColor="@color/white" />
+            app:rippleColor="@color/white"
+            android:contentDescription="@string/btn_more_menu"
+            tools:ignore="RelativeOverlap" />
 
         <LinearLayout
             android:id="@+id/profile_container"
@@ -53,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_margin="5dp"
-                android:text="Edit profile"
+                android:text="@string/btn_text_edit_profile"
                 android:textAllCaps="false"
                 android:textColor="@color/black"
                 app:cornerRadius="30dp"
@@ -64,7 +68,7 @@
                 android:id="@+id/username_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="username"
+                android:text="@string/txt_input_hint_username"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
 
@@ -72,21 +76,21 @@
                 android:id="@+id/email_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="email" />
+                android:text="@string/emailSample" />
 
             <TextView
                 android:id="@+id/date_join_user"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Joined Maret 2022"
+                android:text="@string/text_join_sample"
                 android:textStyle="italic" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="50dp"
-                android:text="My Post"
+                android:text="@string/my_post"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -108,7 +112,7 @@
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="100dp"
         android:src="@drawable/ic_baseline_person_24" />
 

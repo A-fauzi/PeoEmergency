@@ -10,53 +10,44 @@ import android.location.Geocoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.text.Editable
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
-import androidx.core.R
 import androidx.core.app.ActivityCompat
 import androidx.core.net.toUri
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.afauzi.peoemergency.adapter.AdapterListRandPost
 import com.afauzi.peoemergency.dataModel.ModelItemRandomPost
 import com.afauzi.peoemergency.databinding.FragmentHomeBinding
 import com.afauzi.peoemergency.screen.LandingActivity
 import com.afauzi.peoemergency.screen.main.fragment.activity.home.CameraAction
-import com.afauzi.peoemergency.utils.FirebaseServiceInstance
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.databaseReference
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.firebaseDatabase
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.firebaseStorage
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.storageReference
-import com.afauzi.peoemergency.utils.FirebaseServiceInstance.user
-import com.afauzi.peoemergency.utils.Library
 import com.airbnb.lottie.LottieAnimationView
+import com.cooltechworks.views.shimmer.ShimmerRecyclerView
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import java.io.File
 import java.security.SecureRandom
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
 
@@ -80,7 +71,7 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
     private lateinit var postId: UUID
     private lateinit var photoProfileUri: String
     private lateinit var photoPostUri: Uri
-    private lateinit var rvPostRandom: RecyclerView
+    private lateinit var rvPostRandom: ShimmerRecyclerView
     private lateinit var listRandomPost: ArrayList<ModelItemRandomPost>
     private lateinit var animationView: LottieAnimationView
 
@@ -99,7 +90,8 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
         postId = UUID.randomUUID()
         photoProfileUri = ""
         if (requireActivity().intent.extras != null) {
-            photoPostUri = requireActivity().intent.extras?.getString("resultCapturePostRandom")!!.toUri()
+            photoPostUri =
+                requireActivity().intent.extras?.getString("resultCapturePostRandom")!!.toUri()
         }
         animationView = binding.animationView
     }
@@ -152,7 +144,14 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
                         Log.i(TAG, "Access location is granted")
                         progressLoaderPostContent.visibility = View.VISIBLE
 
-                        Log.i(TAG, "Coba time: ${SimpleDateFormat("dd MMM yyyy | hh:mm:ss zzz").format(Date(System.currentTimeMillis()))}")
+                        Log.i(
+                            TAG,
+                            "Coba time: ${
+                                SimpleDateFormat("dd MMM yyyy | hh:mm:ss zzz").format(
+                                    Date(System.currentTimeMillis())
+                                )
+                            }"
+                        )
 
                         if (requireActivity().intent.extras != null) {
                             Log.d(TAG, "uploadImageServer")
@@ -285,7 +284,13 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
 
     }
 
-    private fun storeDataLocation(fullAddress: String, city: String, state: String, country: String, locationCoordinate: String) {
+    private fun storeDataLocation(
+        fullAddress: String,
+        city: String,
+        state: String,
+        country: String,
+        locationCoordinate: String
+    ) {
         val uid = auth.currentUser!!.uid
         databaseReference =
             firebaseDatabase.getReference("users").child(uid).child("currentLocation")
@@ -386,74 +391,105 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
     }
 
     private fun storeDataPostInDatabase(photoPostUriToDatabase: String = "") {
-            // get user location
-            auth.currentUser.let {
-                if (it != null) {
-                    databaseReference = firebaseDatabase.getReference("users").child(it.uid).child("currentLocation")
-                    databaseReference.addValueEventListener(object : ValueEventListener {
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            if (snapshot.exists()) {
-                                val uid = auth.currentUser!!.uid
-                                val randStr = randomString(25)
-                                
-                                databaseReference = firebaseDatabase.getReference("postRandom").child(randStr)
+        // get user location
+        auth.currentUser.let {
+            if (it != null) {
+                databaseReference =
+                    firebaseDatabase.getReference("users").child(it.uid).child("currentLocation")
+                databaseReference.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists()) {
+                            val uid = auth.currentUser!!.uid
+                            val randStr = randomString(25)
 
-                                Log.i(TAG, "dataPostUid: $uid")
-                                Log.i(TAG, "dataPostUsername: ${username.text}")
-                                Log.i(TAG, "dataPostPhotoProfile: $photoProfileUri")
-                                Log.i(TAG, "dataPostImage: $photoPostUriToDatabase")
-                                Log.i(TAG, "dataPostLocCoordinate: ${snapshot.child("locationCoordinate").value.toString()}")
-                                Log.i(TAG, "dataPostLocCityName: ${snapshot.child("fullAddress").value.toString()}")
-                                Log.i(TAG, "dataPostText: ${inputContentDescPost.text}")
-                                Log.i(TAG, "dataPostDate: ${SimpleDateFormat("dd MMM yyyy | hh:mm:ss zzz").format(Date(System.currentTimeMillis()))}")
-                                Log.i(TAG, "dataPostId: $randStr")
+                            databaseReference =
+                                firebaseDatabase.getReference("postRandom").child(randStr)
 
-                                val hashMap: HashMap<String, String> = HashMap()
-                                hashMap["userId"] = uid
-                                hashMap["username"] = username.text.toString()
-                                hashMap["photoProfile"] = photoProfileUri
-                                hashMap["photoPost"] = photoPostUriToDatabase
-                                hashMap["postLocationCoordinate"] = snapshot.child("locationCoordinate").value.toString()
-                                hashMap["postLocationCityName"] = snapshot.child("fullAddress").value.toString()
-                                hashMap["postText"] = inputContentDescPost.text.toString()
-                                hashMap["postDate"] = "${SimpleDateFormat("dd MMM yyyy | hh:mm:ss zzz").format(Date(System.currentTimeMillis()))}"
-                                hashMap["postId"] = postId.toString()
+                            Log.i(TAG, "dataPostUid: $uid")
+                            Log.i(TAG, "dataPostUsername: ${username.text}")
+                            Log.i(TAG, "dataPostPhotoProfile: $photoProfileUri")
+                            Log.i(TAG, "dataPostImage: $photoPostUriToDatabase")
+                            Log.i(
+                                TAG,
+                                "dataPostLocCoordinate: ${snapshot.child("locationCoordinate").value.toString()}"
+                            )
+                            Log.i(
+                                TAG,
+                                "dataPostLocCityName: ${snapshot.child("fullAddress").value.toString()}"
+                            )
+                            Log.i(TAG, "dataPostText: ${inputContentDescPost.text}")
+                            Log.i(
+                                TAG,
+                                "dataPostDate: ${
+                                    SimpleDateFormat("dd MMM yyyy | hh:mm:ss zzz").format(
+                                        Date(
+                                            System.currentTimeMillis()
+                                        )
+                                    )
+                                }"
+                            )
+                            Log.i(TAG, "dataPostId: $randStr")
 
-                                databaseReference.setValue(hashMap).addOnCompleteListener { postResult ->
+                            val hashMap: HashMap<String, String> = HashMap()
+                            hashMap["userId"] = uid
+                            hashMap["username"] = username.text.toString()
+                            hashMap["photoProfile"] = photoProfileUri
+                            hashMap["photoPost"] = photoPostUriToDatabase
+                            hashMap["postLocationCoordinate"] =
+                                snapshot.child("locationCoordinate").value.toString()
+                            hashMap["postLocationCityName"] =
+                                snapshot.child("fullAddress").value.toString()
+                            hashMap["postText"] = inputContentDescPost.text.toString()
+                            hashMap["postDate"] =
+                                "${SimpleDateFormat("dd MMM yyyy | hh:mm:ss zzz").format(Date(System.currentTimeMillis()))}"
+                            hashMap["postId"] = postId.toString()
+
+                            databaseReference.setValue(hashMap)
+                                .addOnCompleteListener { postResult ->
                                     if (postResult.isSuccessful) {
                                         Log.i(TAG, "data post saved in database")
                                         inputContentDescPost.text?.clear()
                                         imageReceiverCapture.setImageResource(0)
                                         progressLoaderPostContent.visibility = View.INVISIBLE
-                                        Toast.makeText(activity, "Post Success!", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(
+                                            activity,
+                                            "Post Success!",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
                                         requireActivity().intent.removeExtra("resultCapturePostRandom")
 
                                     } else {
-                                        Log.i(TAG, "data post not saved in database: ${postResult.exception?.message}")
+                                        Log.i(
+                                            TAG,
+                                            "data post not saved in database: ${postResult.exception?.message}"
+                                        )
                                     }
                                 }.addOnFailureListener { postResultFailure ->
-                                    Log.i(TAG, "data post to database failure: ${postResultFailure.message}")
-                                }
-
-                            } else {
-                                username.text = null
+                                Log.i(
+                                    TAG,
+                                    "data post to database failure: ${postResultFailure.message}"
+                                )
                             }
-                        }
 
-                        override fun onCancelled(error: DatabaseError) {
-                            Snackbar.make(
-                                binding.root,
-                                "Sorry, Error: ${error.message}",
-                                Snackbar.LENGTH_SHORT
-                            ).setBackgroundTint(Color.RED).show()
+                        } else {
+                            username.text = null
                         }
-                    })
-                } else {
-                    Toast.makeText(activity, "User not authentication", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(requireActivity(), LandingActivity::class.java)
-                    startActivity(intent)
-                }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        Snackbar.make(
+                            binding.root,
+                            "Sorry, Error: ${error.message}",
+                            Snackbar.LENGTH_SHORT
+                        ).setBackgroundTint(Color.RED).show()
+                    }
+                })
+            } else {
+                Toast.makeText(activity, "User not authentication", Toast.LENGTH_SHORT).show()
+                val intent = Intent(requireActivity(), LandingActivity::class.java)
+                startActivity(intent)
             }
+        }
     }
 
     private fun randomString(len: Int): String {
@@ -466,7 +502,8 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
         rvPostRandom = binding.rvPostRandom
         listRandomPost = arrayListOf()
         rvPostRandom.setHasFixedSize(true)
-        rvPostRandom.layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
+        rvPostRandom.layoutManager =
+            LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
         getListPostRandom()
     }
 

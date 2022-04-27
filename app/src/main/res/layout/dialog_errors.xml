@@ -14,17 +14,17 @@
         app:lottie_rawRes="@raw/not_page_animation"
         app:lottie_autoPlay="true"
         android:adjustViewBounds="true"
-        app:lottie_loop="true"/>
+        app:lottie_loop="true" />
 
     <TextView
         android:id="@+id/tv_dialog_error"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:text="Oopps..\n fitur ini masih dalam pengembangan!"
+        android:text="@string/tv_error"
         android:layout_gravity="center"
         android:textStyle="bold"
         android:textAlignment="center"
         android:textColor="@color/sekal_farros_red"
-        android:paddingBottom="20dp"/>
+        android:paddingBottom="20dp" />
 
 </LinearLayout>

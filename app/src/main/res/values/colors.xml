@@ -1,26 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="gojek_color_red">#EE2737</color>
-    <color name="gojek_color_green">#00AA13</color>
-    <color name="gojek_color_orange">#F06400</color>
-    <color name="gojek_color_pink">#DF1995</color>
-    <color name="gojek_color_blue">#00AED6</color>
-    <color name="gojek_color_purple">#93328E</color>
-
     <color name="sekal_farros_red">#ed2839</color>
-    <color name="sekal_farros_purple">#6840d5</color>
     <color name="sekal_farros_yellow">#ffd15c</color>
 
 
-    <color name="green_soft">#49b583</color>
     <color name="pink_soft">#ff4171</color>
     <color name="yellow_soft">#ffbd69</color>
     <color name="blue_soft">#7f86ff</color>

@@ -1,8 +1,8 @@
 package com.afauzi.peoemergency.localStorage.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import com.afauzi.peoemergency.databinding.ActivityEditNoteBinding
 import com.afauzi.peoemergency.localStorage.Constant
 import com.afauzi.peoemergency.localStorage.ModelNote
@@ -30,7 +30,7 @@ class EditNoteActivity : AppCompatActivity() {
 
     private fun setUpView() {
 //        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        when(intent.getIntExtra("intent_type", 0)){
+        when (intent.getIntExtra("intent_type", 0)) {
             Constant.TYPE_CREATE -> {
                 binding.buttonUpdate.visibility = View.GONE
             }
@@ -49,13 +49,25 @@ class EditNoteActivity : AppCompatActivity() {
     private fun setUpListener() {
         binding.buttonSave.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
-                db.noteDao().addNote(ModelNote(0, binding.editTitle.text.toString(), binding.editNote.text.toString()))
+                db.noteDao().addNote(
+                    ModelNote(
+                        0,
+                        binding.editTitle.text.toString(),
+                        binding.editNote.text.toString()
+                    )
+                )
                 finish()
             }
         }
         binding.buttonUpdate.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
-                db.noteDao().updateNote(ModelNote(noteId, binding.editTitle.text.toString(), binding.editNote.text.toString()))
+                db.noteDao().updateNote(
+                    ModelNote(
+                        noteId,
+                        binding.editTitle.text.toString(),
+                        binding.editNote.text.toString()
+                    )
+                )
                 finish()
             }
         }

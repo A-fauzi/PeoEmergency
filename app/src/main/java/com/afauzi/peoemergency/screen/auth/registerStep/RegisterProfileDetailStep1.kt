@@ -1,10 +1,9 @@
 package com.afauzi.peoemergency.screen.auth.registerStep
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.databinding.ActivityRegisterProfileDetailStep1Binding
 import com.hbb20.CountryCodePicker
@@ -36,7 +35,8 @@ class RegisterProfileDetailStep1 : AppCompatActivity() {
         setContentView(binding.root)
         initView()
 
-        tvUsername.text = resources.getString(R.string.hi_name, intent.extras?.getString("username"))
+        tvUsername.text =
+            resources.getString(R.string.hi_name, intent.extras?.getString("username"))
 
     }
 

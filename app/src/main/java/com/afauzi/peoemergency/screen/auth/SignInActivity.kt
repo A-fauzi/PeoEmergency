@@ -1,8 +1,6 @@
 package com.afauzi.peoemergency.screen.auth
 
 import android.content.Intent
-import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -11,13 +9,12 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.databinding.ActivitySigninBinding
 import com.afauzi.peoemergency.screen.main.MainActivity
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
-import com.afauzi.peoemergency.utils.Library
 import com.afauzi.peoemergency.utils.Library.dialogErrors
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 
 class SignInActivity : AppCompatActivity() {
@@ -164,20 +161,25 @@ class SignInActivity : AppCompatActivity() {
             setBackBoxTextFieldDisable: TextInputLayout? = null,
             requestFocus: View? = null
         ) {
-            setCompDrawIsCorrect?.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_correct, 0)
+            setCompDrawIsCorrect?.setCompoundDrawablesWithIntrinsicBounds(
+                0,
+                0,
+                R.drawable.ic_correct,
+                0
+            )
             setCompDrawNotCorrect?.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
             textWarnVisible?.visibility = View.VISIBLE
             textWarnGone?.visibility = View.INVISIBLE
             inputEnableTrue?.isEnabled = true
             inputEnableFalse?.isEnabled = false
-            setBackBoxTextFieldActive?.setBoxBackgroundColorResource( R.color.white)
-            setBackBoxTextFieldDisable?.setBoxBackgroundColorResource( R.color.input_disabled)
+            setBackBoxTextFieldActive?.setBoxBackgroundColorResource(R.color.white)
+            setBackBoxTextFieldDisable?.setBoxBackgroundColorResource(R.color.input_disabled)
             requestFocus?.requestFocus()
         }
 
     }
 
-    private fun setFormEnable(condition: Boolean, setBackBoxColor: Int){
+    private fun setFormEnable(condition: Boolean, setBackBoxColor: Int) {
 
         email.isEnabled = condition
         emailInputLayout.setBoxBackgroundColorResource(setBackBoxColor)

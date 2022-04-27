@@ -1,33 +1,25 @@
 package com.afauzi.peoemergency.screen.auth.registerStep
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.databinding.ActivityRegisterDetailProfileFinishBinding
 import com.afauzi.peoemergency.screen.main.MainActivity
-import com.afauzi.peoemergency.utils.FirebaseServiceInstance
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.databaseReference
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.firebaseDatabase
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.firebaseStorage
-import com.afauzi.peoemergency.utils.Library
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.progressindicator.CircularProgressIndicator
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import de.hdodenhof.circleimageview.CircleImageView
 import java.util.*
-import kotlin.collections.HashMap
 
 class RegisterDetailProfileFinish : AppCompatActivity() {
 
@@ -92,14 +84,15 @@ class RegisterDetailProfileFinish : AppCompatActivity() {
         genderProfileDetail.text = resources.getString(R.string.gender_detail_register, gender)
 
         val birthday = intent.extras?.getString("userBirthdayStep2")
-        birthdayProfileDetail.text = resources.getString(R.string.birthday_detail_register, birthday)
+        birthdayProfileDetail.text =
+            resources.getString(R.string.birthday_detail_register, birthday)
 
         val password = intent.extras?.getString("passwordStep2")
         val dateJoin = intent.extras?.getString("dateJoinStep2")
 
 
         btnStepFinish.setOnClickListener {
-            if (email != null && password != null){
+            if (email != null && password != null) {
                 progressLoader.visibility = View.VISIBLE
                 btnStepFinish.visibility = View.INVISIBLE
 
@@ -133,14 +126,25 @@ class RegisterDetailProfileFinish : AppCompatActivity() {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "createUserWithEmail:success")
                     val userId = auth.currentUser!!.uid
-                    uploadImageToFirebase(fileUri, userId, username, email, phone, gender, birthday, dateJoin)
+                    uploadImageToFirebase(
+                        fileUri,
+                        userId,
+                        username,
+                        email,
+                        phone,
+                        gender,
+                        birthday,
+                        dateJoin
+                    )
                 } else {
                     btnStepFinish.visibility = View.VISIBLE
                     progressLoader.visibility = View.INVISIBLE
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                    Toast.makeText(baseContext, "Authentication failed.",
-                        Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        baseContext, "Authentication failed.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
     }
@@ -157,7 +161,8 @@ class RegisterDetailProfileFinish : AppCompatActivity() {
     ) {
         if (fileUri != null) {
             val fileName = UUID.randomUUID().toString() + ".jpg"
-            val refStorage = firebaseStorage.reference.child("imagesProfile/${auth.currentUser!!.email}/$fileName")
+            val refStorage =
+                firebaseStorage.reference.child("imagesProfile/${auth.currentUser!!.email}/$fileName")
             refStorage.putFile(fileUri).addOnSuccessListener { taskSnapshot ->
                 taskSnapshot.storage.downloadUrl.addOnSuccessListener { uri ->
                     databaseReference = firebaseDatabase.getReference("users").child(userId)

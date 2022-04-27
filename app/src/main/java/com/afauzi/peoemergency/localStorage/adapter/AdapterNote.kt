@@ -14,7 +14,7 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 class AdapterNote(
     private val notes: ArrayList<ModelNote>,
     private val listener: OnAdapterListener
-    ):RecyclerView.Adapter<AdapterNote.NoteViewHolder>() {
+) : RecyclerView.Adapter<AdapterNote.NoteViewHolder>() {
 
     interface OnAdapterListener {
         fun onClick(note: ModelNote)
@@ -22,10 +22,11 @@ class AdapterNote(
         fun onDelete(note: ModelNote)
     }
 
-    class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val title: TextView = itemView.findViewById(R.id.item_title)
         val description: TextView = itemView.findViewById(R.id.item_description)
-        val buttonDelete: ExtendedFloatingActionButton = itemView.findViewById(R.id.item_icon_delete)
+        val buttonDelete: ExtendedFloatingActionButton =
+            itemView.findViewById(R.id.item_icon_delete)
         val mainLayout: RelativeLayout = itemView.findViewById(R.id.item_main_layout)
     }
 
@@ -37,7 +38,8 @@ class AdapterNote(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_list_note, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_list_note, parent, false)
         return NoteViewHolder(view)
     }
 

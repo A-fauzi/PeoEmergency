@@ -13,7 +13,7 @@ interface NoteDao {
     @Delete
     suspend fun deleteNote(note: ModelNote)
 
-    @Query("SELECT * FROM note ORDER BY id DESC") 
+    @Query("SELECT * FROM note ORDER BY id DESC")
     suspend fun getNotes(): List<ModelNote>
 
     @Query("SELECT * FROM note WHERE id=:note_id")

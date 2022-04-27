@@ -4,17 +4,17 @@
     <item
         android:id="@+id/homeFragment"
         android:title="@string/item_title_home"
-        android:icon="@drawable/ic_baseline_home_24"/>
+        android:icon="@drawable/ic_baseline_home_24" />
 
     <item
         android:id="@+id/emergencyFragment"
         android:title="@string/item_title_emergency"
-        android:icon="@drawable/ic_baseline_live_help_24"/>
+        android:icon="@drawable/ic_baseline_live_help_24" />
 
     <item
         android:id="@+id/accountFragment"
         android:title="@string/item_title_account"
-        android:icon="@drawable/ic_baseline_manage_accounts_24"/>
+        android:icon="@drawable/ic_baseline_manage_accounts_24" />
 
 
 </menu>

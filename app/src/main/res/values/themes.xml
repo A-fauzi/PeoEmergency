@@ -14,18 +14,19 @@
         <!-- Customize your theme here. -->
     </style>
 
-<!--  Theme splashscreen api ini dijalankan pertama kali pada aplikasi  -->
-<!--  Ketika splash berakhir postSplashScreenTheme akan mengarahkan ke base application theme  -->
+    <!--  Theme splashscreen api ini dijalankan pertama kali pada aplikasi  -->
+    <!--  Ketika splash berakhir postSplashScreenTheme akan mengarahkan ke base application theme  -->
     <style name="Theme.MySplash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/white</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/sample_logo</item>
         <item name="postSplashScreenTheme">@style/Theme.PeoEmergency</item>
     </style>
 
-<!--  Dialog Custom  -->
+    <!--  Dialog Custom  -->
     <style name="MaterialAlertDialog_rounded" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <item name="shapeAppearanceOverlay">@style/DialogCorners</item>
     </style>
+
     <style name="DialogCorners">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">16dp</item>

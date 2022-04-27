@@ -4,11 +4,11 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.fragment.app.Fragment
 import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.databinding.FragmentProfileAccountBinding
 import com.afauzi.peoemergency.screen.auth.SignInActivity
@@ -17,7 +17,9 @@ import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.databaseReference
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.firebaseDatabase
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.user
-import com.google.firebase.database.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 
 class ProfileAccountFragment : Fragment() {
 
@@ -59,7 +61,8 @@ class ProfileAccountFragment : Fragment() {
                 if (snapshot.exists()) {
                     binding.usernameProfile.text = snapshot.child("username").value.toString()
                     binding.emailProfile.text = snapshot.child("email").value.toString()
-                    binding.dateJoinUser.text = "User joined ${snapshot.child("date_join").value.toString()}"
+                    binding.dateJoinUser.text =
+                        "User joined ${snapshot.child("date_join").value.toString()}"
                 } else {
                     // Handle if data null or problem network
                 }

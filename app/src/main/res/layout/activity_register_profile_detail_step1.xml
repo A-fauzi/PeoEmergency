@@ -53,27 +53,27 @@
                 android:progress="35"
                 android:progressDrawable="@drawable/progressbar_state" />
 
-                <TextView
-                    android:id="@+id/username"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:textColor="@color/black"
-                    android:text="@string/hi_name" />
+            <TextView
+                android:id="@+id/username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/black"
+                android:text="@string/hi_name" />
 
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Silahkan isi informasi tambahan dibawah ini" />
+                android:text="@string/tv_text1_regis_step1" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/montserrat_alternates_bold"
-                android:text="Pilih jenis kelamin"
+                android:text="@string/choose_gender"
                 android:textColor="@color/black" />
 
             <RadioGroup
@@ -87,14 +87,14 @@
                     android:id="@+id/rbMan"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/laki_laki"
-                    android:checked="true"/>
+                    android:text="@string/man"
+                    android:checked="true" />
 
                 <RadioButton
                     android:id="@+id/rbWoman"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/perempuan" />
+                    android:text="@string/woman" />
 
             </RadioGroup>
 

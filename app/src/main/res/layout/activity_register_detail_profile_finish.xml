@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -53,19 +52,19 @@
                 android:progress="100"
                 android:progressDrawable="@drawable/progressbar_state" />
 
-                <TextView
-                    android:id="@+id/tvUsername"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="@string/hi_name"
-                    android:textColor="@color/black" />
+            <TextView
+                android:id="@+id/tvUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/hi_name"
+                android:textColor="@color/black" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Terimakasih sudah memberikan informasi untuk kebutuhan aplikasi, data anda aman bersama kami"
+                android:text="@string/tv_text_activity_regis_finish"
                 android:textColor="@color/black" />
 
             <TextView
@@ -73,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="16dp"
-                android:text="Berikut data informasi lengkap anda"
+                android:text="@string/tv_text_complete_information"
                 android:textColor="@color/black" />
 
 
@@ -106,7 +105,7 @@
                                 android:id="@+id/ivProfileDetail"
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
-                                android:src="@drawable/sample_logo"/>
+                                android:src="@drawable/sample_logo" />
 
                             <TextView
                                 android:id="@+id/name_profile_detail"
@@ -133,29 +132,29 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/emailSample"
-                                android:textColor="@color/black"/>
+                                android:textColor="@color/black" />
 
                             <TextView
                                 android:id="@+id/phoneDetailProfile"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/phoneSample"
-                                android:textColor="@color/black"/>
+                                android:textColor="@color/black" />
 
 
                             <TextView
                                 android:id="@+id/genderDetailProfile"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Jenis Kelamin: Laki-Laki"
-                                android:textColor="@color/black"/>
+                                android:text="@string/gender"
+                                android:textColor="@color/black" />
 
                             <TextView
                                 android:id="@+id/birthdayDetailProfile"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Tanggal Lahir: 24-mar-1997"
-                                android:textColor="@color/black"/>
+                                android:text="@string/birthday"
+                                android:textColor="@color/black" />
 
                         </LinearLayout>
 
@@ -169,32 +168,32 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Jika ada kesalahan data, kamu bisa update di bagian profile nanti"
+                android:text="@string/tv_text_information_regis_finish"
                 android:textColor="@color/black" />
 
-          <RelativeLayout
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-              <com.google.android.material.progressindicator.CircularProgressIndicator
-                  android:id="@+id/progress_in_register_finish"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:layout_centerHorizontal="true"
-                  android:layout_marginTop="16dp"
-                  android:layout_marginBottom="16dp"
-                  android:visibility="invisible"
-                  android:indeterminate="true"/>
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    android:id="@+id/progress_in_register_finish"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:visibility="invisible"
+                    android:indeterminate="true" />
 
-              <com.google.android.material.button.MaterialButton
-                  android:id="@+id/btn_step_finish"
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:layout_marginTop="16dp"
-                  android:text="@string/finish"
-                  app:cornerRadius="@dimen/radius_card_circle" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_step_finish"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/finish"
+                    app:cornerRadius="@dimen/radius_card_circle" />
 
-          </RelativeLayout>
+            </RelativeLayout>
 
         </LinearLayout>
 
