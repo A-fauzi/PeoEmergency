@@ -48,6 +48,7 @@ class AdapterListRandPost(
         } else {
             Picasso.get().load(currentItem.photoPost)
                 .placeholder(R.drawable.image_post_place_holder).resize(500, 500)
+                .centerCrop()
                 .into(holder.postImage)
         }
 

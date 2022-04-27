@@ -121,7 +121,7 @@ class RegisterProfileStep2 : AppCompatActivity() {
         datePicker.addOnPositiveButtonClickListener {
             val utc = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
             utc.timeInMillis = it
-            val format = SimpleDateFormat("dd MMM yyyy | hh:mm:ss zzz")
+            val format = SimpleDateFormat("dd MMM yyyy")
             val formatted: String = format.format(utc.time)
             tvDateReceived.text = formatted
 

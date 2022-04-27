@@ -2,6 +2,7 @@ package com.afauzi.peoemergency.screen.main.fragment
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -28,6 +29,7 @@ import com.afauzi.peoemergency.adapter.AdapterListRandPost
 import com.afauzi.peoemergency.dataModel.ModelItemRandomPost
 import com.afauzi.peoemergency.databinding.FragmentHomeBinding
 import com.afauzi.peoemergency.screen.LandingActivity
+import com.afauzi.peoemergency.screen.auth.registerStep.RegisterProfileStep2
 import com.afauzi.peoemergency.screen.main.fragment.activity.home.CameraAction
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.databaseReference
@@ -45,6 +47,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
+import java.io.IOException
 import java.security.SecureRandom
 import java.text.SimpleDateFormat
 import java.util.*
@@ -73,6 +76,7 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
     private lateinit var rvPostRandom: ShimmerRecyclerView
     private lateinit var listRandomPost: ArrayList<ModelItemRandomPost>
     private lateinit var animationView: LottieAnimationView
+    private var fillPath: Uri? = null
 
     private fun initView() {
         layout = binding.mainLayout
@@ -143,21 +147,20 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
                         Log.i(TAG, "Access location is granted")
                         progressLoaderPostContent.visibility = View.VISIBLE
 
-                        Log.i(
-                            TAG,
-                            "Coba time: ${
-                                SimpleDateFormat("dd MMM yyyy | hh:mm:ss zzz").format(
-                                    Date(System.currentTimeMillis())
-                                )
-                            }"
-                        )
 
-                        if (requireActivity().intent.extras != null) {
-                            Log.d(TAG, "uploadImageServer")
-                            uploadImageServer()
-                        } else {
-                            Log.d(TAG, "storeDataPostInDatabase")
-                            storeDataPostInDatabase()
+                        Log.i(TAG, "fill path value $fillPath")
+
+                        when {
+                            requireActivity().intent.extras != null -> {
+                                Log.d(TAG, "uploadImageServer")
+                                uploadImageCaptureServer()
+                            }
+                            fillPath != null -> {
+                                uploadImageGaleryServer()
+                            }
+                            else -> {
+                                storeDataPostInDatabase()
+                            }
                         }
 
                     }
@@ -207,7 +210,7 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
 
         // Btn attachFile
         attachFile.setOnClickListener {
-            Toast.makeText(activity, "Attach file clicked", Toast.LENGTH_SHORT).show()
+            openGalleryForImage()
         }
 
         // Btn More Menu
@@ -360,15 +363,13 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
         }
     }
 
-    private fun uploadImageServer() {
+    private fun uploadImageCaptureServer() {
         progressLoaderPostContent.visibility = View.VISIBLE
 
         val imgId = UUID.randomUUID().toString() + ".jpg"
-//        val uid = auth.currentUser!!.uid
 
         Log.i(TAG, "Image Post : $photoPostUri")
-        storageReference =
-            firebaseStorage.reference.child("post_image/${auth.currentUser!!.email}/$imgId")
+        storageReference = firebaseStorage.reference.child("post_image/${auth.currentUser!!.email}/$imgId")
         storageReference.putFile(photoPostUri).addOnSuccessListener { taskSnap ->
 
             Log.i(TAG, "upload image post: Successful")
@@ -440,7 +441,7 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
                                 snapshot.child("fullAddress").value.toString()
                             hashMap["postText"] = inputContentDescPost.text.toString()
                             hashMap["postDate"] =
-                                "${SimpleDateFormat("dd MMM yyyy | hh:mm:ss zzz").format(Date(System.currentTimeMillis()))}"
+                                "${SimpleDateFormat("dd MMM yyyy | HH:mm:ss zzz").format(Date(System.currentTimeMillis()))}"
                             hashMap["postId"] = postId.toString()
 
                             databaseReference.setValue(hashMap)
@@ -543,6 +544,53 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
     override fun onClickRemove(data: ModelItemRandomPost) {
         TODO("Not yet implemented")
     }
+
+
+    private fun openGalleryForImage() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        startActivityForResult(intent, RegisterProfileStep2.REQUEST_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode == RegisterProfileStep2.REQUEST_CODE) {
+            fillPath = data?.data!!
+            try {
+                imageReceiverCapture.setImageURI(data.data) // handle chosen image
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun uploadImageGaleryServer() {
+        progressLoaderPostContent.visibility = View.VISIBLE
+
+        val imgId = UUID.randomUUID().toString() + ".jpg"
+
+        Log.i(TAG, "Image Post From Galeri : $fillPath")
+        storageReference = firebaseStorage.reference.child("post_image/${auth.currentUser!!.email}/$imgId")
+        storageReference.putFile(fillPath!!).addOnSuccessListener { taskSnap ->
+
+            Log.i(TAG, "upload image post from galery: Successful")
+
+            taskSnap.storage.downloadUrl.addOnSuccessListener { uri ->
+
+                Log.i(TAG, "Uri image post from galery: $uri")
+                storeDataPostInDatabase(uri.toString())
+
+            }.addOnFailureListener { uriFailure ->
+                Toast.makeText(activity, "${uriFailure.message}", Toast.LENGTH_SHORT).show()
+            }
+
+        }.addOnFailureListener { snapshotFailure ->
+            Toast.makeText(activity, "${snapshotFailure.message}", Toast.LENGTH_SHORT).show()
+        }
+
+
+    }
+
 
 }
 
