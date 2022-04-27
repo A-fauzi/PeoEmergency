@@ -73,16 +73,16 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/round_location_on_20"
-                    android:contentDescription="@string/iv_ic_location" />
+                    android:contentDescription="@string/iv_ic_location"
+                    android:src="@drawable/round_location_on_20" />
 
                 <TextView
                     android:id="@+id/item_location_post"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
                     android:text="@string/address_sample"
-                    app:chipIcon="@drawable/round_location_on_20"
-                    android:layout_marginStart="8dp" />
+                    app:chipIcon="@drawable/round_location_on_20" />
             </LinearLayout>
 
             <LinearLayout
@@ -96,9 +96,9 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:background="@color/white"
+                    android:contentDescription="@string/iv_ic_comment"
                     android:foreground="?attr/selectableItemBackground"
-                    android:src="@drawable/ic_baseline_chat_bubble_outline_24"
-                    android:contentDescription="@string/iv_ic_comment" />
+                    android:src="@drawable/ic_comment" />
 
                 <ImageButton
                     android:id="@+id/item_to_like_post"
@@ -106,9 +106,9 @@
                     android:layout_height="25dp"
                     android:layout_marginStart="16dp"
                     android:background="@color/white"
+                    android:contentDescription="@string/iv_ic_favorite"
                     android:foreground="?attr/selectableItemBackground"
-                    android:src="@drawable/ic_baseline_favorite_border_24"
-                    android:contentDescription="@string/iv_ic_favorite" />
+                    android:src="@drawable/ic_favorite__2_" />
 
                 <ImageButton
                     android:id="@+id/item_to_share_post"
@@ -116,9 +116,9 @@
                     android:layout_height="25dp"
                     android:layout_marginStart="16dp"
                     android:background="@color/white"
+                    android:contentDescription="@string/iv_ic_share"
                     android:foreground="?attr/selectableItemBackground"
-                    android:src="@drawable/ic_baseline_share_24"
-                    android:contentDescription="@string/iv_ic_share" />
+                    android:src="@drawable/ic_share__2_" />
 
             </LinearLayout>
 

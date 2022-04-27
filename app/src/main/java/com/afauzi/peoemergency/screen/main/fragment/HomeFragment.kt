@@ -53,7 +53,6 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
 
     companion object {
         private const val TAG = "HomeFragment"
-        const val REQUEST_CODE = 200
     }
 
     private lateinit var layout: View
@@ -100,7 +99,7 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
+
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         initView()
@@ -508,7 +507,6 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
     }
 
     private fun getListPostRandom() {
-        val uid = auth.currentUser!!.uid
         databaseReference = firebaseDatabase.getReference("postRandom")
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
