@@ -149,7 +149,7 @@ class SignInActivity : AppCompatActivity() {
     private fun UpdateUi(account: GoogleSignInAccount) {
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
         auth.signInWithCredential(credential).addOnCompleteListener { task ->
-            if (task.isSuccessful) {
+             if (task.isSuccessful) {
 
                 Log.i(TAG, "sign in with credential: ${task.exception?.localizedMessage}")
 
