@@ -179,6 +179,22 @@ class RegisterDetailProfileFinish : AppCompatActivity() {
 
                     databaseReference.setValue(hashMap).addOnCompleteListener { databaseResult ->
                         if (databaseResult.isSuccessful) {
+
+
+//                            //send email verification
+//                            auth.currentUser!!.sendEmailVerification()
+//                                .addOnSuccessListener {
+//                                    Toast.makeText(this@ProfileActivity, "Instructions Sent...", Toast.LENGTH_SHORT).show()
+//                                }
+//                                .addOnFailureListener { e ->
+//                                    Toast.makeText(this@ProfileActivity, "Failed to send due to " + e.message, Toast.LENGTH_SHORT).show()
+//                                }
+
+
+
+
+
+
                             val intent = Intent(this, MainActivity::class.java)
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                             startActivity(intent)

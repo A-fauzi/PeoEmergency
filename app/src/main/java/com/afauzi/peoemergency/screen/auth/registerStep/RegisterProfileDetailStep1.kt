@@ -2,6 +2,9 @@ package com.afauzi.peoemergency.screen.auth.registerStep
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.afauzi.peoemergency.R
@@ -20,6 +23,7 @@ class RegisterProfileDetailStep1 : AppCompatActivity() {
     private lateinit var radioGroup: RadioGroup
     private lateinit var codeCountryCodePicker: CountryCodePicker
     private lateinit var phoneNumber: EditText
+    private lateinit var tvWarnPhoneInput: TextView
 
     private fun initView() {
         btnNextStep = binding.btnStep1
@@ -27,6 +31,7 @@ class RegisterProfileDetailStep1 : AppCompatActivity() {
         radioGroup = binding.enableRadioGroup
         codeCountryCodePicker = binding.codeCountryPicker
         phoneNumber = binding.phoneNumber
+        tvWarnPhoneInput = binding.tvWarnEtPhoneInput
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,12 +52,15 @@ class RegisterProfileDetailStep1 : AppCompatActivity() {
             passingData()
         }
 
+        phoneNumber.addTextChangedListener(GenericTextWatcher(phoneNumber))
+
     }
 
     private fun passingData() {
         val selectOption: Int = radioGroup.checkedRadioButtonId
         val radioButton: RadioButton = findViewById(selectOption)
         val dataGender = radioButton.text
+
         val phone = "${codeCountryCodePicker.textView_selectedCountry.text}${phoneNumber.text}"
         val userName = intent.extras?.getString("username")
         val email = intent.extras?.getString("email")
@@ -71,6 +79,27 @@ class RegisterProfileDetailStep1 : AppCompatActivity() {
         intent.putExtras(bundle)
         startActivity(intent)
 
+    }
+
+    inner class GenericTextWatcher(private val view: View) : TextWatcher {
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+        override fun afterTextChanged(editable: Editable?) {
+            val text = editable.toString()
+            when(view.id) {
+                R.id.phoneNumber -> {
+                    if (text.startsWith("0")) {
+                        tvWarnPhoneInput.visibility = View.VISIBLE
+                        phoneNumber.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+                        btnNextStep.isEnabled = false
+                    } else {
+                        tvWarnPhoneInput.visibility = View.INVISIBLE
+                        phoneNumber.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_correct, 0)
+                        btnNextStep.isEnabled = true
+                    }
+                }
+            }
+        }
     }
 
 }

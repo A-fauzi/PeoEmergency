@@ -118,25 +118,43 @@
                     app:ccp_contentColor="@color/black"
                     app:ccp_showNameCode="false" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/outlinedTextFieldPhoneNumber"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:hint="@string/phone_number"
-                    app:boxCornerRadiusBottomEnd="20dp"
-                    app:boxCornerRadiusBottomStart="20dp"
-                    app:boxCornerRadiusTopEnd="20dp"
-                    app:boxCornerRadiusTopStart="20dp"
-                    app:hintTextColor="@color/black">
+                    android:orientation="vertical">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/phoneNumber"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/outlinedTextFieldPhoneNumber"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="phone" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_marginStart="16dp"
+                        android:hint="@string/phone_number"
+                        app:boxCornerRadiusBottomEnd="20dp"
+                        app:boxCornerRadiusBottomStart="20dp"
+                        app:boxCornerRadiusTopEnd="20dp"
+                        app:boxCornerRadiusTopStart="20dp"
+                        app:hintTextColor="@color/black">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/phoneNumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="phone"
+                            android:maxLines="1"
+                            android:maxLength="12"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <TextView
+                        android:id="@+id/tv_warn_et_phone_input"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_warn_phone_input"
+                        android:layout_gravity="start"
+                        android:textSize="12sp"
+                        android:layout_marginStart="16dp"
+                        android:textColor="@color/pink_soft"
+                        android:visibility="invisible" />
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -146,7 +164,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/next_step"
-                app:cornerRadius="@dimen/radius_card_circle" />
+                app:cornerRadius="@dimen/radius_card_circle"
+                android:enabled="false"/>
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
