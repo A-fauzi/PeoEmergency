@@ -31,6 +31,7 @@ import com.afauzi.peoemergency.databinding.FragmentHomeBinding
 import com.afauzi.peoemergency.screen.LandingActivity
 import com.afauzi.peoemergency.screen.auth.registerStep.RegisterProfileStep2
 import com.afauzi.peoemergency.screen.main.fragment.activity.home.CameraAction
+import com.afauzi.peoemergency.screen.main.fragment.activity.home.CommentPostRandomActivity
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.databaseReference
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.firebaseDatabase
@@ -517,11 +518,13 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
                         val list = listRandPost.getValue(ModelItemRandomPost::class.java)
                         listRandomPost.add(list!!)
                         animationView.visibility = View.INVISIBLE
+                        rvPostRandom.visibility = View.VISIBLE
 
                     }
                     rvPostRandom.adapter = AdapterListRandPost(this@HomeFragment, listRandomPost)
                 } else {
                     animationView.visibility = View.VISIBLE
+                    rvPostRandom.visibility = View.GONE
                 }
             }
 
@@ -533,7 +536,49 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
     }
 
 
-    override fun onClickListener(data: ModelItemRandomPost) {
+    override fun onClickListenerCardView(data: ModelItemRandomPost) {
+        Log.i(TAG, "username: ${data.username}")
+        Log.i(TAG, "User ID: ${data.userId}")
+        Log.i(TAG, "Photo Profile: ${data.photoProfile}")
+        Log.i(TAG, "Text posting: ${data.postText}")
+        Log.i(TAG, "Post ID: ${data.postId}")
+
+        if (data.photoPost != "" || data.photoPost != null) {
+            Log.i(TAG, "Photo Posting: ${data.photoPost}")
+        }
+
+        Log.i(TAG, "Date Posting: ${data.postDate}")
+        Log.i(TAG, "City name: ${data.postLocationCityName}")
+        Log.i(TAG, "Coordinate location: ${data.postLocationCoordinate}")
+    }
+
+    override fun onClickListenerImageView(data: ModelItemRandomPost) {
+        Log.i(TAG, "Photo Posting: ${data.photoPost}")
+    }
+
+    override fun onClickListenerPostReply(data: ModelItemRandomPost) {
+        val bundle = Bundle()
+        bundle.putString("username", "${data.username}")
+        bundle.putString("userId", "${data.userId}")
+        bundle.putString("photoProfile", "${data.photoProfile}")
+        bundle.putString("textPost", "${data.postText}")
+        bundle.putString("postId", "${data.postId}")
+        if (data.photoPost != "" || data.photoPost != null) {
+            bundle.putString("photoPosting", "${data.photoPost}")
+        }
+        bundle.putString("datePosting", "${data.postDate}")
+
+        val intent = Intent(requireActivity(), CommentPostRandomActivity::class.java)
+        intent.putExtras(bundle)
+        startActivity(intent)
+
+    }
+
+    override fun onClickListenerPostLike(data: ModelItemRandomPost) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onClickListenerPostShare(data: ModelItemRandomPost) {
         TODO("Not yet implemented")
     }
 

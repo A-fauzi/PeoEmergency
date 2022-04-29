@@ -80,6 +80,29 @@
                 android:textStyle="bold"
                 android:textSize="34dp"/>
 
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/filledTextField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:boxCornerRadiusTopStart="20dp"
+                app:boxCornerRadiusBottomEnd="20dp"
+                app:boxCornerRadiusTopEnd="20dp"
+                app:boxCornerRadiusBottomStart="20dp"
+                app:startIconDrawable="@drawable/ic_search"
+                app:startIconCheckable="true"
+                app:startIconTint="@color/black"
+                android:layout_marginTop="16dp"
+                android:hint="Search">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textFilter"
+                    android:minLines="1"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
         </LinearLayout>
 
     </FrameLayout>

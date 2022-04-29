@@ -19,11 +19,17 @@
     <application
         android:name=".utils.FirebaseHandler"
         android:allowBackup="true"
-        android:icon="@drawable/sample_logo"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/sample_logo"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PeoEmergency">
+        <activity
+            android:name=".screen.main.fragment.activity.home.CommentPostRandomActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screen.main.fragment.activity.home.ImagePostDetailActivity"
+            android:exported="false" />
         <activity
             android:name=".screen.auth.registerStep.RegisterDetailProfileFinish"
             android:exported="false" />

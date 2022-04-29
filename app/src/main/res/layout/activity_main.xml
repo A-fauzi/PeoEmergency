@@ -20,13 +20,13 @@
     <me.ibrahimsn.lib.SmoothBottomBar
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="70dp"
         android:layout_alignParentBottom="true"
-        android:paddingBottom="30dp"
-        app:iconTint="#2A000000"
-        app:iconTintActive="@color/white"
-        app:indicatorColor="@color/blue_soft"
+        app:iconTint="@color/white"
+        app:iconTintActive="@color/blue_soft"
+        app:indicatorColor="@color/white"
         app:menu="@menu/bottom_nav_menu"
-        app:textColor="@color/white" />
+        app:backgroundColor="@color/blue_soft"
+        app:textColor="@color/blue_soft"/>
 
 </RelativeLayout>

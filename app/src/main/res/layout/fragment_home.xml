@@ -122,11 +122,11 @@
                 android:layout_marginStart="16dp"
                 android:layout_toEndOf="@id/input_photo_dialog"
                 android:clickable="true"
+                android:contentDescription="@string/iv_ic_attach_file"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:src="@drawable/ic_baseline_attach_file_24"
-                app:tint="@color/black"
-                android:contentDescription="@string/iv_ic_attach_file" />
+                android:src="@drawable/ic_attach_pin"
+                app:tint="@color/black" />
 
             <ImageView
                 android:id="@+id/more_menu_dialog"
@@ -134,19 +134,21 @@
                 android:layout_height="@dimen/height_icon"
                 android:layout_alignParentEnd="true"
                 android:clickable="true"
+                android:contentDescription="@string/iv_ic_more_menu"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackground"
-                android:src="@drawable/ic_baseline_more_vert_24"
-                app:tint="@color/black"
-                android:contentDescription="@string/iv_ic_more_menu" />
+                android:src="@drawable/ic_more__1_"
+                app:tint="@color/black" />
 
         </RelativeLayout>
 
-        <View
+        <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/black"
-            android:layout_marginTop="16dp" />
+            android:layout_height="wrap_content"
+            app:dividerInsetStart="100dp"
+            app:dividerInsetEnd="100dp"
+            app:dividerThickness="2dp"
+            android:layout_marginTop="16dp"/>
 
         <FrameLayout
             android:layout_width="match_parent"

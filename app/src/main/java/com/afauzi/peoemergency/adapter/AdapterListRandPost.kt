@@ -24,6 +24,9 @@ class AdapterListRandPost(
         val postDate: TextView = itemView.findViewById(R.id.item_date_post)
         val postImage: ImageView = itemView.findViewById(R.id.item_image_post)
         val cardContent: CardView = itemView.findViewById(R.id.item_cardView_content_random_post)
+        val replyPost: ImageView = itemView.findViewById(R.id.item_to_comment_post)
+        val likePost: ImageView = itemView.findViewById(R.id.item_to_like_post)
+        val sharePost: ImageView = itemView.findViewById(R.id.item_to_share_post)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -53,8 +56,24 @@ class AdapterListRandPost(
         }
 
         holder.cardContent.setOnClickListener {
-            callClickListener.onClickListener(currentItem)
+            callClickListener.onClickListenerCardView(currentItem)
         }
+
+        holder.postImage.setOnClickListener {
+            callClickListener.onClickListenerImageView(currentItem)
+        }
+
+        holder.replyPost.setOnClickListener {
+            callClickListener.onClickListenerPostReply(currentItem)
+        }
+        holder.likePost.setOnClickListener {
+            callClickListener.onClickListenerPostLike(currentItem)
+        }
+        holder.sharePost.setOnClickListener {
+            callClickListener.onClickListenerPostShare(currentItem)
+        }
+
+
     }
 
     override fun getItemCount(): Int {
@@ -62,7 +81,11 @@ class AdapterListRandPost(
     }
 
     interface CallClickListener {
-        fun onClickListener(data: ModelItemRandomPost)
+        fun onClickListenerCardView(data: ModelItemRandomPost)
+        fun onClickListenerImageView(data: ModelItemRandomPost)
+        fun onClickListenerPostReply(data: ModelItemRandomPost)
+        fun onClickListenerPostLike(data: ModelItemRandomPost)
+        fun onClickListenerPostShare(data: ModelItemRandomPost)
         fun onLongClickListener(data: ModelItemRandomPost)
         fun onClickRemove(data: ModelItemRandomPost)
     }
