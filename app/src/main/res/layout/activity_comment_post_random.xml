@@ -91,6 +91,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_gravity="end"
+            android:visibility="invisible"
             tools:listitem="@layout/item_list_reply_comment"
             tools:itemCount="3"/>
 

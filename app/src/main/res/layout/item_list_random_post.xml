@@ -102,36 +102,78 @@
                     android:layout_marginTop="16dp"
                     android:orientation="horizontal">
 
-                    <ImageButton
-                        android:id="@+id/item_to_comment_post"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:background="@color/white"
-                        android:contentDescription="@string/iv_ic_comment"
-                        android:foreground="?attr/selectableItemBackground"
-                        android:src="@drawable/ic_comment"
-                        style="?attr/borderlessButtonStyle"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
 
-                    <ImageButton
-                        android:id="@+id/item_to_like_post"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_marginStart="16dp"
-                        android:background="@color/white"
-                        android:contentDescription="@string/iv_ic_favorite"
-                        android:foreground="?attr/selectableItemBackground"
-                        android:src="@drawable/ic_favorite__2_" />
+                        <ImageButton
+                            android:id="@+id/item_to_comment_post"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:background="@color/white"
+                            android:contentDescription="@string/iv_ic_comment"
+                            android:foreground="?attr/selectableItemBackground"
+                            android:src="@drawable/ic_comment"
+                            style="?attr/borderlessButtonStyle"/>
 
-                    <ImageButton
-                        android:id="@+id/item_to_share_post"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_marginStart="16dp"
-                        android:background="@color/white"
-                        android:contentDescription="@string/iv_ic_share"
-                        android:foreground="?attr/selectableItemBackground"
-                        android:src="@drawable/ic_share__2_" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="22 comment"
+                            android:layout_marginLeft="8dp"
+                            android:textSize="10dp"/>
+                    </LinearLayout>
 
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <ImageButton
+                            android:id="@+id/item_to_like_post"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_marginStart="16dp"
+                            android:background="@color/white"
+                            android:contentDescription="@string/iv_ic_favorite"
+                            android:foreground="?attr/selectableItemBackground"
+                            android:src="@drawable/ic_favorite__2_" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="22 like"
+                            android:layout_marginLeft="8dp"
+                            android:textSize="10dp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <ImageButton
+                            android:id="@+id/item_to_share_post"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_marginStart="16dp"
+                            android:background="@color/white"
+                            android:contentDescription="@string/iv_ic_share"
+                            android:foreground="?attr/selectableItemBackground"
+                            android:src="@drawable/ic_share__2_" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="22 share"
+                            android:layout_marginLeft="8dp"
+                            android:textSize="10dp"/>
+
+                    </LinearLayout>
                 </LinearLayout>
 
             </LinearLayout>

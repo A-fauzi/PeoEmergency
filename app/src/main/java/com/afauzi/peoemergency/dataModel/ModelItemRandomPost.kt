@@ -10,4 +10,5 @@ data class ModelItemRandomPost(
     var postId: String? = null,
     var postLocationCoordinate: String? = null,
     var userId: String? = null,
+    var userReplyPost: ModelReplyPost? = null
 )

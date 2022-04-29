@@ -91,7 +91,6 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
         imgProfile = binding.imageProfile
         currentLocation = binding.currentLocation
         progressLoaderPostContent = binding.progressPostContent
-        postId = UUID.randomUUID()
         photoProfileUri = ""
         if (requireActivity().intent.extras != null) {
             photoPostUri =
