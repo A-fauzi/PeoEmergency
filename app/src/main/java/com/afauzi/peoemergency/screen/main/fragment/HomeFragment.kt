@@ -403,8 +403,7 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
                             val uid = auth.currentUser!!.uid
                             val randStr = randomString(25)
 
-                            databaseReference =
-                                firebaseDatabase.getReference("postRandom").child(randStr)
+                            databaseReference = firebaseDatabase.getReference("postRandom").child(randStr)
 
                             Log.i(TAG, "dataPostUid: $uid")
                             Log.i(TAG, "dataPostUsername: ${username.text}")
@@ -443,7 +442,7 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
                             hashMap["postText"] = inputContentDescPost.text.toString()
                             hashMap["postDate"] =
                                 "${SimpleDateFormat("dd MMM yyyy | HH:mm:ss zzz").format(Date(System.currentTimeMillis()))}"
-                            hashMap["postId"] = postId.toString()
+                            hashMap["postId"] = randStr
 
                             databaseReference.setValue(hashMap)
                                 .addOnCompleteListener { postResult ->
@@ -558,6 +557,10 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
 
     override fun onClickListenerPostReply(data: ModelItemRandomPost) {
         val bundle = Bundle()
+        // Data CurrentUser
+        bundle.putString("photoProfileCurrentUser", photoProfileUri)
+        bundle.putString("usernameCurrentUser", username.text.toString())
+
         bundle.putString("username", "${data.username}")
         bundle.putString("userId", "${data.userId}")
         bundle.putString("photoProfile", "${data.photoProfile}")

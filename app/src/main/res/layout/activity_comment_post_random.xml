@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="8dp"
+        android:padding="@dimen/root_view_padding"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -69,8 +69,7 @@
                         android:layout_height="wrap_content"
                         android:adjustViewBounds="true"
                         android:contentDescription="@string/upload_image"
-                        android:transitionName="shared_element_container_imageview"
-                        android:src="@drawable/sample_logo"/>
+                        android:transitionName="shared_element_container_imageview"/>
 
                 </androidx.cardview.widget.CardView>
 
@@ -92,19 +91,46 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_gravity="end"
-            tools:listitem="@layout/item_list_reply_comment"/>
+            tools:listitem="@layout/item_list_reply_comment"
+            tools:itemCount="3"/>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_input_comment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/text_comment_reply"
-            android:layout_marginTop="16dp"
-            android:padding="8dp"
-            android:background="@drawable/background_shape_radius_input_comment"
-            android:autofillHints="About this content"
-            android:inputType="textMultiLine"/>
 
+           <androidx.constraintlayout.widget.ConstraintLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="16dp"
+               tools:ignore="MissingPrefix">
+
+               <de.hdodenhof.circleimageview.CircleImageView
+                   android:id="@+id/iv_photo_profile_user_reply"
+                   android:layout_width="35dp"
+                   android:layout_height="35dp"
+                   app:layout_constraintTop_toTopOf="parent"
+                   app:layout_constraintLeft_toLeftOf="parent"
+                   android:src="@drawable/sample_logo"/>
+
+               <com.google.android.material.textfield.TextInputEditText
+                   android:id="@+id/et_input_comment"
+                   android:layout_width="250dp"
+                   android:layout_height="wrap_content"
+                   android:hint="@string/text_comment_reply"
+                   app:layout_constraintLeft_toRightOf="@id/iv_photo_profile_user_reply"
+                   app:layout_constraintBottom_toBottomOf="parent"
+                   android:layout_marginTop="16dp"
+                   android:padding="16dp"
+                   android:autofillHints="About this content"
+                   android:inputType="textMultiLine"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_send_reply"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="send"
+                app:cornerRadius="@dimen/button_radius"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+           </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
 
