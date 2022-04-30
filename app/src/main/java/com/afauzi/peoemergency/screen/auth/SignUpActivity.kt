@@ -160,12 +160,16 @@ class SignUpActivity : AppCompatActivity() {
 
     /**
      * Handle to passing data on second activity
+     *
+     * Fungsi untuk passing data
      */
     private fun passingData() {
 
         // ======================================= Passing data on bundle ==================================
         /**
          * Declaration variable Bundle()
+         *
+         * Mengirim sebuah data dengan bundles
          */
         val bundle = Bundle()
         bundle.putString("username", username.text.toString())
@@ -181,6 +185,8 @@ class SignUpActivity : AppCompatActivity() {
         // ====================================== Intent Main ===========================
         /**
          * Intent Action Target to second class activity
+         *
+         * Intent untuk mengarahkan aktifitas yang dituju dengan membawa data menggunakan bundle
          */
         val intent = Intent(this, RegisterProfileDetailStep1::class.java)
 
@@ -195,6 +201,8 @@ class SignUpActivity : AppCompatActivity() {
 
     /**
      * GenericTextWatcher class to views editText in this activity
+     *
+     * Kelas ini adalah kelas untuk mengelola validasi yang dikirimkan melalui input form menggunakan TextWatcher
      */
     inner class GenericTextWatcher(private val view: View) : TextWatcher {
         override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
@@ -288,6 +296,9 @@ class SignUpActivity : AppCompatActivity() {
 
         /**
          * Validate on ediText to use in GenericTextWatcher class
+         *
+         *
+         * Kejadian di formulir saat formulir di validasi dengan TextWatcher
          */
         private fun inputValidate(
             setCompDrawIsCorrect: EditText? = null,
@@ -320,6 +331,8 @@ class SignUpActivity : AppCompatActivity() {
 
     /**
      * Handle form enabling condition
+     *
+     * Mengatasi formulir aktif atau tidak
      */
     private fun setFormEnable(condition: Boolean, setBackBoxColor: Int) {
         username.isEnabled = condition

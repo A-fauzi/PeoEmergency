@@ -86,7 +86,7 @@ class RegisterProfileDetailStep1 : AppCompatActivity() {
         override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
         override fun afterTextChanged(editable: Editable?) {
             val text = editable.toString()
-            when(view.id) {
+            when (view.id) {
                 R.id.phoneNumber -> {
                     if (text.startsWith("0")) {
                         tvWarnPhoneInput.visibility = View.VISIBLE
@@ -94,7 +94,12 @@ class RegisterProfileDetailStep1 : AppCompatActivity() {
                         btnNextStep.isEnabled = false
                     } else {
                         tvWarnPhoneInput.visibility = View.INVISIBLE
-                        phoneNumber.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_correct, 0)
+                        phoneNumber.setCompoundDrawablesWithIntrinsicBounds(
+                            0,
+                            0,
+                            R.drawable.ic_correct,
+                            0
+                        )
                         btnNextStep.isEnabled = true
                     }
                 }

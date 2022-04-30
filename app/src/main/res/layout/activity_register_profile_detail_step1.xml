@@ -142,8 +142,9 @@
                             android:layout_height="wrap_content"
                             android:inputType="phone"
                             android:maxLines="1"
-                            android:maxLength="12"/>
+                            android:maxLength="12" />
                     </com.google.android.material.textfield.TextInputLayout>
+
                     <TextView
                         android:id="@+id/tv_warn_et_phone_input"
                         android:layout_width="wrap_content"
@@ -165,7 +166,7 @@
                 android:layout_marginTop="16dp"
                 android:text="@string/next_step"
                 app:cornerRadius="@dimen/radius_card_circle"
-                android:enabled="false"/>
+                android:enabled="false" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

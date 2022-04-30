@@ -17,7 +17,8 @@ class AdapterListReplyPost(
     private val listItemReplyPost: ArrayList<ModelReplyPost>
 ) : RecyclerView.Adapter<AdapterListReplyPost.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val photoProfile = itemView.findViewById<CircleImageView>(R.id.item_photo_profile_user_reply)
+        val photoProfile =
+            itemView.findViewById<CircleImageView>(R.id.item_photo_profile_user_reply)
         val username = itemView.findViewById<TextView>(R.id.item_name_user_reply)
         val currentDate = itemView.findViewById<TextView>(R.id.item_date_post_user_reply)
         val textReply = itemView.findViewById<TextView>(R.id.item_description_post_user_reply)

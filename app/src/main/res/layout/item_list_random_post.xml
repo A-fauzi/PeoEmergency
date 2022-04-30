@@ -116,14 +116,15 @@
                             android:contentDescription="@string/iv_ic_comment"
                             android:foreground="?attr/selectableItemBackground"
                             android:src="@drawable/ic_comment"
-                            style="?attr/borderlessButtonStyle"/>
+                            style="?attr/borderlessButtonStyle" />
 
                         <TextView
+                            android:id="@+id/item_tv_count_comment"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="22 comment"
                             android:layout_marginLeft="8dp"
-                            android:textSize="10dp"/>
+                            android:textSize="10dp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -147,7 +148,7 @@
                             android:layout_height="wrap_content"
                             android:text="22 like"
                             android:layout_marginLeft="8dp"
-                            android:textSize="10dp"/>
+                            android:textSize="10dp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -171,7 +172,7 @@
                             android:layout_height="wrap_content"
                             android:text="22 share"
                             android:layout_marginLeft="8dp"
-                            android:textSize="10dp"/>
+                            android:textSize="10dp" />
 
                     </LinearLayout>
                 </LinearLayout>
@@ -186,7 +187,7 @@
             app:dividerInsetEnd="200dp"
             app:dividerInsetStart="200dp"
             app:dividerThickness="2dp"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp" />
 
     </LinearLayout>
 

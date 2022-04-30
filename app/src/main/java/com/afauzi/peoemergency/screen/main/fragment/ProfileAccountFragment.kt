@@ -75,7 +75,8 @@ class ProfileAccountFragment : Fragment() {
         // Code get username from database
         auth.currentUser.let {
             if (it != null) {
-                FirebaseServiceInstance.databaseReference = FirebaseServiceInstance.firebaseDatabase.getReference("users").child(it.uid)
+                FirebaseServiceInstance.databaseReference =
+                    FirebaseServiceInstance.firebaseDatabase.getReference("users").child(it.uid)
                 FirebaseServiceInstance.databaseReference.addValueEventListener(object :
                     ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
@@ -98,7 +99,10 @@ class ProfileAccountFragment : Fragment() {
                                     .placeholder(com.afauzi.peoemergency.R.drawable.girl_image_place_holder)
                                     .into(photoProfile)
                             }
-                            Log.i(TAG, "Photo Profile Uri: ${snapshot.child("photoProfile").value.toString()}") // data username done
+                            Log.i(
+                                TAG,
+                                "Photo Profile Uri: ${snapshot.child("photoProfile").value.toString()}"
+                            ) // data username done
                         } else {
                             username.text = null
                         }
@@ -126,13 +130,13 @@ class ProfileAccountFragment : Fragment() {
         popupMenu.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.logout_account -> {
-                   auth.currentUser.let { currentUser ->
-                       if (currentUser != null) {
-                           auth.signOut()
-                           startActivity(Intent(activity, SignInActivity::class.java))
-                           activity?.finish()
-                       }
-                   }
+                    auth.currentUser.let { currentUser ->
+                        if (currentUser != null) {
+                            auth.signOut()
+                            startActivity(Intent(activity, SignInActivity::class.java))
+                            activity?.finish()
+                        }
+                    }
                 }
             }
 

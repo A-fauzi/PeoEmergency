@@ -30,6 +30,7 @@ class SignInActivity : AppCompatActivity() {
 
     companion object {
         private const val TAG = "SignInActivity"
+        private const val GOOGLE_SIGNIN_REQ_CODE = 1046
     }
 
 
@@ -48,7 +49,6 @@ class SignInActivity : AppCompatActivity() {
     private lateinit var btnSignInGoogle: CardView
 
     private lateinit var mGoogleSignInClient: GoogleSignInClient
-    val reqCode: Int = 123
 
     private fun initView() {
         email = binding.etEmailSignIn
@@ -72,23 +72,52 @@ class SignInActivity : AppCompatActivity() {
 
         initView()
 
+        configureGso()
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        btnLogin.setOnClickListener {
+            setFormEnable(false, R.color.input_disabled)
+            signInUser()
+            progressBar.visibility = View.VISIBLE
+        }
+
+        linkToSignUp.setOnClickListener {
+            val intent = Intent(this, SignUpActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        btnSignInGoogle.setOnClickListener {
+            signInGoogle()
+        }
+
+//        ========================================== |TextWatcher| ==================================================================
+        email.addTextChangedListener(GenericTextWatcher(email))
+        password.addTextChangedListener(GenericTextWatcher(password))
+//        ========================================== |END| ==================================================================
+    }
+
+    private fun configureGso() {
         val gso = GoogleSignInOptions
             .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.client_id))
             .requestEmail()
             .build()
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
-
     }
 
     private fun signInGoogle() {
         val signInIntent: Intent = mGoogleSignInClient.signInIntent
-        startActivityForResult(signInIntent, reqCode)
+        startActivityForResult(signInIntent, GOOGLE_SIGNIN_REQ_CODE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == reqCode) {
+        if (requestCode == GOOGLE_SIGNIN_REQ_CODE) {
             val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
             handleResult(task)
         }
@@ -100,31 +129,31 @@ class SignInActivity : AppCompatActivity() {
             if (account != null) {
                 UpdateUi(account)
             }
-        }catch (e: ApiException) {
+        } catch (e: ApiException) {
             Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show()
         }
     }
 
     object SavedPreference {
 
-        const val EMAIL= "email"
-        const val USERNAME="username"
+        const val EMAIL = "email"
+        const val USERNAME = "username"
 
-        private  fun getSharedPreference(ctx: Context?): SharedPreferences? {
+        private fun getSharedPreference(ctx: Context?): SharedPreferences? {
             return PreferenceManager.getDefaultSharedPreferences(ctx)
         }
 
-        private fun  editor(context: Context, const:String, string: String){
+        private fun editor(context: Context, const: String, string: String) {
             getSharedPreference(
                 context
-            )?.edit()?.putString(const,string)?.apply()
+            )?.edit()?.putString(const, string)?.apply()
         }
 
-        fun getEmail(context: Context)= getSharedPreference(
+        fun getEmail(context: Context) = getSharedPreference(
             context
-        )?.getString(EMAIL,"")
+        )?.getString(EMAIL, "")
 
-        fun setEmail(context: Context, email: String){
+        fun setEmail(context: Context, email: String) {
             editor(
                 context,
                 EMAIL,
@@ -132,7 +161,7 @@ class SignInActivity : AppCompatActivity() {
             )
         }
 
-        fun setUsername(context: Context, username:String){
+        fun setUsername(context: Context, username: String) {
             editor(
                 context,
                 USERNAME,
@@ -142,22 +171,36 @@ class SignInActivity : AppCompatActivity() {
 
         fun getUsername(context: Context) = getSharedPreference(
             context
-        )?.getString(USERNAME,"")
+        )?.getString(USERNAME, "")
 
     }
 
+    /**
+     * Google oAuth handle methode
+     */
     private fun UpdateUi(account: GoogleSignInAccount) {
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
         auth.signInWithCredential(credential).addOnCompleteListener { task ->
-             if (task.isSuccessful) {
+            if (task.isSuccessful) {
 
                 Log.i(TAG, "sign in with credential: ${task.exception?.localizedMessage}")
 
                 SavedPreference.setEmail(this, account.email.toString())
-                Log.i(TAG, "SavedPreference: ${SavedPreference.setEmail(this, account.email.toString())}")
+                Log.i(
+                    TAG,
+                    "SavedPreference: ${SavedPreference.setEmail(this, account.email.toString())}"
+                )
 
                 SavedPreference.setUsername(this, account.displayName.toString())
-                Log.i(TAG, "SavedPreference: ${SavedPreference.setUsername(this, account.displayName.toString())}")
+                Log.i(
+                    TAG,
+                    "SavedPreference: ${
+                        SavedPreference.setUsername(
+                            this,
+                            account.displayName.toString()
+                        )
+                    }"
+                )
 
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
@@ -180,31 +223,9 @@ class SignInActivity : AppCompatActivity() {
     }
 
 
-    override fun onResume() {
-        super.onResume()
-
-        btnLogin.setOnClickListener {
-            setFormEnable(false, R.color.input_disabled)
-            signInUser()
-            progressBar.visibility = View.VISIBLE
-        }
-
-        linkToSignUp.setOnClickListener {
-            val intent = Intent(this, SignUpActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-
-        btnSignInGoogle.setOnClickListener {
-            signInGoogle()
-        }
-
-        email.addTextChangedListener(GenericTextWatcher(email))
-        password.addTextChangedListener(GenericTextWatcher(password))
-
-    }
-
-
+    /**
+     * Methode Handle SignIn User
+     */
     private fun signInUser() {
         auth.signInWithEmailAndPassword(
             email.text.toString().trim(),
@@ -230,11 +251,21 @@ class SignInActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * Metode Text in EditText to Clear
+     *
+     * Fungsi untuk membersihkan / menghapus text yang terdapat pada editText
+     */
     private fun clearText() {
         email.text.clear()
         password.text.clear()
     }
 
+    /**
+     * TextWatcher class to handle validation of editText View
+     *
+     * Kelas TextWatcher ini digunakan untuk membuat validasi pada form, untuk mengatasi suatu tindakan
+     */
     inner class GenericTextWatcher(private val view: View) : TextWatcher {
         override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(editable: CharSequence, start: Int, before: Int, count: Int) {}
@@ -279,6 +310,11 @@ class SignInActivity : AppCompatActivity() {
             }
         }
 
+        /**
+         * metohde validasi form
+         *
+         * Methode input validasi tindakan yang akan dikirimkan kedalam kelas TextWatcher
+         */
         private fun inputValidate(
             setCompDrawIsCorrect: EditText? = null,
             setCompDrawNotCorrect: EditText? = null,
@@ -308,6 +344,12 @@ class SignInActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * Methode to handle form enable true or false
+     *
+     * Sebuah fungsi untuk penanganan sebuah form editText apakah harus enable or disable
+     *
+     */
     private fun setFormEnable(condition: Boolean, setBackBoxColor: Int) {
 
         email.isEnabled = condition

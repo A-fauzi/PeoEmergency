@@ -28,9 +28,6 @@
             android:name=".screen.main.fragment.activity.home.CommentPostRandomActivity"
             android:exported="false" />
         <activity
-            android:name=".screen.main.fragment.activity.home.ImagePostDetailActivity"
-            android:exported="false" />
-        <activity
             android:name=".screen.auth.registerStep.RegisterDetailProfileFinish"
             android:exported="false" />
         <activity
@@ -59,7 +56,19 @@
             android:exported="false" />
         <activity
             android:name=".screen.auth.SignInActivity"
-            android:exported="false" />
+            android:exported="true">
+            <intent-filter android:label="Peo Emergency">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="https"
+                    android:host="www.peoemergency.com"
+                    android:pathPrefix="/verify" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".screen.LandingActivity"
             android:exported="true"
@@ -72,7 +81,9 @@
         </activity>
         <activity
             android:name=".screen.main.MainActivity"
-            android:exported="false" />
+            android:exported="true">
+
+        </activity>
 
         <meta-data
             android:name="preloaded_fonts"

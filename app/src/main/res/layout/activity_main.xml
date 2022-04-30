@@ -27,6 +27,6 @@
         app:indicatorColor="@color/white"
         app:menu="@menu/bottom_nav_menu"
         app:backgroundColor="@color/blue_soft"
-        app:textColor="@color/blue_soft"/>
+        app:textColor="@color/blue_soft" />
 
 </RelativeLayout>

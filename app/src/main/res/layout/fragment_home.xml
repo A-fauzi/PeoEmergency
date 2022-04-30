@@ -148,7 +148,7 @@
             app:dividerInsetStart="100dp"
             app:dividerInsetEnd="100dp"
             app:dividerThickness="2dp"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp" />
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -168,7 +168,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                tools:listitem="@layout/item_list_random_post"/>
+                tools:listitem="@layout/item_list_random_post" />
         </FrameLayout>
 
     </LinearLayout>

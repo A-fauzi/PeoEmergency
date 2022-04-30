@@ -71,9 +71,9 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
     private lateinit var imgProfile: CircleImageView
     private lateinit var currentLocation: TextView
     private lateinit var progressLoaderPostContent: LinearProgressIndicator
-    private lateinit var postId: UUID
     private lateinit var photoProfileUri: String
     private lateinit var photoPostUri: Uri
+
     private lateinit var rvPostRandom: ShimmerRecyclerView
     private lateinit var listRandomPost: ArrayList<ModelItemRandomPost>
     private lateinit var animationView: LottieAnimationView
@@ -369,7 +369,8 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
         val imgId = UUID.randomUUID().toString() + ".jpg"
 
         Log.i(TAG, "Image Post : $photoPostUri")
-        storageReference = firebaseStorage.reference.child("post_image/${auth.currentUser!!.email}/$imgId")
+        storageReference =
+            firebaseStorage.reference.child("post_image/${auth.currentUser!!.email}/$imgId")
         storageReference.putFile(photoPostUri).addOnSuccessListener { taskSnap ->
 
             Log.i(TAG, "upload image post: Successful")
@@ -464,11 +465,11 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
                                         )
                                     }
                                 }.addOnFailureListener { postResultFailure ->
-                                Log.i(
-                                    TAG,
-                                    "data post to database failure: ${postResultFailure.message}"
-                                )
-                            }
+                                    Log.i(
+                                        TAG,
+                                        "data post to database failure: ${postResultFailure.message}"
+                                    )
+                                }
 
                         } else {
                             username.text = null
@@ -518,6 +519,10 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
                         animationView.visibility = View.INVISIBLE
                         rvPostRandom.visibility = View.VISIBLE
 
+                        Log.i("postId", "${list.postId}")
+
+
+                        getCountCommentPost(list.postId.toString())
                     }
                     rvPostRandom.adapter = AdapterListRandPost(this@HomeFragment, listRandomPost)
                 } else {
@@ -528,6 +533,32 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
 
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
+            }
+        })
+    }
+
+    private fun getCountCommentPost(postId: String) {
+        databaseReference = firebaseDatabase.getReference("postRandom").child(postId).child("userReplyPost")
+        databaseReference.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val size: String = snapshot.childrenCount.toString()
+                Log.i("countComment", "count postId $postId: $size")
+
+                databaseReference = firebaseDatabase.getReference("postRandom").child(postId).child("countCommentPostUser")
+                databaseReference.setValue(size).addOnCompleteListener { result ->
+                    if (result.isSuccessful) {
+                        Log.i(TAG, "Post reply count updated")
+                    } else {
+                        Log.i(TAG, "Post reply count not updated")
+                    }
+                }.addOnFailureListener { e ->
+                    Log.i(TAG, "failure post reply result database: ${e.localizedMessage} ")
+                }
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.i("countCommentError", "count: ${error.message}")
             }
 
         })
@@ -617,7 +648,8 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
         val imgId = UUID.randomUUID().toString() + ".jpg"
 
         Log.i(TAG, "Image Post From Galeri : $fillPath")
-        storageReference = firebaseStorage.reference.child("post_image/${auth.currentUser!!.email}/$imgId")
+        storageReference =
+            firebaseStorage.reference.child("post_image/${auth.currentUser!!.email}/$imgId")
         storageReference.putFile(fillPath!!).addOnSuccessListener { taskSnap ->
 
             Log.i(TAG, "upload image post from galery: Successful")

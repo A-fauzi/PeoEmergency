@@ -206,7 +206,8 @@ class CommentPostRandomActivity : AppCompatActivity(), AdapterListReplyPost.Call
     }
 
     private fun getListReplyPost() {
-        databaseReference = firebaseDatabase.getReference("postRandom").child(postId.toString()).child("userReplyPost")
+        databaseReference = firebaseDatabase.getReference("postRandom").child(postId.toString())
+            .child("userReplyPost")
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
