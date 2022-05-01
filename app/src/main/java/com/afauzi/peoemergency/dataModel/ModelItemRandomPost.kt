@@ -11,6 +11,7 @@ data class ModelItemRandomPost(
     var postLocationCoordinate: String? = null,
     var userId: String? = null,
     var userReplyPost: ModelReplyPost? = null,
-    var countCommentPostUser: String? = null
+    var countCommentPostUser: String? = null,
+    var countLikePostUser: String? = null
 
 )

@@ -28,6 +28,7 @@ class AdapterListRandPost(
         val likePost: ImageView = itemView.findViewById(R.id.item_to_like_post)
         val sharePost: ImageView = itemView.findViewById(R.id.item_to_share_post)
         val commentCount: TextView = itemView.findViewById(R.id.item_tv_count_comment)
+        val likeCount: TextView = itemView.findViewById(R.id.item_tv_count_like)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -44,6 +45,7 @@ class AdapterListRandPost(
         holder.postDesc.text = currentItem.postText
         holder.postDate.text = currentItem.postDate
         holder.commentCount.text = currentItem.countCommentPostUser
+        holder.likeCount.text = currentItem.countLikePostUser
 
         Picasso.get().load(currentItem.photoProfile).placeholder(R.drawable.person_place_holder)
             .into(holder.photoProfile)

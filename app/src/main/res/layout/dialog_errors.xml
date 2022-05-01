@@ -8,13 +8,13 @@
 
 
     <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/animationLoading"
+        android:id="@+id/animationDialog"
         android:layout_width="match_parent"
         android:layout_height="250dp"
         app:lottie_rawRes="@raw/not_page_animation"
         app:lottie_autoPlay="true"
         android:adjustViewBounds="true"
-        app:lottie_loop="true" />
+        app:lottie_loop="false" />
 
     <TextView
         android:id="@+id/tv_dialog_error"

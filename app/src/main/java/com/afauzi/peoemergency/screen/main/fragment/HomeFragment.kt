@@ -78,6 +78,7 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
     private lateinit var listRandomPost: ArrayList<ModelItemRandomPost>
     private lateinit var animationView: LottieAnimationView
     private var fillPath: Uri? = null
+    private var postId: String? = null
 
     private fun initView() {
         layout = binding.mainLayout
@@ -260,27 +261,34 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
             val address: Address?
 
             val addresses: List<Address>? = geocoder.getFromLocation(latitude!!, longitude!!, 1)
-            if (addresses!!.isNotEmpty()) {
-                address = addresses[0]
-                val fullAddress = address.getAddressLine(0)
-                val city = address.locality
-                val state = address.adminArea
-                val country = address.countryName
-                val postalCode = address.postalCode
-                val knownName = address.featureName
 
-                currentLocation.text = city
+            try {
+                if (addresses!!.isNotEmpty()) {
+                    address = addresses[0]
+                    val fullAddress = address.getAddressLine(0)
+                    val city = address.locality
+                    val state = address.adminArea
+                    val country = address.countryName
+                    val postalCode = address.postalCode
+                    val knownName = address.featureName
 
-                Log.i(TAG, "FullAddress: $fullAddress")
-                Log.i(TAG, "City: $city")
-                Log.i(TAG, "State: $state")
-                Log.i(TAG, "Country: $country")
-                Log.i(TAG, "postal code: $postalCode")
-                Log.i(TAG, "knowName: $knownName")
+                    currentLocation.text = city
 
-                storeDataLocation(fullAddress, city, state, country, locationCoordinate)
+                    Log.i(TAG, "FullAddress: $fullAddress")
+                    Log.i(TAG, "City: $city")
+                    Log.i(TAG, "State: $state")
+                    Log.i(TAG, "Country: $country")
+                    Log.i(TAG, "postal code: $postalCode")
+                    Log.i(TAG, "knowName: $knownName")
 
+                    storeDataLocation(fullAddress, city, state, country, locationCoordinate)
+
+                }
+            }catch (e: IOException) {
+                Log.e(TAG, "Error: ${e.printStackTrace()}")
+                Log.e(TAG, "Error: ${e.localizedMessage}")
             }
+
 
         }
 
@@ -521,8 +529,10 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
 
                         Log.i("postId", "${list.postId}")
 
+                        postId = list.postId
+                        Log.i(TAG, "post id: $postId")
 
-                        getCountCommentPost(list.postId.toString())
+                        getCountCommentPost(postId.toString())
                     }
                     rvPostRandom.adapter = AdapterListRandPost(this@HomeFragment, listRandomPost)
                 } else {
@@ -608,7 +618,63 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
     }
 
     override fun onClickListenerPostLike(data: ModelItemRandomPost) {
-        TODO("Not yet implemented")
+        val uid = auth.currentUser!!.uid
+        databaseReference = firebaseDatabase.getReference("users").child(uid)
+        databaseReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    val username = snapshot.child("username").value.toString()
+                    val photoProfile = snapshot.child("photoProfile").value.toString()
+
+                    val postId = data.postId
+
+                    databaseReference = firebaseDatabase.getReference("postRandom").child(postId.toString()).child("userLike").child(uid)
+                    val hashMap: HashMap<String, String> = HashMap()
+                    hashMap["username"] = username
+                    hashMap["photoProfile"] = photoProfile
+                    databaseReference.setValue(hashMap).addOnCompleteListener { databaseResult ->
+                        if (databaseResult.isSuccessful) {
+                            Toast.makeText(activity, "$username this like post", Toast.LENGTH_SHORT).show()
+
+                            databaseReference = firebaseDatabase.getReference("postRandom").child(postId.toString()).child("userLike")
+                            databaseReference.addValueEventListener(object : ValueEventListener{
+                                override fun onDataChange(snapshot: DataSnapshot) {
+                                    val size: String = snapshot.childrenCount.toString()
+                                    Log.i(TAG, "user like count in post $postId : $size")
+
+
+                                    databaseReference = firebaseDatabase.getReference("postRandom").child(postId.toString()).child("countLikePostUser")
+                                    databaseReference.setValue(size).addOnCompleteListener { databaseResult ->
+                                        if (databaseResult.isSuccessful) {
+                                            Log.i(TAG, "user like count updated")
+                                        } else {
+                                            Log.i(TAG, "user like count not updated")
+                                        }
+                                    }.addOnFailureListener { e ->
+                                        Log.e(TAG, "user like error: ${e.message}")
+                                    }
+
+                                }
+
+                                override fun onCancelled(error: DatabaseError) {
+                                    TODO("Not yet implemented")
+                                }
+
+                            })
+
+                        } else {
+                            Toast.makeText(activity, "$username failed like post", Toast.LENGTH_SHORT).show()
+                        }
+                    }.addOnFailureListener { e ->
+                        Log.e(TAG, "failed user like to database: ${e.message}")
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
     }
 
     override fun onClickListenerPostShare(data: ModelItemRandomPost) {

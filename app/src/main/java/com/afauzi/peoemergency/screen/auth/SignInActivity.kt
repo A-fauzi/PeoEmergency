@@ -239,13 +239,13 @@ class SignInActivity : AppCompatActivity() {
                 clearText()
             } else {
                 setFormEnable(true, R.color.white)
-                dialogErrors(layoutInflater, this, authResult.exception?.localizedMessage!!)
+                dialogErrors(layoutInflater, this, authResult.exception?.localizedMessage!!, R.raw.auth_failure)
                 progressBar.visibility = View.GONE
             }
 
         }.addOnFailureListener { authFailure ->
             setFormEnable(true, R.color.white)
-            dialogErrors(layoutInflater, this, authFailure.localizedMessage!!)
+            dialogErrors(layoutInflater, this, authFailure.localizedMessage!!, R.raw.auth_failure)
             progressBar.visibility = View.GONE
         }
 

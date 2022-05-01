@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import com.afauzi.peoemergency.R
+import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 object Library {
@@ -23,10 +24,13 @@ object Library {
     /**
      * Dialog Error
      */
-    fun dialogErrors(layoutInflater: LayoutInflater, context: Context, dialogText: String) {
+    fun dialogErrors(layoutInflater: LayoutInflater, context: Context, dialogText: String, rawRes: Int) {
         val dialog = MaterialAlertDialogBuilder(context, R.style.MaterialAlertDialog_rounded)
         val dialogView: View = layoutInflater.inflate(R.layout.dialog_errors, null)
         val textDialog = dialogView.findViewById<TextView>(R.id.tv_dialog_error)
+        val animationDialog = dialogView.findViewById<LottieAnimationView>(R.id.animationDialog)
+
+        animationDialog.setAnimation(rawRes)
         textDialog.text = dialogText
 
         dialog.setView(dialogView)
