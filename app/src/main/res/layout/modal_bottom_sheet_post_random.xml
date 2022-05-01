@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="@dimen/root_view_padding"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:id="@+id/bottom_sheet_item_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:foreground="?attr/selectableItemBackground">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_edit"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit Post"
+            android:layout_marginLeft="8dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bottom_sheet_item_delete"
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:foreground="?attr/selectableItemBackground">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_delete"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delete Post"
+            android:layout_marginLeft="8dp"/>
+    </LinearLayout>
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/bottom_sheet_post_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="cancel"
+        android:layout_gravity="end"/>
+</LinearLayout>

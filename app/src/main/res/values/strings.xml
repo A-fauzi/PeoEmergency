@@ -93,4 +93,6 @@
     <string name="text_comment_reply">write to reply...</string>
     <string name="text_lorem_comment_reply">In publishing and graphic design, Lorem ipsum is a placeholder</string>
     <string name="text_warn_phone_input">Please don\'t input char 0 number</string>
+    <string name="delete_item_more_post">Delete</string>
+    <string name="edit_item_post_random">Edit</string>
 </resources>

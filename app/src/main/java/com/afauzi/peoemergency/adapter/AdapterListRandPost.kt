@@ -10,7 +10,9 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.dataModel.ModelItemRandomPost
+import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
 import com.squareup.picasso.Picasso
+
 
 class AdapterListRandPost(
     private val callClickListener: CallClickListener,
@@ -24,6 +26,7 @@ class AdapterListRandPost(
         val postDate: TextView = itemView.findViewById(R.id.item_date_post)
         val postImage: ImageView = itemView.findViewById(R.id.item_image_post)
         val cardContent: CardView = itemView.findViewById(R.id.item_cardView_content_random_post)
+        val btnMorePost: ImageView = itemView.findViewById(R.id.item_btn_more_post)
         val replyPost: ImageView = itemView.findViewById(R.id.item_to_comment_post)
         val likePost: ImageView = itemView.findViewById(R.id.item_to_like_post)
         val sharePost: ImageView = itemView.findViewById(R.id.item_to_share_post)
@@ -59,6 +62,15 @@ class AdapterListRandPost(
                 .into(holder.postImage)
         }
 
+        val uid = auth.currentUser!!.uid
+        if (currentItem.userId != uid) {
+            holder.btnMorePost.visibility = View.INVISIBLE
+        }
+
+        holder.btnMorePost.setOnClickListener {
+            callClickListener.onClickListenerPostMore(currentItem)
+        }
+
         holder.cardContent.setOnClickListener {
             callClickListener.onClickListenerCardView(currentItem)
         }
@@ -90,6 +102,7 @@ class AdapterListRandPost(
         fun onClickListenerPostReply(data: ModelItemRandomPost)
         fun onClickListenerPostLike(data: ModelItemRandomPost)
         fun onClickListenerPostShare(data: ModelItemRandomPost)
+        fun onClickListenerPostMore(data: ModelItemRandomPost)
         fun onLongClickListener(data: ModelItemRandomPost)
         fun onClickRemove(data: ModelItemRandomPost)
     }

@@ -15,16 +15,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.adapter.AdapterListRandPost
 import com.afauzi.peoemergency.dataModel.ModelItemRandomPost
 import com.afauzi.peoemergency.databinding.FragmentHomeBinding
@@ -40,6 +38,8 @@ import com.afauzi.peoemergency.utils.FirebaseServiceInstance.storageReference
 import com.airbnb.lottie.LottieAnimationView
 import com.cooltechworks.views.shimmer.ShimmerRecyclerView
 import com.google.android.gms.location.LocationServices
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.chip.Chip
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
@@ -589,6 +589,49 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
         Log.i(TAG, "Date Posting: ${data.postDate}")
         Log.i(TAG, "City name: ${data.postLocationCityName}")
         Log.i(TAG, "Coordinate location: ${data.postLocationCoordinate}")
+    }
+
+    override fun onClickListenerPostMore(data: ModelItemRandomPost) {
+        Log.i(TAG, "Clicked this post ${data.username}")
+        bottomSheetPostMore(data.postId.toString())
+    }
+
+    @SuppressLint("InflateParams")
+    private fun bottomSheetPostMore(postId: String) {
+        val dialog = BottomSheetDialog(requireActivity())
+
+        val view = layoutInflater.inflate(R.layout.modal_bottom_sheet_post_random, null)
+        val editPostBottomSheet = view.findViewById<LinearLayout>(R.id.bottom_sheet_item_edit)
+        val deletePostBottomSheet = view.findViewById<LinearLayout>(R.id.bottom_sheet_item_delete)
+        val cancelPostBottomSheet = view.findViewById<Chip>(R.id.bottom_sheet_post_cancel)
+
+        editPostBottomSheet.setOnClickListener {
+            Toast.makeText(activity, "Edit clicked post in post id: $postId", Toast.LENGTH_SHORT).show()
+        }
+
+        deletePostBottomSheet.setOnClickListener {
+            Log.i(TAG, "delete post in post id : $postId")
+            databaseReference = firebaseDatabase.getReference("postRandom").child(postId)
+            databaseReference.removeValue().addOnCompleteListener { removeResult ->
+                if (removeResult.isSuccessful) {
+                    Toast.makeText(activity, "post success deleted", Toast.LENGTH_SHORT).show()
+                    Log.i(TAG, "Success delete post")
+                } else {
+                    Log.i(TAG, "Not Success delete post: ${removeResult.exception?.localizedMessage}")
+                }
+            }.addOnFailureListener { e ->
+                Log.i(TAG, "Failure remove post: ${e.localizedMessage}")
+            }
+        }
+
+        cancelPostBottomSheet.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.setContentView(view)
+        dialog.setCancelable(false)
+        dialog.show()
+
     }
 
     override fun onClickListenerImageView(data: ModelItemRandomPost) {
