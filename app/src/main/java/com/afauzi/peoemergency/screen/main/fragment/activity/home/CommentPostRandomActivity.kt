@@ -84,6 +84,7 @@ class CommentPostRandomActivity : AppCompatActivity(), AdapterListReplyPost.Call
 
         btnSendReply.setOnClickListener {
             storeCommentReplyPostRandom()
+            etInputCommentReply.text.clear()
         }
 
     }
