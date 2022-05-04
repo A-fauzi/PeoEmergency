@@ -3,11 +3,13 @@ package com.afauzi.peoemergency.screen.main.fragment
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.Address
 import android.location.Geocoder
+import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -74,6 +76,9 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
     private lateinit var photoProfileUri: String
     private lateinit var photoPostUri: Uri
 
+    private lateinit var locationManager: LocationManager
+    private var gpsStatus = false
+
     private lateinit var rvPostRandom: ShimmerRecyclerView
     private lateinit var listRandomPost: ArrayList<ModelItemRandomPost>
     private lateinit var animationView: LottieAnimationView
@@ -120,8 +125,8 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
         // GetData USer
         getUserData()
 
-        // get current Location
-        getCurrentLocation()
+       // Chcek GPS Status
+        checkGpsStatus()
 
         // Get List Post
         recyclerViewListRandPost()
@@ -231,6 +236,21 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
         }
 
     }
+
+
+    private fun checkGpsStatus() {
+        locationManager = context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        gpsStatus = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        if (gpsStatus) {
+            Log.i(TAG, "GPS Is enabled")
+            // get current Location
+            getCurrentLocation()
+        } else {
+            Log.e(TAG, "GPS Is disabled")
+            Toast.makeText(activity, "GPS is disable, please turn on GPS Location", Toast.LENGTH_SHORT).show()
+        }
+    }
+
 
     private fun getCurrentLocation() {
         // Get current location

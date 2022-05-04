@@ -83,6 +83,7 @@ class AdapterListRandPost(
             callClickListener.onClickListenerPostReply(currentItem)
         }
         holder.likePost.setOnClickListener {
+            holder.likePost.setImageResource(R.drawable.ic_like)
             callClickListener.onClickListenerPostLike(currentItem)
         }
         holder.sharePost.setOnClickListener {

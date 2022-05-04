@@ -46,7 +46,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:chipIcon="@drawable/round_location_on_20"
-                    android:text="@string/tv_sample_city" />
+                    android:text="Location gps not detected " />
 
             </LinearLayout>
 
