@@ -1,4 +1,4 @@
-package com.afauzi.peoemergency.screen.main.fragment.activity.accountProfile
+package com.afauzi.peoemergency.screen.main.fragment.activity.account_profile
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

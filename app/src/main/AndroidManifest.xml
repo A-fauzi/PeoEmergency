@@ -17,7 +17,7 @@
         android:required="true" />
 
     <application
-        android:name=".utils.FirebaseHandler"
+        android:name=".utils.ApplicationHandler"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -28,13 +28,13 @@
             android:name=".screen.main.fragment.activity.home.CommentPostRandomActivity"
             android:exported="false" />
         <activity
-            android:name=".screen.auth.registerStep.RegisterDetailProfileFinish"
+            android:name=".screen.auth.register_step.RegisterDetailProfileFinish"
             android:exported="false" />
         <activity
-            android:name=".screen.auth.registerStep.RegisterProfileStep2"
+            android:name=".screen.auth.register_step.RegisterProfileStep2"
             android:exported="false" />
         <activity
-            android:name=".screen.auth.registerStep.RegisterProfileDetailStep1"
+            android:name=".screen.auth.register_step.RegisterProfileDetailStep1"
             android:exported="false" />
         <activity
             android:name=".screen.main.fragment.activity.home.GalleryActivity"
@@ -43,13 +43,13 @@
             android:name=".screen.main.fragment.activity.home.CameraAction"
             android:exported="false" />
         <activity
-            android:name=".localStorage.activity.EditNoteActivity"
+            android:name=".local_storage.activity.EditNoteActivity"
             android:exported="false" />
         <activity
-            android:name=".localStorage.activity.NoteActivity"
+            android:name=".local_storage.activity.NoteActivity"
             android:exported="true" />
         <activity
-            android:name=".screen.main.fragment.activity.accountProfile.EditProfileActivity"
+            android:name=".screen.main.fragment.activity.account_profile.EditProfileActivity"
             android:exported="false" />
         <activity
             android:name=".screen.auth.SignUpActivity"

@@ -1,4 +1,4 @@
-package com.afauzi.peoemergency.localStorage
+package com.afauzi.peoemergency.local_storage
 
 import androidx.room.*
 

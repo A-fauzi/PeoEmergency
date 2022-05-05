@@ -11,8 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.adapter.AdapterListReplyPost
-import com.afauzi.peoemergency.dataModel.ModelItemRandomPost
-import com.afauzi.peoemergency.dataModel.ModelReplyPost
+import com.afauzi.peoemergency.data_model.ModelItemRandomPost
+import com.afauzi.peoemergency.data_model.ModelReplyPost
 import com.afauzi.peoemergency.databinding.ActivityCommentPostRandomBinding
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.databaseReference

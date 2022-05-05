@@ -1,4 +1,4 @@
-package com.afauzi.peoemergency.dataModel
+package com.afauzi.peoemergency.data_model
 
 data class ModelReplyPost(
     var userPhoto: String? = null,

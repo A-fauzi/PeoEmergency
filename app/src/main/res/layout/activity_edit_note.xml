@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp"
-    tools:context=".localStorage.activity.EditNoteActivity">
+    tools:context=".local_storage.activity.EditNoteActivity">
 
     <EditText
         android:id="@+id/edit_title"

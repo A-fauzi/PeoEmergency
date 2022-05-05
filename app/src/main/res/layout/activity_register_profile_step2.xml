@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/blue_soft"
-    tools:context=".screen.auth.registerStep.RegisterProfileStep2">
+    tools:context=".screen.auth.register_step.RegisterProfileStep2">
 
 
     <ImageView

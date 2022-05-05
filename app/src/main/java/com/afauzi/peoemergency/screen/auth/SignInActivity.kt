@@ -16,6 +16,7 @@ import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.databinding.ActivitySigninBinding
 import com.afauzi.peoemergency.screen.main.MainActivity
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
+import com.afauzi.peoemergency.utils.Library.clearText
 import com.afauzi.peoemergency.utils.Library.dialogErrors
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -78,29 +79,43 @@ class SignInActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-
+//======================================================Login Button===========================================
         btnLogin.setOnClickListener {
+
             setFormEnable(false, R.color.input_disabled)
             signInUser()
             progressBar.visibility = View.VISIBLE
-        }
 
+        }
+//======================================================|END|===========================================
+
+
+//======================================================Link To Sign Up Activity===========================================
         linkToSignUp.setOnClickListener {
+
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
             finish()
-        }
 
+        }
+//======================================================|END|===========================================
+
+
+//=================================================Sign In With Google===================================
         btnSignInGoogle.setOnClickListener {
-            signInGoogle()
-        }
 
-//        ========================================== |TextWatcher| ==================================================================
+            signInGoogle()
+
+        }
+//======================================================|END|===========================================
+
+//========================================== |TextWatcher| ==================================================================
         email.addTextChangedListener(GenericTextWatcher(email))
         password.addTextChangedListener(GenericTextWatcher(password))
-//        ========================================== |END| ==================================================================
+//========================================== |END| ==================================================================
     }
 
+//    ===============================================Google OAuth============================================================
     private fun configureGso() {
         val gso = GoogleSignInOptions
             .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -221,6 +236,7 @@ class SignInActivity : AppCompatActivity() {
             finish()
         }
     }
+//===============================================|END|============================================================
 
 
     /**
@@ -232,33 +248,31 @@ class SignInActivity : AppCompatActivity() {
             password.text.toString().trim()
         ).addOnCompleteListener { authResult ->
             if (authResult.isSuccessful) {
+
                 val intent = Intent(this, MainActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
                 finish()
-                clearText()
+
+                clearText(email)
+                clearText(password)
+
             } else {
+
                 setFormEnable(true, R.color.white)
                 dialogErrors(layoutInflater, this, authResult.exception?.localizedMessage!!, R.raw.auth_failure)
                 progressBar.visibility = View.GONE
+
             }
 
         }.addOnFailureListener { authFailure ->
+
             setFormEnable(true, R.color.white)
             dialogErrors(layoutInflater, this, authFailure.localizedMessage!!, R.raw.auth_failure)
             progressBar.visibility = View.GONE
+
         }
 
-    }
-
-    /**
-     * Metode Text in EditText to Clear
-     *
-     * Fungsi untuk membersihkan / menghapus text yang terdapat pada editText
-     */
-    private fun clearText() {
-        email.text.clear()
-        password.text.clear()
     }
 
     /**

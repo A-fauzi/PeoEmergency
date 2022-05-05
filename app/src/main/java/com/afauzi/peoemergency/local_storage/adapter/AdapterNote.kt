@@ -1,4 +1,4 @@
-package com.afauzi.peoemergency.localStorage.adapter
+package com.afauzi.peoemergency.local_storage.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -8,7 +8,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.afauzi.peoemergency.R
-import com.afauzi.peoemergency.localStorage.ModelNote
+import com.afauzi.peoemergency.local_storage.ModelNote
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 
 class AdapterNote(

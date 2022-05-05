@@ -30,10 +30,10 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.adapter.AdapterListRandPost
-import com.afauzi.peoemergency.dataModel.ModelItemRandomPost
+import com.afauzi.peoemergency.data_model.ModelItemRandomPost
 import com.afauzi.peoemergency.databinding.FragmentHomeBinding
 import com.afauzi.peoemergency.screen.LandingActivity
-import com.afauzi.peoemergency.screen.auth.registerStep.RegisterProfileStep2
+import com.afauzi.peoemergency.screen.auth.register_step.RegisterProfileStep2
 import com.afauzi.peoemergency.screen.main.fragment.activity.home.CameraAction
 import com.afauzi.peoemergency.screen.main.fragment.activity.home.CommentPostRandomActivity
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth

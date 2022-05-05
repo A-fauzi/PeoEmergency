@@ -1,4 +1,4 @@
-package com.afauzi.peoemergency.localStorage.activity
+package com.afauzi.peoemergency.local_storage.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,10 +7,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afauzi.peoemergency.databinding.ActivityNoteBinding
-import com.afauzi.peoemergency.localStorage.Constant
-import com.afauzi.peoemergency.localStorage.ModelNote
-import com.afauzi.peoemergency.localStorage.NoteDB
-import com.afauzi.peoemergency.localStorage.adapter.AdapterNote
+import com.afauzi.peoemergency.local_storage.Constant
+import com.afauzi.peoemergency.local_storage.ModelNote
+import com.afauzi.peoemergency.local_storage.NoteDB
+import com.afauzi.peoemergency.local_storage.adapter.AdapterNote
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.afauzi.peoemergency.R
-import com.afauzi.peoemergency.dataModel.ModelItemRandomPost
+import com.afauzi.peoemergency.data_model.ModelItemRandomPost
 import com.afauzi.peoemergency.databinding.ItemListRandomPostBinding
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.databaseReference

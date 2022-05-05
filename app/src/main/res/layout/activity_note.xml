@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".localStorage.activity.NoteActivity">
+    tools:context=".local_storage.activity.NoteActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_note"

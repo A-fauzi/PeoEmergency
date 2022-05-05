@@ -1,4 +1,4 @@
-package com.afauzi.peoemergency.screen.auth.registerStep
+package com.afauzi.peoemergency.screen.auth.register_step
 
 import android.annotation.SuppressLint
 import android.app.Activity

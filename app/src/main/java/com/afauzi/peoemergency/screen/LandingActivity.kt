@@ -53,14 +53,13 @@ class LandingActivity : AppCompatActivity() {
         // init views
         initView()
 
+        // Current User
+        currentUser()
+
     }
 
     override fun onResume() {
         super.onResume()
-
-        // Current User
-        currentUser()
-
         // onClick to second activity
         onClickBtn(btnToSignInActivity, SignInActivity::class.java)
         onClickBtn(btnToSignUpActivity, SignUpActivity::class.java)

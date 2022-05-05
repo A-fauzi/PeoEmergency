@@ -1,5 +1,6 @@
 package com.afauzi.peoemergency.utils
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,6 +10,8 @@ import android.widget.TextView
 import com.afauzi.peoemergency.R
 import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.text.SimpleDateFormat
+import java.util.*
 
 object Library {
     /**
@@ -38,5 +41,11 @@ object Library {
         dialog.show()
 
     }
+
+    /**
+     * Current date and time WIB Format
+     */
+    @SuppressLint("SimpleDateFormat")
+    val currentDateAndTime: String = SimpleDateFormat("dd MMM yyyy | HH:mm:ss zzz").format(Date(System.currentTimeMillis()))
 
 }

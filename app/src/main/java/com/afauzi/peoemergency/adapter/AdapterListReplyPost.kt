@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.afauzi.peoemergency.R
-import com.afauzi.peoemergency.dataModel.ModelItemRandomPost
-import com.afauzi.peoemergency.dataModel.ModelReplyPost
+import com.afauzi.peoemergency.data_model.ModelItemRandomPost
+import com.afauzi.peoemergency.data_model.ModelReplyPost
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 

@@ -76,6 +76,7 @@
             app:boxCornerRadiusTopEnd="20dp"
             app:boxCornerRadiusTopStart="20dp"
             app:hintTextColor="@color/black"
+            app:endIconMode="password_toggle"
             android:hint="@string/txt_input_hint_password"
             app:boxBackgroundColor="@color/input_disabled"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">

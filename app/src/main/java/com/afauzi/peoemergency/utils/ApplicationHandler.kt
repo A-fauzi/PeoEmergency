@@ -10,7 +10,7 @@ import android.widget.Toast
 /**
  * Offline data on disk firebase
  */
-class FirebaseHandler : Application() {
+class ApplicationHandler : Application() {
     override fun onCreate() {
         super.onCreate()
 
