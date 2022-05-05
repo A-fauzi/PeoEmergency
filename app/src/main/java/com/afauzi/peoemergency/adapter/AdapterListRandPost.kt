@@ -4,12 +4,10 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.dataModel.ModelItemRandomPost
+import com.afauzi.peoemergency.databinding.ItemListRandomPostBinding
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.databaseReference
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.firebaseDatabase
@@ -23,99 +21,90 @@ class AdapterListRandPost(
     private val callClickListener: CallClickListener,
     private val listItemRandomPost: ArrayList<ModelItemRandomPost>
 ) : RecyclerView.Adapter<AdapterListRandPost.ViewHolder>() {
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val username: TextView = itemView.findViewById(R.id.item_name)
-        val photoProfile: ImageView = itemView.findViewById(R.id.item_photo_profile)
-        val postLocation: TextView = itemView.findViewById(R.id.item_location_post)
-        val postDesc: TextView = itemView.findViewById(R.id.item_description_post)
-        val postDate: TextView = itemView.findViewById(R.id.item_date_post)
-        val postImage: ImageView = itemView.findViewById(R.id.item_image_post)
-        val cardContent: CardView = itemView.findViewById(R.id.item_cardView_content_random_post)
-        val btnMorePost: ImageView = itemView.findViewById(R.id.item_btn_more_post)
-        val replyPost: ImageView = itemView.findViewById(R.id.item_to_comment_post)
-        val likePost: ImageView = itemView.findViewById(R.id.item_to_like_post)
-        val sharePost: ImageView = itemView.findViewById(R.id.item_to_share_post)
-        val commentCount: TextView = itemView.findViewById(R.id.item_tv_count_comment)
-        val likeCount: TextView = itemView.findViewById(R.id.item_tv_count_like)
-    }
+
+    class ViewHolder(val binding: ItemListRandomPostBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val itemView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_list_random_post, parent, false)
-        return ViewHolder(itemView)
+        val binding = ItemListRandomPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+
+        return ViewHolder(binding)
     }
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val currentItem = listItemRandomPost[position]
-        holder.username.text = currentItem.username
-        holder.postLocation.text = currentItem.postLocationCityName
-        holder.postDesc.text = currentItem.postText
-        holder.postDate.text = currentItem.postDate
-        holder.commentCount.text = currentItem.countCommentPostUser
-        holder.likeCount.text = currentItem.countLikePostUser
 
-        Picasso.get().load(currentItem.photoProfile).placeholder(R.drawable.person_place_holder)
-            .into(holder.photoProfile)
+        with(holder) {
+            with(listItemRandomPost[position]) {
+                binding.itemName.text = username
+                binding.itemLocationPost.text = postLocationCityName
+                binding.itemDescriptionPost.text = postText
+                binding.itemDatePost.text = postDate
+                binding.itemTvCountComment.text = countCommentPostUser
+                binding.itemTvCountLike.text = countLikePostUser
 
-        if (currentItem.photoPost == null || currentItem.photoPost == "") {
-            holder.postImage.setImageResource(0)
-        } else {
-            Picasso.get().load(currentItem.photoPost)
-                .placeholder(R.drawable.image_post_place_holder).resize(500, 500)
-                .centerCrop()
-                .into(holder.postImage)
-        }
+                Picasso.get().load(photoProfile).placeholder(R.drawable.person_place_holder)
+                    .into(binding.itemPhotoProfile)
 
-        val uid = auth.currentUser!!.uid
-        if (currentItem.userId != uid) {
-            holder.btnMorePost.visibility = View.INVISIBLE
-        }
-
-        databaseReference = firebaseDatabase.getReference("postRandom").child(currentItem.postId.toString()).child("userLike").child(uid)
-        databaseReference.addValueEventListener(object : ValueEventListener{
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
-                    val status = snapshot.child("status").value.toString()
-                    if (status == "true") {
-                        holder.likePost.setImageResource(R.drawable.ic_like)
-                    } else {
-                        holder.likePost.setImageResource(R.drawable.ic_favorite__2_)
-                    }
+                if (photoPost == null || photoPost == "") {
+                    binding.itemImagePost.setImageResource(0)
+                } else {
+                    Picasso.get().load(photoPost)
+                        .placeholder(R.drawable.image_post_place_holder).resize(500, 500)
+                        .centerCrop()
+                        .into(binding.itemImagePost)
                 }
+
+                val uid = auth.currentUser!!.uid
+                if (userId != uid) {
+                    binding.itemBtnMorePost.visibility = View.INVISIBLE
+                }
+
+                databaseReference = firebaseDatabase.getReference("postRandom").child(postId.toString()).child("userLike").child(uid)
+                databaseReference.addValueEventListener(object : ValueEventListener{
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists()) {
+                            val status = snapshot.child("status").value.toString()
+                            if (status == "true") {
+                                binding.itemToLikePost.setImageResource(R.drawable.ic_like)
+                            } else {
+                                binding.itemToLikePost.setImageResource(R.drawable.ic_favorite__2_)
+                            }
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        TODO("Not yet implemented")
+                    }
+
+                })
+
+
+                binding.itemBtnMorePost.setOnClickListener {
+                    callClickListener.onClickListenerPostMore(listItemRandomPost[position])
+                }
+
+                binding.itemCardViewContentRandomPost.setOnClickListener {
+                    callClickListener.onClickListenerCardView(listItemRandomPost[position])
+                }
+
+                binding.itemImagePost.setOnClickListener {
+                    callClickListener.onClickListenerImageView(listItemRandomPost[position])
+                }
+
+                binding.itemToCommentPost.setOnClickListener {
+                    callClickListener.onClickListenerPostReply(listItemRandomPost[position])
+                }
+
+                binding.itemToLikePost.setOnClickListener {
+                    callClickListener.onClickListenerPostLike(listItemRandomPost[position])
+                }
+                binding.itemToSharePost.setOnClickListener {
+                    callClickListener.onClickListenerPostShare(listItemRandomPost[position])
+                }
+
+
             }
-
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-
-        })
-
-
-
-        holder.btnMorePost.setOnClickListener {
-            callClickListener.onClickListenerPostMore(currentItem)
         }
-
-        holder.cardContent.setOnClickListener {
-            callClickListener.onClickListenerCardView(currentItem)
-        }
-
-        holder.postImage.setOnClickListener {
-            callClickListener.onClickListenerImageView(currentItem)
-        }
-
-        holder.replyPost.setOnClickListener {
-            callClickListener.onClickListenerPostReply(currentItem)
-        }
-
-        holder.likePost.setOnClickListener {
-            callClickListener.onClickListenerPostLike(currentItem)
-        }
-        holder.sharePost.setOnClickListener {
-            callClickListener.onClickListenerPostShare(currentItem)
-        }
-
 
     }
 
