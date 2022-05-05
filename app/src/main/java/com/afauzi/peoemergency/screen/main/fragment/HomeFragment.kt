@@ -17,9 +17,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
@@ -65,9 +69,9 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var username: TextView
     private lateinit var inputContentDescPost: TextInputEditText
-    private lateinit var chooseImagePost: ImageView
-    private lateinit var attachFile: ImageView
-    private lateinit var moreMenu: ImageView
+    private lateinit var chooseImagePost: CardView
+    private lateinit var attachFile: CardView
+    private lateinit var moreMenu: CardView
     private lateinit var imageReceiverCapture: ImageView
     private lateinit var btnPost: Button
     private lateinit var imgProfile: CircleImageView
@@ -91,9 +95,9 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
         layout = binding.mainLayout
         username = binding.username
         inputContentDescPost = binding.etContentDescDialog
-        chooseImagePost = binding.inputPhotoDialog
-        attachFile = binding.attachFileDialog
-        moreMenu = binding.moreMenuDialog
+        chooseImagePost = binding.inputPhotoDialogCardView
+        attachFile = binding.attachFileDialogCardView
+        moreMenu = binding.moreMenuDialogCardView
         btnPost = binding.buttonPostDialog
         imageReceiverCapture = binding.ivReceiveImageCapture
         imgProfile = binding.imageProfile
@@ -633,8 +637,8 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
         val dialog = BottomSheetDialog(requireActivity())
 
         val view = layoutInflater.inflate(R.layout.modal_bottom_sheet_post_random, null)
-        val editPostBottomSheet = view.findViewById<LinearLayout>(R.id.bottom_sheet_item_edit)
-        val deletePostBottomSheet = view.findViewById<LinearLayout>(R.id.bottom_sheet_item_delete)
+        val editPostBottomSheet = view.findViewById<CardView>(R.id.bottom_sheet_item_edit)
+        val deletePostBottomSheet = view.findViewById<CardView>(R.id.bottom_sheet_item_delete)
         val cancelPostBottomSheet = view.findViewById<Chip>(R.id.bottom_sheet_post_cancel)
 
         editPostBottomSheet.setOnClickListener {
@@ -643,6 +647,7 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
         }
 
         deletePostBottomSheet.setOnClickListener {
+            dialog.dismiss()
             Log.i(TAG, "delete post in post id : $postId")
             databaseReference = firebaseDatabase.getReference("postRandom").child(postId)
             databaseReference.removeValue().addOnCompleteListener { removeResult ->

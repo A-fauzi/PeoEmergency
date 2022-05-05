@@ -7,42 +7,58 @@
     android:orientation="vertical">
 
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:id="@+id/bottom_sheet_item_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        app:cardCornerRadius="@dimen/button_radius"
+        app:cardElevation="0dp"
         android:foreground="?attr/selectableItemBackground">
 
-        <ImageView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_edit"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Edit Post"
-            android:layout_marginLeft="8dp"/>
-    </LinearLayout>
+            android:padding="@dimen/root_view_padding"
+            android:orientation="horizontal">
 
-    <LinearLayout
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_edit"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Edit Post"
+                android:layout_marginLeft="8dp"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
         android:id="@+id/bottom_sheet_item_delete"
-        android:layout_marginTop="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        app:cardCornerRadius="@dimen/button_radius"
+        app:cardElevation="0dp"
         android:foreground="?attr/selectableItemBackground">
 
-        <ImageView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_delete"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Delete Post"
-            android:layout_marginLeft="8dp"/>
-    </LinearLayout>
+            android:orientation="horizontal"
+            android:padding="@dimen/root_view_padding">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_delete"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete Post"
+                android:layout_marginLeft="8dp"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
     <com.google.android.material.chip.Chip
         android:id="@+id/bottom_sheet_post_cancel"

@@ -56,7 +56,7 @@ class AdapterListRandPost(
 
                 val uid = auth.currentUser!!.uid
                 if (userId != uid) {
-                    binding.itemBtnMorePost.visibility = View.INVISIBLE
+                    binding.itemBtnMorePostCardView.visibility = View.INVISIBLE
                 }
 
                 databaseReference = firebaseDatabase.getReference("postRandom").child(postId.toString()).child("userLike").child(uid)
@@ -78,16 +78,15 @@ class AdapterListRandPost(
 
                 })
 
-
-                binding.itemBtnMorePost.setOnClickListener {
-                    callClickListener.onClickListenerPostMore(listItemRandomPost[position])
-                }
-
                 binding.itemCardViewContentRandomPost.setOnClickListener {
                     callClickListener.onClickListenerCardView(listItemRandomPost[position])
                 }
 
-                binding.itemImagePost.setOnClickListener {
+                binding.itemBtnMorePostCardView.setOnClickListener {
+                    callClickListener.onClickListenerPostMore(listItemRandomPost[position])
+                }
+
+                binding.itemImagePostCardView.setOnClickListener {
                     callClickListener.onClickListenerImageView(listItemRandomPost[position])
                 }
 
