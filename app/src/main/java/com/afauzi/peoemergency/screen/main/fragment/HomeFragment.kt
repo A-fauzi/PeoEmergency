@@ -76,6 +76,8 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
     private lateinit var photoProfileUri: String
     private lateinit var photoPostUri: Uri
 
+    private var statusLike: Boolean = false
+
     private lateinit var locationManager: LocationManager
     private var gpsStatus = false
 
@@ -114,6 +116,18 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
 
         initView()
 
+        // GetData USer
+        getUserData()
+
+        // Chcek GPS Status
+        checkGpsStatus()
+
+        // Get List Post
+        recyclerViewListRandPost()
+
+
+        Toast.makeText(activity, "Status Like: $statusLike", Toast.LENGTH_SHORT).show()
+
         return binding.root
 
     }
@@ -122,15 +136,6 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // GetData USer
-        getUserData()
-
-       // Chcek GPS Status
-        checkGpsStatus()
-
-        // Get List Post
-        recyclerViewListRandPost()
-
 
         // Received Capture Image
         if (requireActivity().intent.extras != null) {
@@ -247,7 +252,11 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
             getCurrentLocation()
         } else {
             Log.e(TAG, "GPS Is disabled")
-            Toast.makeText(activity, "GPS is disable, please turn on GPS Location", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                activity,
+                "GPS is disable, please turn on GPS Location",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
@@ -304,7 +313,7 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
                     storeDataLocation(fullAddress, city, state, country, locationCoordinate)
 
                 }
-            }catch (e: IOException) {
+            } catch (e: IOException) {
                 Log.e(TAG, "Error: ${e.printStackTrace()}")
                 Log.e(TAG, "Error: ${e.localizedMessage}")
             }
@@ -431,7 +440,8 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
                             val uid = auth.currentUser!!.uid
                             val randStr = randomString(25)
 
-                            databaseReference = firebaseDatabase.getReference("postRandom").child(randStr)
+                            databaseReference =
+                                firebaseDatabase.getReference("postRandom").child(randStr)
 
                             Log.i(TAG, "dataPostUid: $uid")
                             Log.i(TAG, "dataPostUsername: ${username.text}")
@@ -568,13 +578,15 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
     }
 
     private fun getCountCommentPost(postId: String) {
-        databaseReference = firebaseDatabase.getReference("postRandom").child(postId).child("userReplyPost")
-        databaseReference.addValueEventListener(object : ValueEventListener{
+        databaseReference =
+            firebaseDatabase.getReference("postRandom").child(postId).child("userReplyPost")
+        databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val size: String = snapshot.childrenCount.toString()
                 Log.i("countComment", "count postId $postId: $size")
 
-                databaseReference = firebaseDatabase.getReference("postRandom").child(postId).child("countCommentPostUser")
+                databaseReference = firebaseDatabase.getReference("postRandom").child(postId)
+                    .child("countCommentPostUser")
                 databaseReference.setValue(size).addOnCompleteListener { result ->
                     if (result.isSuccessful) {
                         Log.i(TAG, "Post reply count updated")
@@ -626,7 +638,8 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
         val cancelPostBottomSheet = view.findViewById<Chip>(R.id.bottom_sheet_post_cancel)
 
         editPostBottomSheet.setOnClickListener {
-            Toast.makeText(activity, "Edit clicked post in post id: $postId", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, "Edit clicked post in post id: $postId", Toast.LENGTH_SHORT)
+                .show()
         }
 
         deletePostBottomSheet.setOnClickListener {
@@ -637,7 +650,10 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
                     Toast.makeText(activity, "post success deleted", Toast.LENGTH_SHORT).show()
                     Log.i(TAG, "Success delete post")
                 } else {
-                    Log.i(TAG, "Not Success delete post: ${removeResult.exception?.localizedMessage}")
+                    Log.i(
+                        TAG,
+                        "Not Success delete post: ${removeResult.exception?.localizedMessage}"
+                    )
                 }
             }.addOnFailureListener { e ->
                 Log.i(TAG, "Failure remove post: ${e.localizedMessage}")
@@ -681,63 +697,100 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
     }
 
     override fun onClickListenerPostLike(data: ModelItemRandomPost) {
+
         val uid = auth.currentUser!!.uid
-        databaseReference = firebaseDatabase.getReference("users").child(uid)
-        databaseReference.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
-                    val username = snapshot.child("username").value.toString()
-                    val photoProfile = snapshot.child("photoProfile").value.toString()
 
-                    val postId = data.postId
+        if (!statusLike) {
+            statusLike = true
+            Log.i(TAG, "Status Like: $statusLike")
 
-                    databaseReference = firebaseDatabase.getReference("postRandom").child(postId.toString()).child("userLike").child(uid)
-                    val hashMap: HashMap<String, String> = HashMap()
-                    hashMap["username"] = username
-                    hashMap["photoProfile"] = photoProfile
-                    databaseReference.setValue(hashMap).addOnCompleteListener { databaseResult ->
-                        if (databaseResult.isSuccessful) {
-                            Toast.makeText(activity, "$username this like post", Toast.LENGTH_SHORT).show()
+            databaseReference = firebaseDatabase.getReference("users").child(uid)
+            databaseReference.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        val username = snapshot.child("username").value.toString()
+                        val photoProfile = snapshot.child("photoProfile").value.toString()
 
-                            databaseReference = firebaseDatabase.getReference("postRandom").child(postId.toString()).child("userLike")
-                            databaseReference.addValueEventListener(object : ValueEventListener{
-                                override fun onDataChange(snapshot: DataSnapshot) {
-                                    val size: String = snapshot.childrenCount.toString()
-                                    Log.i(TAG, "user like count in post $postId : $size")
+                        val postId = data.postId
+
+                        databaseReference =
+                            firebaseDatabase.getReference("postRandom").child(postId.toString())
+                                .child("userLike").child(uid)
+                        val hashMap: HashMap<String, String> = HashMap()
+                        hashMap["photoProfile"] = photoProfile
+                        hashMap["username"] = username
+                        hashMap["status"] = "true"
+                        hashMap["userId"] = uid
+                        databaseReference.setValue(hashMap).addOnCompleteListener { databaseResult ->
+                            if (databaseResult.isSuccessful) {
+
+                                Toast.makeText(activity, "$username this like post", Toast.LENGTH_SHORT)
+                                    .show()
+
+                                databaseReference =
+                                    firebaseDatabase.getReference("postRandom").child(postId.toString())
+                                        .child("userLike")
+                                databaseReference.addValueEventListener(object : ValueEventListener {
+                                    override fun onDataChange(snapshot: DataSnapshot) {
+                                        val size: String = snapshot.childrenCount.toString()
+                                        Log.i(TAG, "user like count in post $postId : $size")
 
 
-                                    databaseReference = firebaseDatabase.getReference("postRandom").child(postId.toString()).child("countLikePostUser")
-                                    databaseReference.setValue(size).addOnCompleteListener { databaseResult ->
-                                        if (databaseResult.isSuccessful) {
-                                            Log.i(TAG, "user like count updated")
-                                        } else {
-                                            Log.i(TAG, "user like count not updated")
-                                        }
-                                    }.addOnFailureListener { e ->
-                                        Log.e(TAG, "user like error: ${e.message}")
+                                        databaseReference = firebaseDatabase.getReference("postRandom")
+                                            .child(postId.toString()).child("countLikePostUser")
+                                        databaseReference.setValue(size)
+                                            .addOnCompleteListener { databaseResult ->
+                                                if (databaseResult.isSuccessful) {
+                                                    Log.i(TAG, "user like count updated")
+                                                } else {
+                                                    Log.i(TAG, "user like count not updated")
+                                                }
+                                            }.addOnFailureListener { e ->
+                                                Log.e(TAG, "user like error: ${e.message}")
+                                            }
+
                                     }
 
-                                }
+                                    override fun onCancelled(error: DatabaseError) {
+                                        TODO("Not yet implemented")
+                                    }
 
-                                override fun onCancelled(error: DatabaseError) {
-                                    TODO("Not yet implemented")
-                                }
+                                })
 
-                            })
-
-                        } else {
-                            Toast.makeText(activity, "$username failed like post", Toast.LENGTH_SHORT).show()
+                            } else {
+                                Toast.makeText(
+                                    activity,
+                                    "$username failed like post",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }.addOnFailureListener { e ->
+                            Log.e(TAG, "failed user like to database: ${e.message}")
                         }
-                    }.addOnFailureListener { e ->
-                        Log.e(TAG, "failed user like to database: ${e.message}")
                     }
                 }
+
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+            })
+
+        } else {
+            statusLike = false
+            Log.i(TAG, "Status Like: $statusLike")
+
+            databaseReference = firebaseDatabase.getReference("postRandom").child(data.postId.toString()).child("userLike").child(uid)
+            databaseReference.removeValue().addOnCompleteListener { removeValue ->
+                if (removeValue.isSuccessful) {
+                    Log.i(TAG, "Remove like successfuly: ${removeValue.exception?.localizedMessage}")
+                } else {
+                    Log.i(TAG, "Remove like not successfuly: ${removeValue.exception?.localizedMessage}")
+                }
+            }.addOnFailureListener { e ->
+                Log.i(TAG, "Remove like failure: ${e.localizedMessage}")
             }
 
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-        })
+        }
     }
 
     override fun onClickListenerPostShare(data: ModelItemRandomPost) {

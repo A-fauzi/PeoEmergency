@@ -11,6 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.dataModel.ModelItemRandomPost
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
+import com.afauzi.peoemergency.utils.FirebaseServiceInstance.databaseReference
+import com.afauzi.peoemergency.utils.FirebaseServiceInstance.firebaseDatabase
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
 
 
@@ -67,6 +72,27 @@ class AdapterListRandPost(
             holder.btnMorePost.visibility = View.INVISIBLE
         }
 
+        databaseReference = firebaseDatabase.getReference("postRandom").child(currentItem.postId.toString()).child("userLike").child(uid)
+        databaseReference.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    val status = snapshot.child("status").value.toString()
+                    if (status == "true") {
+                        holder.likePost.setImageResource(R.drawable.ic_like)
+                    } else {
+                        holder.likePost.setImageResource(R.drawable.ic_favorite__2_)
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
+
+
+
         holder.btnMorePost.setOnClickListener {
             callClickListener.onClickListenerPostMore(currentItem)
         }
@@ -82,8 +108,8 @@ class AdapterListRandPost(
         holder.replyPost.setOnClickListener {
             callClickListener.onClickListenerPostReply(currentItem)
         }
+
         holder.likePost.setOnClickListener {
-            holder.likePost.setImageResource(R.drawable.ic_like)
             callClickListener.onClickListenerPostLike(currentItem)
         }
         holder.sharePost.setOnClickListener {
@@ -106,5 +132,9 @@ class AdapterListRandPost(
         fun onClickListenerPostMore(data: ModelItemRandomPost)
         fun onLongClickListener(data: ModelItemRandomPost)
         fun onClickRemove(data: ModelItemRandomPost)
+    }
+
+    companion object {
+        const val TAG = "AdapterListRandomPost"
     }
 }
