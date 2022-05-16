@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
+import androidx.cardview.widget.CardView
 import com.afauzi.peoemergency.R
 import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -38,6 +40,29 @@ object Library {
 
         dialog.setView(dialogView)
         dialog.setTitle("Uppss..")
+        dialog.show()
+
+    }
+  /**
+     * Dialog Reactions Emotion
+     */
+    fun dialogReactions(layoutInflater: LayoutInflater, context: Context, data: String) {
+        val dialog = MaterialAlertDialogBuilder(context, R.style.MaterialAlertDialog_rounded)
+        val dialogView: View = layoutInflater.inflate(R.layout.dialog_reactions, null)
+        val emotLike: CardView = dialogView.findViewById(R.id.cv_emotion_like)
+        val emotDislike: CardView = dialogView.findViewById(R.id.cv_emotion_dislike)
+        val emotApplause: CardView = dialogView.findViewById(R.id.cv_emotion_applause)
+        val emotLove: CardView = dialogView.findViewById(R.id.cv_emotion_love)
+        val emotAngry: CardView = dialogView.findViewById(R.id.cv_emotion_angry)
+
+        emotLike.setOnClickListener { Toast.makeText(context, "$data Like Clicked", Toast.LENGTH_SHORT).show() }
+        emotDislike.setOnClickListener { Toast.makeText(context, "$data Dislike Clicked", Toast.LENGTH_SHORT).show() }
+        emotApplause.setOnClickListener { Toast.makeText(context, "$data Applause Clicked", Toast.LENGTH_SHORT).show() }
+        emotLove.setOnClickListener { Toast.makeText(context, "$data Love Clicked", Toast.LENGTH_SHORT).show() }
+        emotAngry.setOnClickListener { Toast.makeText(context, "$data Angry Clicked", Toast.LENGTH_SHORT).show() }
+
+        dialog.setView(dialogView)
+        dialog.setTitle("Reactions")
         dialog.show()
 
     }

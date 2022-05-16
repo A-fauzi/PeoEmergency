@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -40,8 +41,12 @@ class RegisterProfileDetailStep1 : AppCompatActivity() {
         setContentView(binding.root)
         initView()
 
-        tvUsername.text =
-            resources.getString(R.string.hi_name, intent.extras?.getString("username"))
+        Log.i(TAG, intent.extras?.getString("username").toString())
+        Log.i(TAG, intent.extras?.getString("email").toString())
+        Log.i(TAG, intent.extras?.getString("password").toString())
+        Log.i(TAG, intent.extras?.getString("dateJoin").toString())
+
+        tvUsername.text = resources.getString(R.string.hi_name, intent.extras?.getString("username"))
 
     }
 
@@ -88,22 +93,39 @@ class RegisterProfileDetailStep1 : AppCompatActivity() {
             val text = editable.toString()
             when (view.id) {
                 R.id.phoneNumber -> {
-                    if (text.startsWith("0")) {
-                        tvWarnPhoneInput.visibility = View.VISIBLE
-                        phoneNumber.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
-                        btnNextStep.isEnabled = false
-                    } else {
-                        tvWarnPhoneInput.visibility = View.INVISIBLE
-                        phoneNumber.setCompoundDrawablesWithIntrinsicBounds(
-                            0,
-                            0,
-                            R.drawable.ic_correct,
-                            0
-                        )
-                        btnNextStep.isEnabled = true
+                    when {
+                        text.startsWith("0") -> {
+                          inputValidateErr(
+                              getString(R.string.tv_warning_number_input_not_empty),
+                              View.VISIBLE,
+                              0,
+                              false
+                          )
+                        }
+                        text.isEmpty() -> {
+                           inputValidateErr(
+                               getString(R.string.tv_warning_number_input_not_empty),
+                               View.VISIBLE,
+                               0,
+                               false
+                           )
+                        }
+                        else -> {
+                            inputValidateErr(
+                                viewVisibilityTextErr = View.INVISIBLE,
+                                setCompDrawRightPosition = R.drawable.ic_correct,
+                                btnEnable = true
+                            )
+                        }
                     }
                 }
             }
+        }
+        private fun inputValidateErr(textErr: String = "", viewVisibilityTextErr: Int, setCompDrawRightPosition: Int, btnEnable: Boolean) {
+            tvWarnPhoneInput.visibility = viewVisibilityTextErr
+            tvWarnPhoneInput.text = textErr
+            phoneNumber.setCompoundDrawablesWithIntrinsicBounds(0, 0, setCompDrawRightPosition, 0)
+            btnNextStep.isEnabled = btnEnable
         }
     }
 

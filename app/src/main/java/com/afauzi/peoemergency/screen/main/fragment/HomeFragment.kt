@@ -41,6 +41,8 @@ import com.afauzi.peoemergency.utils.FirebaseServiceInstance.databaseReference
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.firebaseDatabase
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.firebaseStorage
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.storageReference
+import com.afauzi.peoemergency.utils.Library.currentDateAndTime
+import com.afauzi.peoemergency.utils.Library.dialogReactions
 import com.airbnb.lottie.LottieAnimationView
 import com.cooltechworks.views.shimmer.ShimmerRecyclerView
 import com.google.android.gms.location.LocationServices
@@ -126,10 +128,6 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
         // Chcek GPS Status
         checkGpsStatus()
 
-        // Get List Post
-        recyclerViewListRandPost()
-
-
         Toast.makeText(activity, "Status Like: $statusLike", Toast.LENGTH_SHORT).show()
 
         return binding.root
@@ -142,16 +140,7 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
         super.onViewCreated(view, savedInstanceState)
 
         // Received Capture Image
-        if (requireActivity().intent.extras != null) {
-            Picasso
-                .get()
-                .load(photoPostUri)
-                .resize(500, 500)
-                .centerCrop()
-                .into(imageReceiverCapture)
-
-            Log.i(TAG, "image capture received: $photoPostUri")
-        }
+        receiveImagePicture()
 
         val permissionRequestLocation =
             registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permission ->
@@ -161,7 +150,6 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
                         // Precise location access granted
                         Log.i(TAG, "Access location is granted")
                         progressLoaderPostContent.visibility = View.VISIBLE
-
 
                         Log.i(TAG, "fill path value $fillPath")
 
@@ -243,6 +231,9 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
                 )
             )
         }
+
+        // Get List Post
+        recyclerViewListRandPost()
 
     }
 
@@ -431,6 +422,62 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
 
 
     }
+    private fun receiveImagePicture() {
+        if (requireActivity().intent.extras != null) {
+            Picasso
+                .get()
+                .load(photoPostUri)
+                .resize(500, 500)
+                .centerCrop()
+                .into(imageReceiverCapture)
+
+            Log.i(TAG, "image capture received: $photoPostUri")
+        }
+    }
+
+    private fun openGalleryForImage() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        startActivityForResult(intent, RegisterProfileStep2.REQUEST_CODE)
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode == RegisterProfileStep2.REQUEST_CODE) {
+            fillPath = data?.data!!
+            try {
+                imageReceiverCapture.setImageURI(data.data) // handle chosen image
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+    }
+    private fun uploadImageGaleryServer() {
+        progressLoaderPostContent.visibility = View.VISIBLE
+
+        val imgId = UUID.randomUUID().toString() + ".jpg"
+
+        Log.i(TAG, "Image Post From Galeri : $fillPath")
+        storageReference =
+            firebaseStorage.reference.child("post_image/${auth.currentUser!!.email}/$imgId")
+        storageReference.putFile(fillPath!!).addOnSuccessListener { taskSnap ->
+
+            Log.i(TAG, "upload image post from galery: Successful")
+
+            taskSnap.storage.downloadUrl.addOnSuccessListener { uri ->
+
+                Log.i(TAG, "Uri image post from galery: $uri")
+                storeDataPostInDatabase(uri.toString())
+
+            }.addOnFailureListener { uriFailure ->
+                Toast.makeText(activity, "${uriFailure.message}", Toast.LENGTH_SHORT).show()
+            }
+
+        }.addOnFailureListener { snapshotFailure ->
+            Toast.makeText(activity, "${snapshotFailure.message}", Toast.LENGTH_SHORT).show()
+        }
+
+
+    }
 
     private fun storeDataPostInDatabase(photoPostUriToDatabase: String = "") {
         // get user location
@@ -444,32 +491,16 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
                             val uid = auth.currentUser!!.uid
                             val randStr = randomString(25)
 
-                            databaseReference =
-                                firebaseDatabase.getReference("postRandom").child(randStr)
+                            databaseReference = firebaseDatabase.getReference("postRandom").child(randStr)
 
                             Log.i(TAG, "dataPostUid: $uid")
                             Log.i(TAG, "dataPostUsername: ${username.text}")
                             Log.i(TAG, "dataPostPhotoProfile: $photoProfileUri")
                             Log.i(TAG, "dataPostImage: $photoPostUriToDatabase")
-                            Log.i(
-                                TAG,
-                                "dataPostLocCoordinate: ${snapshot.child("locationCoordinate").value.toString()}"
-                            )
-                            Log.i(
-                                TAG,
-                                "dataPostLocCityName: ${snapshot.child("fullAddress").value.toString()}"
-                            )
+                            Log.i(TAG, "dataPostLocCoordinate: ${snapshot.child("locationCoordinate").value.toString()}")
+                            Log.i(TAG, "dataPostLocCityName: ${snapshot.child("fullAddress").value.toString()}")
                             Log.i(TAG, "dataPostText: ${inputContentDescPost.text}")
-                            Log.i(
-                                TAG,
-                                "dataPostDate: ${
-                                    SimpleDateFormat("dd MMM yyyy | hh:mm:ss zzz").format(
-                                        Date(
-                                            System.currentTimeMillis()
-                                        )
-                                    )
-                                }"
-                            )
+                            Log.i(TAG, "dataPostDate: $currentDateAndTime")
                             Log.i(TAG, "dataPostId: $randStr")
 
                             val hashMap: HashMap<String, String> = HashMap()
@@ -491,6 +522,7 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
                                     if (postResult.isSuccessful) {
                                         Log.i(TAG, "data post saved in database")
                                         inputContentDescPost.text?.clear()
+
                                         imageReceiverCapture.setImageResource(0)
                                         progressLoaderPostContent.visibility = View.INVISIBLE
                                         Toast.makeText(
@@ -532,12 +564,6 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
                 startActivity(intent)
             }
         }
-    }
-
-    private fun randomString(len: Int): String {
-        val random = SecureRandom()
-        val chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".toCharArray()
-        return (1..len).map { chars[random.nextInt(chars.size)] }.joinToString("")
     }
 
     private fun recyclerViewListRandPost() {
@@ -611,27 +637,6 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
     }
 
 
-    override fun onClickListenerCardView(data: ModelItemRandomPost) {
-        Log.i(TAG, "username: ${data.username}")
-        Log.i(TAG, "User ID: ${data.userId}")
-        Log.i(TAG, "Photo Profile: ${data.photoProfile}")
-        Log.i(TAG, "Text posting: ${data.postText}")
-        Log.i(TAG, "Post ID: ${data.postId}")
-
-        if (data.photoPost != "" || data.photoPost != null) {
-            Log.i(TAG, "Photo Posting: ${data.photoPost}")
-        }
-
-        Log.i(TAG, "Date Posting: ${data.postDate}")
-        Log.i(TAG, "City name: ${data.postLocationCityName}")
-        Log.i(TAG, "Coordinate location: ${data.postLocationCoordinate}")
-    }
-
-    override fun onClickListenerPostMore(data: ModelItemRandomPost) {
-        Log.i(TAG, "Clicked this post ${data.username}")
-        bottomSheetPostMore(data.postId.toString())
-    }
-
     @SuppressLint("InflateParams")
     private fun bottomSheetPostMore(postId: String) {
         val dialog = BottomSheetDialog(requireActivity())
@@ -675,6 +680,28 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
 
     }
 
+
+    override fun onClickListenerCardView(data: ModelItemRandomPost) {
+        Log.i(TAG, "username: ${data.username}")
+        Log.i(TAG, "User ID: ${data.userId}")
+        Log.i(TAG, "Photo Profile: ${data.photoProfile}")
+        Log.i(TAG, "Text posting: ${data.postText}")
+        Log.i(TAG, "Post ID: ${data.postId}")
+
+        if (data.photoPost != "" || data.photoPost != null) {
+            Log.i(TAG, "Photo Posting: ${data.photoPost}")
+        }
+
+        Log.i(TAG, "Date Posting: ${data.postDate}")
+        Log.i(TAG, "City name: ${data.postLocationCityName}")
+        Log.i(TAG, "Coordinate location: ${data.postLocationCoordinate}")
+    }
+
+    override fun onClickListenerPostMore(data: ModelItemRandomPost) {
+        Log.i(TAG, "Clicked this post ${data.username}")
+        bottomSheetPostMore(data.postId.toString())
+    }
+
     override fun onClickListenerImageView(data: ModelItemRandomPost) {
         Log.i(TAG, "Photo Posting: ${data.photoPost}")
     }
@@ -702,100 +729,7 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
     }
 
     override fun onClickListenerPostLike(data: ModelItemRandomPost) {
-
-        val uid = auth.currentUser!!.uid
-
-        if (!statusLike) {
-            statusLike = true
-            Log.i(TAG, "Status Like: $statusLike")
-
-            databaseReference = firebaseDatabase.getReference("users").child(uid)
-            databaseReference.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot.exists()) {
-                        val username = snapshot.child("username").value.toString()
-                        val photoProfile = snapshot.child("photoProfile").value.toString()
-
-                        val postId = data.postId
-
-                        databaseReference =
-                            firebaseDatabase.getReference("postRandom").child(postId.toString())
-                                .child("userLike").child(uid)
-                        val hashMap: HashMap<String, String> = HashMap()
-                        hashMap["photoProfile"] = photoProfile
-                        hashMap["username"] = username
-                        hashMap["status"] = "true"
-                        hashMap["userId"] = uid
-                        databaseReference.setValue(hashMap).addOnCompleteListener { databaseResult ->
-                            if (databaseResult.isSuccessful) {
-
-                                Toast.makeText(activity, "$username this like post", Toast.LENGTH_SHORT)
-                                    .show()
-
-                                databaseReference =
-                                    firebaseDatabase.getReference("postRandom").child(postId.toString())
-                                        .child("userLike")
-                                databaseReference.addValueEventListener(object : ValueEventListener {
-                                    override fun onDataChange(snapshot: DataSnapshot) {
-                                        val size: String = snapshot.childrenCount.toString()
-                                        Log.i(TAG, "user like count in post $postId : $size")
-
-
-                                        databaseReference = firebaseDatabase.getReference("postRandom")
-                                            .child(postId.toString()).child("countLikePostUser")
-                                        databaseReference.setValue(size)
-                                            .addOnCompleteListener { databaseResult ->
-                                                if (databaseResult.isSuccessful) {
-                                                    Log.i(TAG, "user like count updated")
-                                                } else {
-                                                    Log.i(TAG, "user like count not updated")
-                                                }
-                                            }.addOnFailureListener { e ->
-                                                Log.e(TAG, "user like error: ${e.message}")
-                                            }
-
-                                    }
-
-                                    override fun onCancelled(error: DatabaseError) {
-                                        TODO("Not yet implemented")
-                                    }
-
-                                })
-
-                            } else {
-                                Toast.makeText(
-                                    activity,
-                                    "$username failed like post",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }.addOnFailureListener { e ->
-                            Log.e(TAG, "failed user like to database: ${e.message}")
-                        }
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
-                }
-            })
-
-        } else {
-            statusLike = false
-            Log.i(TAG, "Status Like: $statusLike")
-
-            databaseReference = firebaseDatabase.getReference("postRandom").child(data.postId.toString()).child("userLike").child(uid)
-            databaseReference.removeValue().addOnCompleteListener { removeValue ->
-                if (removeValue.isSuccessful) {
-                    Log.i(TAG, "Remove like successfuly: ${removeValue.exception?.localizedMessage}")
-                } else {
-                    Log.i(TAG, "Remove like not successfuly: ${removeValue.exception?.localizedMessage}")
-                }
-            }.addOnFailureListener { e ->
-                Log.i(TAG, "Remove like failure: ${e.localizedMessage}")
-            }
-
-        }
+        dialogReactions(layoutInflater, requireActivity(), data.username.toString())
     }
 
     override fun onClickListenerPostShare(data: ModelItemRandomPost) {
@@ -811,53 +745,11 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
     }
 
 
-    private fun openGalleryForImage() {
-        val intent = Intent(Intent.ACTION_PICK)
-        intent.type = "image/*"
-        startActivityForResult(intent, RegisterProfileStep2.REQUEST_CODE)
+    private fun randomString(len: Int): String {
+        val random = SecureRandom()
+        val chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".toCharArray()
+        return (1..len).map { chars[random.nextInt(chars.size)] }.joinToString("")
     }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == RegisterProfileStep2.REQUEST_CODE) {
-            fillPath = data?.data!!
-            try {
-                imageReceiverCapture.setImageURI(data.data) // handle chosen image
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-        }
-    }
-
-    private fun uploadImageGaleryServer() {
-        progressLoaderPostContent.visibility = View.VISIBLE
-
-        val imgId = UUID.randomUUID().toString() + ".jpg"
-
-        Log.i(TAG, "Image Post From Galeri : $fillPath")
-        storageReference =
-            firebaseStorage.reference.child("post_image/${auth.currentUser!!.email}/$imgId")
-        storageReference.putFile(fillPath!!).addOnSuccessListener { taskSnap ->
-
-            Log.i(TAG, "upload image post from galery: Successful")
-
-            taskSnap.storage.downloadUrl.addOnSuccessListener { uri ->
-
-                Log.i(TAG, "Uri image post from galery: $uri")
-                storeDataPostInDatabase(uri.toString())
-
-            }.addOnFailureListener { uriFailure ->
-                Toast.makeText(activity, "${uriFailure.message}", Toast.LENGTH_SHORT).show()
-            }
-
-        }.addOnFailureListener { snapshotFailure ->
-            Toast.makeText(activity, "${snapshotFailure.message}", Toast.LENGTH_SHORT).show()
-        }
-
-
-    }
-
-
 }
 
 

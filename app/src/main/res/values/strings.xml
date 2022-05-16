@@ -24,7 +24,7 @@
     <string name="txt_link_to_sign_up">Sign Up</string>
 
     <string name="logout">Logout</string>
-    <string name="hello">Hello!</string>
+    <string name="hello">Hello &#x1f44b;!</string>
     <string name="welcome_nback">Welcome \nBack</string>
     <string name="sign_up">Sign Up\ </string>
     <string name="to">To</string>
@@ -95,4 +95,10 @@
     <string name="text_warn_phone_input">Please don\'t input char 0 number</string>
     <string name="delete_item_more_post">Delete</string>
     <string name="edit_item_post_random">Edit</string>
+    <string name="tv_warning_number_input_not_empty">input number is required!</string>
+    <string name="emotion_like">👍</string>
+    <string name="emotion_dislike">👎</string>
+    <string name="emotion_applause">👏</string>
+    <string name="emotion_love">❤</string>
+    <string name="emotion_angry">😡</string>
 </resources>

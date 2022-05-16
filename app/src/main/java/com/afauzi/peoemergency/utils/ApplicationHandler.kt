@@ -14,13 +14,17 @@ class ApplicationHandler : Application() {
     override fun onCreate() {
         super.onCreate()
 
+        firebaseOffline()
+
+        isOnline(applicationContext)
+
+    }
+
+    private fun firebaseOffline() {
         val firebaseServiceInstance = FirebaseServiceInstance
         val firebaseDatabase = firebaseServiceInstance.firebaseDatabase
 
         firebaseDatabase.setPersistenceEnabled(true)
-
-        isOnline(applicationContext)
-
     }
 
     fun isOnline(context: Context): Boolean {

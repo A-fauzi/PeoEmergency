@@ -224,7 +224,7 @@ class SignUpActivity : AppCompatActivity() {
                                 setBackBoxTextFieldDisable = emailInputLayout,
                                 requestFocus = username
                             )
-                        }
+                        } 
                         else -> {
                             inputValidate(
                                 textWarnGone = textWarnUsername,
@@ -232,6 +232,7 @@ class SignUpActivity : AppCompatActivity() {
                                 viewEnableFalse = email,
                                 setBackBoxTextFieldDisable = emailInputLayout
                             )
+
                         }
                     }
                 }

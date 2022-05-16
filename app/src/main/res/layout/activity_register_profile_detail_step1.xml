@@ -58,7 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:textColor="@color/black"
+                android:textColor="@color/blue_soft"
                 android:text="@string/hi_name" />
 
 
@@ -140,7 +140,7 @@
                             android:id="@+id/phoneNumber"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="phone"
+                            android:inputType="number|phone"
                             android:maxLines="1"
                             android:maxLength="12" />
                     </com.google.android.material.textfield.TextInputLayout>

@@ -176,7 +176,7 @@
                             android:foreground="?attr/selectableItemBackground">
 
                             <ImageButton
-                                android:id="@+id/item_to_like_post"
+                                android:id="@+id/item_to_reactions_post"
                                 android:layout_width="25dp"
                                 android:layout_height="25dp"
                                 android:background="@color/white"
