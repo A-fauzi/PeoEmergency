@@ -2,12 +2,12 @@ package com.afauzi.peoemergency.utils
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
 import androidx.cardview.widget.CardView
 import com.afauzi.peoemergency.R
 import com.airbnb.lottie.LottieAnimationView
@@ -19,7 +19,7 @@ object Library {
     /**
      * LOG
      */
-    const val TAG = "myAppLog"
+    const val TAG = "library"
 
     fun clearText(inputText: EditText) {
         Log.i(TAG, "input clear text")
@@ -29,7 +29,12 @@ object Library {
     /**
      * Dialog Error
      */
-    fun dialogErrors(layoutInflater: LayoutInflater, context: Context, dialogText: String, rawRes: Int) {
+    fun dialogErrors(
+        layoutInflater: LayoutInflater,
+        context: Context,
+        dialogText: String,
+        rawRes: Int
+    ) {
         val dialog = MaterialAlertDialogBuilder(context, R.style.MaterialAlertDialog_rounded)
         val dialogView: View = layoutInflater.inflate(R.layout.dialog_errors, null)
         val textDialog = dialogView.findViewById<TextView>(R.id.tv_dialog_error)
@@ -43,34 +48,79 @@ object Library {
         dialog.show()
 
     }
-  /**
+
+
+    private fun reactHandle(dataPostId: String, dataUserName: String, dataPhotoProfile: String, dataUid: String, htmlCode: String) {
+        val unicode = Html.fromHtml(htmlCode)
+
+        FirebaseServiceInstance.databaseReference = FirebaseServiceInstance.firebaseDatabase.getReference("postRandom").child(dataPostId).child("userReact").child(dataUid)
+        val hashMap: HashMap<String, String> = HashMap()
+        hashMap["username"] = dataUserName
+        hashMap["photoProfile"] = dataPhotoProfile
+        hashMap["statusReaction"] = unicode.toString()
+        hashMap["status"] = "reacted"
+        FirebaseServiceInstance.databaseReference.setValue(hashMap).addOnCompleteListener { reactionUpload ->
+            if (reactionUpload.isSuccessful) {
+                Log.d(TAG, "$dataUserName successfully reaction $unicode")
+            } else {
+                Log.d(TAG, "$dataUserName not successfully reaction: ${reactionUpload.exception?.localizedMessage}")
+            }
+        }.addOnFailureListener { reactionUploadFail ->
+            Log.d(TAG, reactionUploadFail.localizedMessage!!)
+        }
+
+    }
+
+    /**
      * Dialog Reactions Emotion
      */
-    fun dialogReactions(layoutInflater: LayoutInflater, context: Context, data: String) {
-        val dialog = MaterialAlertDialogBuilder(context, R.style.MaterialAlertDialog_rounded)
+    fun dialogReactions(
+        layoutInflater: LayoutInflater,
+        context: Context,
+        dataPostId: String,
+        dataUid: String,
+        dataUserName: String,
+        dataPhotoProfile: String
+    ) {
+
         val dialogView: View = layoutInflater.inflate(R.layout.dialog_reactions, null)
+        val dialog = MaterialAlertDialogBuilder(context, R.style.MaterialAlertDialog_rounded)
+            .setView(dialogView)
+            .setTitle("Reactions")
+            .show()
         val emotLike: CardView = dialogView.findViewById(R.id.cv_emotion_like)
         val emotDislike: CardView = dialogView.findViewById(R.id.cv_emotion_dislike)
         val emotApplause: CardView = dialogView.findViewById(R.id.cv_emotion_applause)
         val emotLove: CardView = dialogView.findViewById(R.id.cv_emotion_love)
         val emotAngry: CardView = dialogView.findViewById(R.id.cv_emotion_angry)
 
-        emotLike.setOnClickListener { Toast.makeText(context, "$data Like Clicked", Toast.LENGTH_SHORT).show() }
-        emotDislike.setOnClickListener { Toast.makeText(context, "$data Dislike Clicked", Toast.LENGTH_SHORT).show() }
-        emotApplause.setOnClickListener { Toast.makeText(context, "$data Applause Clicked", Toast.LENGTH_SHORT).show() }
-        emotLove.setOnClickListener { Toast.makeText(context, "$data Love Clicked", Toast.LENGTH_SHORT).show() }
-        emotAngry.setOnClickListener { Toast.makeText(context, "$data Angry Clicked", Toast.LENGTH_SHORT).show() }
-
-        dialog.setView(dialogView)
-        dialog.setTitle("Reactions")
-        dialog.show()
-
+        emotLike.setOnClickListener {
+            reactHandle(dataPostId, dataUserName, dataPhotoProfile, dataUid, "&#x1f44d;")
+            dialog.dismiss()
+        }
+        emotDislike.setOnClickListener {
+            reactHandle(dataPostId, dataUserName, dataPhotoProfile, dataUid, "&#x1f44e;")
+            dialog.dismiss()
+        }
+        emotApplause.setOnClickListener {
+            reactHandle(dataPostId, dataUserName, dataPhotoProfile, dataUid, "&#x1f44f;")
+            dialog.dismiss()
+        }
+        emotLove.setOnClickListener {
+            reactHandle(dataPostId, dataUserName, dataPhotoProfile, dataUid, "&#x2764;")
+            dialog.dismiss()
+        }
+        emotAngry.setOnClickListener {
+            reactHandle(dataPostId, dataUserName, dataPhotoProfile, dataUid, "&#x1f621;")
+            dialog.dismiss()
+        }
     }
 
     /**
      * Current date and time WIB Format
      */
     @SuppressLint("SimpleDateFormat")
-    val currentDateAndTime: String = SimpleDateFormat("dd MMM yyyy | HH:mm:ss zzz").format(Date(System.currentTimeMillis()))
+    val currentDateAndTime: String =
+        SimpleDateFormat("dd MMM yyyy | HH:mm:ss zzz").format(Date(System.currentTimeMillis()))
 
 }

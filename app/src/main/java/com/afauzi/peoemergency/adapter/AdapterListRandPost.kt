@@ -9,6 +9,11 @@ import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.data_model.ModelItemRandomPost
 import com.afauzi.peoemergency.databinding.ItemListRandomPostBinding
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
+import com.afauzi.peoemergency.utils.FirebaseServiceInstance.databaseReference
+import com.afauzi.peoemergency.utils.FirebaseServiceInstance.firebaseDatabase
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
 
 
@@ -35,7 +40,6 @@ class AdapterListRandPost(
                 binding.itemDescriptionPost.text = postText
                 binding.itemDatePost.text = postDate
                 binding.itemTvCountComment.text = countCommentPostUser
-                binding.itemTvCountLike.text = countLikePostUser
 
                 Picasso.get().load(photoProfile).placeholder(R.drawable.person_place_holder)
                     .into(binding.itemPhotoProfile)
@@ -53,25 +57,22 @@ class AdapterListRandPost(
                 if (userId != uid) {
                     binding.itemBtnMorePostCardView.visibility = View.INVISIBLE
                 }
-//
-//                databaseReference = firebaseDatabase.getReference("postRandom").child(postId.toString()).child("userLike").child(uid)
-//                databaseReference.addValueEventListener(object : ValueEventListener{
-//                    override fun onDataChange(snapshot: DataSnapshot) {
-//                        if (snapshot.exists()) {
-//                            val status = snapshot.child("status").value.toString()
-//                            if (status == "true") {
-//                                binding.itemToReactionsPost.setImageResource(R.drawable.ic_like)
-//                            } else {
-//                                binding.itemToReactionsPost.setImageResource(R.drawable.ic_favorite__2_)
-//                            }
-//                        }
-//                    }
-//
-//                    override fun onCancelled(error: DatabaseError) {
-//                        TODO("Not yet implemented")
-//                    }
-//
-//                })
+
+                databaseReference = firebaseDatabase.getReference("postRandom").child(postId!!).child("userReact").child(uid)
+                databaseReference.addValueEventListener(object : ValueEventListener{
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists()) {
+                            binding.itemTvCountReact.text = snapshot.child("statusReaction").value.toString() + " " + countReactPostUser
+                        } else {
+                            binding.itemTvCountReact.text = countReactPostUser
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        TODO("Not yet implemented")
+                    }
+
+                })
 
                 binding.itemCardViewContentRandomPost.setOnClickListener {
                     callClickListener.onClickListenerCardView(listItemRandomPost[position])
@@ -90,13 +91,8 @@ class AdapterListRandPost(
                 }
 
                 binding.itemToReactionsPost.setOnClickListener {
-                    callClickListener.onClickListenerPostLike(listItemRandomPost[position])
+                    callClickListener.onClickListenerPostReact(listItemRandomPost[position])
                 }
-                binding.itemToSharePost.setOnClickListener {
-                    callClickListener.onClickListenerPostShare(listItemRandomPost[position])
-                }
-
-
             }
         }
 
@@ -110,7 +106,7 @@ class AdapterListRandPost(
         fun onClickListenerCardView(data: ModelItemRandomPost)
         fun onClickListenerImageView(data: ModelItemRandomPost)
         fun onClickListenerPostReply(data: ModelItemRandomPost)
-        fun onClickListenerPostLike(data: ModelItemRandomPost)
+        fun onClickListenerPostReact(data: ModelItemRandomPost)
         fun onClickListenerPostShare(data: ModelItemRandomPost)
         fun onClickListenerPostMore(data: ModelItemRandomPost)
         fun onLongClickListener(data: ModelItemRandomPost)

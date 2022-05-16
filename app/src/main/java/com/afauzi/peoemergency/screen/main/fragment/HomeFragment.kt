@@ -82,8 +82,6 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
     private lateinit var photoProfileUri: String
     private lateinit var photoPostUri: Uri
 
-    private var statusLike: Boolean = false
-
     private lateinit var locationManager: LocationManager
     private var gpsStatus = false
 
@@ -127,8 +125,6 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
 
         // Chcek GPS Status
         checkGpsStatus()
-
-        Toast.makeText(activity, "Status Like: $statusLike", Toast.LENGTH_SHORT).show()
 
         return binding.root
 
@@ -591,8 +587,8 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
 
                         postId = list.postId
                         Log.i(TAG, "post id: $postId")
-
                         getCountCommentPost(postId.toString())
+                        getCountReactPost(postId.toString())
                     }
                     rvPostRandom.adapter = AdapterListRandPost(this@HomeFragment, listRandomPost)
                 } else {
@@ -631,6 +627,32 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
 
             override fun onCancelled(error: DatabaseError) {
                 Log.i("countCommentError", "count: ${error.message}")
+            }
+
+        })
+    }
+    private fun getCountReactPost(postId: String) {
+        databaseReference = firebaseDatabase.getReference("postRandom").child(postId).child("userReact")
+        databaseReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val size: String = snapshot.childrenCount.toString()
+                Log.i("countReact", "count postId $postId: $size")
+
+                databaseReference = firebaseDatabase.getReference("postRandom").child(postId).child("countReactPostUser")
+                databaseReference.setValue(size).addOnCompleteListener { result ->
+                    if (result.isSuccessful) {
+                        Log.i(TAG, "Post react count updated")
+                    } else {
+                        Log.i(TAG, "Post react count not updated")
+                    }
+                }.addOnFailureListener { e ->
+                    Log.i(TAG, "failure post react result database: ${e.localizedMessage} ")
+                }
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.i("countReactError", "count: ${error.message}")
             }
 
         })
@@ -728,8 +750,8 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
 
     }
 
-    override fun onClickListenerPostLike(data: ModelItemRandomPost) {
-        dialogReactions(layoutInflater, requireActivity(), data.username.toString())
+    override fun onClickListenerPostReact(data: ModelItemRandomPost) {
+        dialogReactions(layoutInflater, requireActivity(), data.postId!!, data.userId!!, data.username!!, data.photoProfile!!)
     }
 
     override fun onClickListenerPostShare(data: ModelItemRandomPost) {

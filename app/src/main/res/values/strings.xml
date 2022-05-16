@@ -96,9 +96,10 @@
     <string name="delete_item_more_post">Delete</string>
     <string name="edit_item_post_random">Edit</string>
     <string name="tv_warning_number_input_not_empty">input number is required!</string>
-    <string name="emotion_like">👍</string>
-    <string name="emotion_dislike">👎</string>
-    <string name="emotion_applause">👏</string>
-    <string name="emotion_love">❤</string>
-    <string name="emotion_angry">😡</string>
+    <string name="emotion_like">&#x1f44d;</string>
+    <string name="emotion_dislike">&#x1f44e;</string>
+    <string name="emotion_applause">&#x1f44f;</string>
+    <string name="emotion_love">&#x2764;</string>
+    <string name="emotion_angry">&#x1f621;</string>
+    <string name="iv_ic_reaction">iv_ic_reaction</string>
 </resources>

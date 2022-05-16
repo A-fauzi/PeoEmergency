@@ -12,6 +12,7 @@ data class ModelItemRandomPost(
     var userId: String? = null,
     var userReplyPost: ModelReplyPost? = null,
     var countCommentPostUser: String? = null,
-    var countLikePostUser: String? = null
+    var countReactPostUser: String? = null,
+    var userReact: ModelReactPost? = null
 
 )
