@@ -9,11 +9,6 @@ import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.data_model.ModelItemRandomPost
 import com.afauzi.peoemergency.databinding.ItemListRandomPostBinding
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
-import com.afauzi.peoemergency.utils.FirebaseServiceInstance.databaseReference
-import com.afauzi.peoemergency.utils.FirebaseServiceInstance.firebaseDatabase
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
 
 
@@ -36,7 +31,7 @@ class AdapterListRandPost(
         with(holder) {
             with(listItemRandomPost[position]) {
                 binding.itemName.text = username
-                binding.itemLocationPost.text = postLocationCityName
+                binding.itemLocationPost.text = postLocationName
                 binding.itemDescriptionPost.text = postText
                 binding.itemDatePost.text = postDate
                 binding.itemTvCountComment.text = countCommentPostUser
@@ -57,22 +52,6 @@ class AdapterListRandPost(
                 if (userId != uid) {
                     binding.itemBtnMorePostCardView.visibility = View.INVISIBLE
                 }
-
-                databaseReference = firebaseDatabase.getReference("postRandom").child(postId!!).child("userReact").child(uid)
-                databaseReference.addValueEventListener(object : ValueEventListener{
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        if (snapshot.exists()) {
-                            binding.itemTvCountReact.text = snapshot.child("statusReaction").value.toString() + " " + countReactPostUser
-                        } else {
-                            binding.itemTvCountReact.text = countReactPostUser
-                        }
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-                        TODO("Not yet implemented")
-                    }
-
-                })
 
                 binding.itemCardViewContentRandomPost.setOnClickListener {
                     callClickListener.onClickListenerCardView(listItemRandomPost[position])

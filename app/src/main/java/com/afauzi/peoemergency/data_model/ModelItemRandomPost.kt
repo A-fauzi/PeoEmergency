@@ -3,7 +3,7 @@ package com.afauzi.peoemergency.data_model
 data class ModelItemRandomPost(
     var username: String? = null,
     var photoProfile: String? = null,
-    var postLocationCityName: String? = null,
+    var postLocationName: String? = null,
     var postText: String? = null,
     var postDate: String? = null,
     var photoPost: String? = null,
