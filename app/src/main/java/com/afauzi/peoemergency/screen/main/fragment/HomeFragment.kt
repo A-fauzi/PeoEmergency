@@ -619,10 +619,9 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
                         Log.d(TAG, "=============================DATA POST ${list.username}===============================")
                         Log.i(TAG, "post id: ${list.postId}")
                         Log.i(TAG, "post list size: ${listRandomPost.size}")
+
                         getCountCommentPost(list.postId.toString())
-
-
-//                        getCountReactPost(postId.toString())
+                        getCountReactPost(list.postId.toString())
                     }
                     rvPostRandom.adapter = AdapterListRandPost(this@HomeFragment, listRandomPost)
                 } else {
@@ -668,8 +667,7 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
     }
 
     private fun getCountReactPost(postId: String) {
-        databaseReference =
-            firebaseDatabase.getReference("postRandom").child(postId).child("userReact")
+        databaseReference = firebaseDatabase.getReference("postRandom").child(postId).child("userReact")
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val size: String = snapshot.childrenCount.toString()
@@ -789,13 +787,14 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
     }
 
     override fun onClickListenerPostReact(data: ModelItemRandomPost) {
+        val currentUser = auth.currentUser
         dialogReactions(
             layoutInflater,
             requireActivity(),
             data.postId!!,
-            data.userId!!,
-            data.username!!,
-            data.photoProfile!!
+            currentUser?.uid.toString(),
+            currentUser?.displayName.toString(),
+            currentUser?.photoUrl.toString()
         )
     }
 

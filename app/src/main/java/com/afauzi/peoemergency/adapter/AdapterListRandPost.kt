@@ -9,6 +9,11 @@ import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.data_model.ModelItemRandomPost
 import com.afauzi.peoemergency.databinding.ItemListRandomPostBinding
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
+import com.afauzi.peoemergency.utils.FirebaseServiceInstance.databaseReference
+import com.afauzi.peoemergency.utils.FirebaseServiceInstance.firebaseDatabase
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
 
 
@@ -36,6 +41,22 @@ class AdapterListRandPost(
                 binding.itemDescriptionPost.text = postText
                 binding.itemDatePost.text = postDate
                 binding.itemTvCountComment.text = countCommentPostUser
+                binding.itemTvCountReact.text = countReactPostUser
+
+                databaseReference = firebaseDatabase.getReference("postRandom").child("$postId").child("userReact").child("${auth.currentUser?.uid}")
+                databaseReference.addValueEventListener(object : ValueEventListener{
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists()) {
+                            val statusReact = snapshot.child("statusReaction").value.toString()
+                            binding.itemTvCountReact.text = "$statusReact $countReactPostUser"
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        TODO("Not yet implemented")
+                    }
+
+                })
 
                 Picasso.get().load(photoProfile).placeholder(R.drawable.person_place_holder).into(binding.itemPhotoProfile)
 
