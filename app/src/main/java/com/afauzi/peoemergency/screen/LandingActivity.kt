@@ -11,10 +11,13 @@ import com.afauzi.peoemergency.databinding.ActivityLandingBinding
 import com.afauzi.peoemergency.screen.auth.SignInActivity
 import com.afauzi.peoemergency.screen.auth.SignUpActivity
 import com.afauzi.peoemergency.screen.main.MainActivity
-import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
-import com.afauzi.peoemergency.utils.Library.TAG
+import com.afauzi.peoemergency.utils.FirebaseServiceInstance.user
 
 class LandingActivity : AppCompatActivity() {
+
+    companion object {
+        const val TAG = "LandingActivity"
+    }
 
     /**
      * Declaration viewBinding
@@ -70,9 +73,12 @@ class LandingActivity : AppCompatActivity() {
      * Handle current user
      */
     private fun currentUser() {
-        auth.currentUser.let {
+        user.let {
             if (it != null) {
                 Log.i(TAG, "user logged in")
+                Log.i(TAG, "name: ${it.displayName}")
+                Log.i(TAG, "email: ${it.email}")
+                Log.i(TAG, "photo profile: ${it.photoUrl}")
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             } else {

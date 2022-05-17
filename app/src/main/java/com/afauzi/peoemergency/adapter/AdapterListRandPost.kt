@@ -36,8 +36,8 @@ class AdapterListRandPost(
                 binding.itemDatePost.text = postDate
                 binding.itemTvCountComment.text = countCommentPostUser
 
-                Picasso.get().load(photoProfile).placeholder(R.drawable.person_place_holder)
-                    .into(binding.itemPhotoProfile)
+//                Picasso.get().load(photoProfile).placeholder(R.drawable.person_place_holder)
+//                    .into(binding.itemPhotoProfile)
 
                 if (photoPost == null || photoPost == "") {
                     binding.itemImagePost.setImageResource(0)

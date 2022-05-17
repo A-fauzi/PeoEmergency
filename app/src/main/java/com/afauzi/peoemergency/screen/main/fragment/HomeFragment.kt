@@ -126,11 +126,21 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
 
         initView()
 
+        // Check User
+        auth.currentUser.let {
+            Log.d(TAG, "Email User: ${it?.email}")
+            Log.d(TAG, "Name User: ${it?.displayName}")
+            Log.d(TAG, "PhotoUrl: ${it?.photoUrl}")
+        }
+
         // GetData USer
         getUserData()
 
         // Chcek GPS Status
         checkGpsStatus()
+
+        // Get List Post
+        recyclerViewListRandPost()
 
         return binding.root
 
@@ -233,10 +243,6 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
                 )
             )
         }
-
-        // Get List Post
-        recyclerViewListRandPost()
-
     }
 
 
@@ -295,11 +301,11 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
             val locationCoordinate = "$latitude, $longitude"
 
             val geocoder = Geocoder(requireActivity(), Locale.getDefault())
-            val address: Address?
+            val address: Address
 
-            val addresses: List<Address>? = geocoder.getFromLocation(latitude!!, longitude!!, 1)
+            val addresses: List<Address> = geocoder.getFromLocation(latitude!!, longitude!!, 1)
 
-            address = addresses!![0]
+            address = addresses[0]
             val fullAddress = address.getAddressLine(0)
             val subDistrict = address.locality
             val province = address.adminArea
@@ -377,35 +383,28 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
         // Code get username from database
         auth.currentUser.let {
             if (it != null) {
+
+                username.text = it.displayName
+                Log.i(TAG, "username: ${username.text}") // data username done
+
+                Picasso
+                    .get()
+                    .load(it.photoUrl)
+                    .placeholder(R.drawable.boy_image_place_holder)
+                    .into(imgProfile)
+                Log.i(TAG, "photo Uri: ${it.photoUrl}") // data photoUri done
+
                 databaseReference = firebaseDatabase.getReference("users").child(it.uid)
                 databaseReference.addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         if (snapshot.exists()) {
-                            val gender = snapshot.child("gender").value.toString()
-
-                            username.text = snapshot.child("username").value.toString()
-                            Log.i(TAG, "username: ${username.text}") // data username done
-                            photoProfileUri = snapshot.child("photoProfile").value.toString()
                             val streetName  = snapshot.child("currentLocation").child("streetName").value.toString()
                             val urbanVillage  = snapshot.child("currentLocation").child("urbanVillage").value.toString()
                             currentLocation.text = "$streetName, $urbanVillage..."
+                            Log.i(TAG, "current location: ${currentLocation.text}") // data location done
 
-                            if (gender == "Laki-Laki") {
-                                Picasso
-                                    .get()
-                                    .load(photoProfileUri)
-                                    .placeholder(com.afauzi.peoemergency.R.drawable.boy_image_place_holder)
-                                    .into(imgProfile)
-                            } else {
-                                Picasso
-                                    .get()
-                                    .load(photoProfileUri)
-                                    .placeholder(com.afauzi.peoemergency.R.drawable.girl_image_place_holder)
-                                    .into(imgProfile)
-                            }
-                            Log.i(TAG, "Photo Profile Uri: $photoProfileUri") // data username done
                         } else {
-                            username.text = null
+                            // Code not exist data
                         }
                     }
 
@@ -608,12 +607,8 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
         rvPostRandom = binding.rvPostRandom
         listRandomPost = arrayListOf()
         rvPostRandom.setHasFixedSize(true)
-        rvPostRandom.layoutManager =
-            LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
-        getListPostRandom()
-    }
+        rvPostRandom.layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
 
-    private fun getListPostRandom() {
         databaseReference = firebaseDatabase.getReference("postRandom")
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -774,25 +769,28 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
     }
 
     override fun onClickListenerPostReply(data: ModelItemRandomPost) {
-        val bundle = Bundle()
-        // Data CurrentUser
-        bundle.putString("photoProfileCurrentUser", photoProfileUri)
-        bundle.putString("usernameCurrentUser", username.text.toString())
 
-        bundle.putString("username", "${data.username}")
-        bundle.putString("userId", "${data.userId}")
-        bundle.putString("photoProfile", "${data.photoProfile}")
-        bundle.putString("textPost", "${data.postText}")
-        bundle.putString("postId", "${data.postId}")
-        if (data.photoPost != "" || data.photoPost != null) {
-            bundle.putString("photoPosting", "${data.photoPost}")
+        auth.currentUser.let {
+            val bundle = Bundle()
+            // Data CurrentUser
+            bundle.putString("photoProfileCurrentUser", it?.photoUrl.toString())
+            bundle.putString("usernameCurrentUser", it?.displayName)
+
+            bundle.putString("username", "${data.username}")
+            bundle.putString("userId", "${data.userId}")
+            bundle.putString("photoProfile", "${data.photoProfile}")
+            bundle.putString("textPost", "${data.postText}")
+            bundle.putString("postId", "${data.postId}")
+            if (data.photoPost != "" || data.photoPost != null) {
+                bundle.putString("photoPosting", "${data.photoPost}")
+            }
+            bundle.putString("datePosting", "${data.postDate}")
+
+            val intent = Intent(requireActivity(), CommentPostRandomActivity::class.java)
+            intent.putExtras(bundle)
+            startActivity(intent)
+
         }
-        bundle.putString("datePosting", "${data.postDate}")
-
-        val intent = Intent(requireActivity(), CommentPostRandomActivity::class.java)
-        intent.putExtras(bundle)
-        startActivity(intent)
-
     }
 
     override fun onClickListenerPostReact(data: ModelItemRandomPost) {
@@ -817,7 +815,6 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
     override fun onClickRemove(data: ModelItemRandomPost) {
         TODO("Not yet implemented")
     }
-
 
     private fun randomString(len: Int): String {
         val random = SecureRandom()

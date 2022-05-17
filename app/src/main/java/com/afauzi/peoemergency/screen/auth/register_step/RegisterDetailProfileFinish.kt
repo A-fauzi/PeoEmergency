@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import com.afauzi.peoemergency.R
@@ -18,6 +17,7 @@ import com.afauzi.peoemergency.utils.FirebaseServiceInstance.databaseReference
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.firebaseDatabase
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.firebaseStorage
 import com.google.android.material.progressindicator.CircularProgressIndicator
+import com.google.firebase.auth.UserProfileChangeRequest
 import de.hdodenhof.circleimageview.CircleImageView
 import java.util.*
 
@@ -68,38 +68,46 @@ class RegisterDetailProfileFinish : AppCompatActivity() {
         super.onResume()
 
         val username = intent.extras?.getString("usernameStep2")
+        Log.d(TAG, username.toString())
         tvUsername.text = resources.getString(R.string.hi_name, username)
         nameProfileDetail.text = username
 
         val imgUri = intent.extras?.getString("imgUriStep2")
+        Log.d(TAG, imgUri.toString())
         photoProfileDetail.setImageURI(imgUri?.toUri())
 
         val email = intent.extras?.getString("emailStep2")
+        Log.d(TAG, email.toString())
         emailProfileDetail.text = resources.getString(R.string.email_detail_register, email)
 
         val phone = intent.extras?.getString("phoneStep2")
+        Log.d(TAG, phone.toString())
         phoneProfileDetail.text = resources.getString(R.string.phone_detail_register, phone)
 
         val gender = intent.extras?.getString("genderStep2")
+        Log.d(TAG, gender.toString())
         genderProfileDetail.text = resources.getString(R.string.gender_detail_register, gender)
 
         val birthday = intent.extras?.getString("userBirthdayStep2")
-        birthdayProfileDetail.text =
-            resources.getString(R.string.birthday_detail_register, birthday)
+        Log.d(TAG, birthday.toString())
+        birthdayProfileDetail.text = resources.getString(R.string.birthday_detail_register, birthday)
 
         val password = intent.extras?.getString("passwordStep2")
-        val dateJoin = intent.extras?.getString("dateJoinStep2")
+        Log.d(TAG, password.toString())
 
+        val dateJoin = intent.extras?.getString("dateJoinStep2")
+        Log.d(TAG, dateJoin.toString())
 
         btnStepFinish.setOnClickListener {
             if (email != null && password != null) {
                 progressLoader.visibility = View.VISIBLE
                 btnStepFinish.visibility = View.INVISIBLE
 
-                createUserWithEmailPassword(
+                uploadImageToFirebase(
                     imgUri!!.toUri(),
+                    auth.currentUser!!.uid,
                     username.toString(),
-                    email, password,
+                    email,
                     phone.toString(),
                     gender.toString(),
                     birthday.toString(),
@@ -108,45 +116,6 @@ class RegisterDetailProfileFinish : AppCompatActivity() {
             }
         }
 
-    }
-
-    private fun createUserWithEmailPassword(
-        fileUri: Uri,
-        username: String,
-        email: String,
-        password: String,
-        phone: String,
-        gender: String,
-        birthday: String,
-        dateJoin: String
-    ) {
-        auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "createUserWithEmail:success")
-                    val userId = auth.currentUser!!.uid
-                    uploadImageToFirebase(
-                        fileUri,
-                        userId,
-                        username,
-                        email,
-                        phone,
-                        gender,
-                        birthday,
-                        dateJoin
-                    )
-                } else {
-                    btnStepFinish.visibility = View.VISIBLE
-                    progressLoader.visibility = View.INVISIBLE
-                    // If sign in fails, display a message to the user.
-                    Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                    Toast.makeText(
-                        baseContext, "Authentication failed.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
     }
 
     private fun uploadImageToFirebase(
@@ -180,6 +149,20 @@ class RegisterDetailProfileFinish : AppCompatActivity() {
                     databaseReference.setValue(hashMap).addOnCompleteListener { databaseResult ->
                         if (databaseResult.isSuccessful) {
                             Log.i(TAG, "Succesfully save data in database")
+                            // Sign in success, update UI with the signed-in user's information
+                            val user = auth.currentUser
+                            val profileUpdates = UserProfileChangeRequest.Builder().apply {
+                                this.photoUri = uri
+                            }.build()
+                            user?.updateProfile(profileUpdates)?.addOnCompleteListener { updatesProfile ->
+                                if (updatesProfile.isSuccessful) {
+                                    Log.d(TAG, "Profile Updated")
+                                } else {
+                                    btnStepFinish.visibility = View.VISIBLE
+                                    progressLoader.visibility = View.INVISIBLE
+                                    Log.w(TAG, "Profile Not Updated")
+                                }
+                            }
 
                             startActivity(Intent(this, MainActivity::class.java))
                         } else {

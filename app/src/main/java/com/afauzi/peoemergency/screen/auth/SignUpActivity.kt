@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -12,10 +13,14 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.databinding.ActivitySignUpBinding
+import com.afauzi.peoemergency.screen.auth.register_step.RegisterDetailProfileFinish
 import com.afauzi.peoemergency.screen.auth.register_step.RegisterProfileDetailStep1
+import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
 import com.afauzi.peoemergency.utils.Library.currentDateAndTime
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.auth.UserProfileChangeRequest
 
 @SuppressLint("SimpleDateFormat")
 class SignUpActivity : AppCompatActivity() {
@@ -102,6 +107,8 @@ class SignUpActivity : AppCompatActivity() {
      */
     private lateinit var linkToSignIn: TextView
 
+    private lateinit var progressIndicator: CircularProgressIndicator
+
     /**
      * Initials view
      */
@@ -120,6 +127,7 @@ class SignUpActivity : AppCompatActivity() {
         passwordConfirmInputLayout = binding.outlinedTextFieldPassConfirm
         linkToSignIn = binding.tvLinkToSignIn
         usernameInputLayout = binding.outlinedTextFieldUsername
+        progressIndicator = binding.progressInSignup
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -139,7 +147,9 @@ class SignUpActivity : AppCompatActivity() {
         // btn register to behavior
         btnRegister.setOnClickListener {
             setFormEnable(false, R.color.input_disabled)
-            passingData()
+            progressIndicator.visibility = View.VISIBLE
+            btnRegister.visibility = View.INVISIBLE
+            createUserEmailPassword()
         }
 
         // link to move sign in activity
@@ -157,6 +167,38 @@ class SignUpActivity : AppCompatActivity() {
 
     }
 
+
+    private fun createUserEmailPassword() {
+        auth.createUserWithEmailAndPassword(email.text.toString(), password.text.toString()).addOnCompleteListener(this) {  taskSuccessfuly ->
+            if (taskSuccessfuly.isSuccessful) {
+                Log.d(TAG, "Success Create Email Password")
+
+                // Sign in success, update UI with the signed-in user's information
+                val user = auth.currentUser
+                val profileUpdates = UserProfileChangeRequest.Builder().apply {
+                    this.displayName = username.text.toString()
+                }.build()
+                user?.updateProfile(profileUpdates)?.addOnCompleteListener { updatesProfile ->
+                    if (updatesProfile.isSuccessful) {
+                        Log.d(RegisterDetailProfileFinish.TAG, "Profile Updated")
+                        passingData()
+                    } else {
+                        Log.w(RegisterDetailProfileFinish.TAG, "Profile Not Updated")
+                    }
+                }
+            } else {
+                // Handle Jika Gagal
+                progressIndicator.visibility = View.INVISIBLE
+                btnRegister.visibility = View.VISIBLE
+                Log.w(TAG, "Not Success Create Email Password : ${taskSuccessfuly.exception?.localizedMessage}")
+            }
+        }.addOnFailureListener {
+            progressIndicator.visibility = View.INVISIBLE
+            btnRegister.visibility = View.VISIBLE
+            Log.w(TAG, "Failure Create Email Password : ${it.localizedMessage}")
+        }
+    }
+
     /**
      * Handle to passing data on second activity
      *
@@ -171,11 +213,20 @@ class SignUpActivity : AppCompatActivity() {
          * Mengirim sebuah data dengan bundles
          */
         val bundle = Bundle()
-        bundle.putString("username", username.text.toString())
-        bundle.putString("email", email.text.toString())
-        bundle.putString("password", password.text.toString())
-        bundle.putString("dateJoin", currentDateAndTime)
 
+        auth.currentUser.let {
+            bundle.putString("username", it?.displayName)
+            Log.d(TAG, it?.displayName.toString())
+
+            bundle.putString("email", it?.email)
+            Log.d(TAG, it?.email.toString())
+
+            bundle.putString("password", password.text.toString())
+            Log.d(TAG, password.text.toString())
+
+            bundle.putString("dateJoin", currentDateAndTime)
+            Log.d(TAG, currentDateAndTime)
+        }
         // ======================================= End ==================================
 
         // ====================================== Intent Main ===========================

@@ -1,7 +1,6 @@
 package com.afauzi.peoemergency.screen.main.fragment
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -17,12 +16,7 @@ import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.databinding.FragmentProfileAccountBinding
 import com.afauzi.peoemergency.screen.LandingActivity
 import com.afauzi.peoemergency.screen.auth.SignInActivity
-import com.afauzi.peoemergency.utils.FirebaseServiceInstance
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
-import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -75,47 +69,16 @@ class ProfileAccountFragment : Fragment() {
         // Code get username from database
         auth.currentUser.let {
             if (it != null) {
-                FirebaseServiceInstance.databaseReference =
-                    FirebaseServiceInstance.firebaseDatabase.getReference("users").child(it.uid)
-                FirebaseServiceInstance.databaseReference.addValueEventListener(object :
-                    ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        if (snapshot.exists()) {
-                            val gender = snapshot.child("gender").value.toString()
+                username.text = it.displayName
+                Log.i(TAG, "username: ${username.text}") // data username done
 
-                            username.text = snapshot.child("username").value.toString()
-                            Log.i(TAG, "username: ${username.text}") // data username done
+                Picasso
+                    .get()
+                    .load(it.photoUrl)
+                    .placeholder(R.drawable.boy_image_place_holder)
+                    .into(photoProfile)
+                Log.i(TAG, "photo Uri: ${it.photoUrl}") // data photo Uri done
 
-                            if (gender == "Laki-Laki") {
-                                Picasso
-                                    .get()
-                                    .load(snapshot.child("photoProfile").value.toString())
-                                    .placeholder(com.afauzi.peoemergency.R.drawable.boy_image_place_holder)
-                                    .into(photoProfile)
-                            } else {
-                                Picasso
-                                    .get()
-                                    .load(snapshot.child("photoProfile").value.toString())
-                                    .placeholder(com.afauzi.peoemergency.R.drawable.girl_image_place_holder)
-                                    .into(photoProfile)
-                            }
-                            Log.i(
-                                TAG,
-                                "Photo Profile Uri: ${snapshot.child("photoProfile").value.toString()}"
-                            ) // data username done
-                        } else {
-                            username.text = null
-                        }
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-                        Snackbar.make(
-                            binding.root,
-                            "Sorry, Error: ${error.message}",
-                            Snackbar.LENGTH_SHORT
-                        ).setBackgroundTint(Color.RED).show()
-                    }
-                })
             } else {
                 Toast.makeText(activity, "User not authentication", Toast.LENGTH_SHORT).show()
                 val intent = Intent(requireActivity(), LandingActivity::class.java)

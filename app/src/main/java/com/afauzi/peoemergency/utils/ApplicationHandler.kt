@@ -14,9 +14,9 @@ class ApplicationHandler : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        firebaseOffline()
+//        firebaseOffline()
 
-        isOnline(applicationContext)
+//        isOnline(applicationContext)
 
     }
 

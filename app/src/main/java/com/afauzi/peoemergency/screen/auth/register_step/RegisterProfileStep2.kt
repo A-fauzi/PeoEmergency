@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -48,6 +49,24 @@ class RegisterProfileStep2 : AppCompatActivity() {
         setContentView(binding.root)
         initView()
 
+        val username = intent.extras?.getString("usernameStep1")
+        Log.d(TAG, username.toString())
+
+        val gender = intent.extras?.getString("genderStep1")
+        Log.d(TAG, gender.toString())
+
+        val phone = intent.extras?.getString("phoneStep1")
+        Log.d(TAG, phone.toString())
+
+        val email = intent.extras?.getString("emailStep1")
+        Log.d(TAG, email.toString())
+
+        val password = intent.extras?.getString("passwordStep1")
+        Log.d(TAG, password.toString())
+
+        val dateJoin = intent.extras?.getString("dateJoinStep1")
+        Log.d(TAG, dateJoin.toString())
+
         tvUsername.text =
             resources.getString(R.string.hi_name, intent.extras?.getString("usernameStep1"))
     }
@@ -82,11 +101,23 @@ class RegisterProfileStep2 : AppCompatActivity() {
 
     private fun passingData(fileUri: Uri) {
         val username = intent.extras?.getString("usernameStep1")
+        Log.d(TAG, username.toString())
+
         val gender = intent.extras?.getString("genderStep1")
+        Log.d(TAG, gender.toString())
+
         val phone = intent.extras?.getString("phoneStep1")
+        Log.d(TAG, phone.toString())
+
         val email = intent.extras?.getString("emailStep1")
+        Log.d(TAG, email.toString())
+
         val password = intent.extras?.getString("passwordStep1")
+        Log.d(TAG, password.toString())
+
         val dateJoin = intent.extras?.getString("dateJoinStep1")
+        Log.d(TAG, dateJoin.toString())
+
         val imgProfileUri = fileUri.toString()
 
         btnDatePicker.setOnClickListener {

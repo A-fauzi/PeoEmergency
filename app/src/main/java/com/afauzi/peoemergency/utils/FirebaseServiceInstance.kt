@@ -13,7 +13,10 @@ object FirebaseServiceInstance {
      */
     val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
-    lateinit var user: FirebaseUser
+    /**
+     * Declaration firebase user
+     */
+    var user: FirebaseUser? = auth.currentUser
 
     /**
      * declaration for firebase realtimeDatabase plus getInstance()

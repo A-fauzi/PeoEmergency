@@ -197,14 +197,28 @@
             android:textColor="@color/pink_soft"
             android:visibility="invisible" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_register_sign_up"
-            android:layout_width="@dimen/button_width"
-            android:layout_height="wrap_content"
-            android:text="@string/txt_btn_sign_up"
-            app:cornerRadius="@dimen/button_radius"
-            android:textAllCaps="false"
-            android:enabled="false" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/progress_in_signup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:visibility="invisible"
+                android:indeterminate="true" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_register_sign_up"
+                android:layout_width="@dimen/button_width"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="@string/txt_btn_sign_up"
+                app:cornerRadius="@dimen/button_radius"
+                android:textAllCaps="false"
+                android:enabled="false" />
+        </RelativeLayout>
 
         <TextView
             android:layout_width="wrap_content"
