@@ -47,10 +47,7 @@ import com.afauzi.peoemergency.utils.Library.dialogReactions
 import com.airbnb.lottie.LottieAnimationView
 import com.cooltechworks.views.shimmer.ShimmerRecyclerView
 import com.google.android.gms.common.api.ResolvableApiException
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.LocationSettingsRequest
-import com.google.android.gms.location.LocationSettingsResponse
+import com.google.android.gms.location.*
 import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.chip.Chip
@@ -71,6 +68,7 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
 
     companion object {
         private const val TAG = "HomeFragment"
+        private const val REQUEST_CHECK_SETTINGS = 12345
     }
 
     private lateinit var layout: View
@@ -90,6 +88,7 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
 
     private lateinit var locationManager: LocationManager
     private var gpsStatus = false
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     private lateinit var rvPostRandom: ShimmerRecyclerView
     private lateinit var listRandomPost: ArrayList<ModelItemRandomPost>
@@ -138,6 +137,9 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
 
         // Chcek GPS Status
         checkGpsStatus()
+
+        // Current Location
+        getCurrentLocation()
 
         // Get List Post
         recyclerViewListRandPost()
@@ -251,40 +253,50 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
         gpsStatus = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
         if (gpsStatus) {
             Log.i(TAG, "GPS Is enabled")
-            getCurrentLocation()
+            Toast.makeText(activity, "Location GPS Is Active", Toast.LENGTH_SHORT).show()
         } else {
             Log.w(TAG, "GPS Is Not enabled")
             turnOnGPS()
         }
     }
+
     /**
      * Enable gps system
      */
     private fun turnOnGPS() {
         val locationRequest = LocationRequest.create().apply {
-            interval = 5000
-            fastestInterval = 2000
+            interval = 2000
+            fastestInterval = 1000
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
         val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
-        val settingsClient = LocationServices.getSettingsClient(requireActivity())
-        val task: Task<LocationSettingsResponse> = settingsClient.checkLocationSettings(builder.build())
+        val settingsClient: SettingsClient = LocationServices.getSettingsClient(requireActivity())
+        val task: Task<LocationSettingsResponse> =
+            settingsClient.checkLocationSettings(builder.build())
         task.addOnSuccessListener {
-
+            Log.d(TAG, "Location Settings State : ${it.locationSettingsStates}")
         }
         task.addOnFailureListener {
             if (it is ResolvableApiException) {
                 try {
-                    it.startResolutionForResult(requireActivity(), 12345)
-                }catch (sendEx: IntentSender.SendIntentException){}
+                    it.startResolutionForResult(requireActivity(), REQUEST_CHECK_SETTINGS)
+                } catch (sendEx: IntentSender.SendIntentException) {
+                }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        Log.d("onResume", gpsStatus.toString())
     }
 
 
     private fun getCurrentLocation() {
         // Get current location
-        val mFusedLocation = LocationServices.getFusedLocationProviderClient(requireActivity())
+        fusedLocationProviderClient =
+            LocationServices.getFusedLocationProviderClient(requireActivity())
         if (ActivityCompat.checkSelfPermission(
                 requireActivity(),
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -293,66 +305,94 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
             return
         }
-        mFusedLocation.lastLocation.addOnSuccessListener(requireActivity()) { location ->
+        fusedLocationProviderClient.lastLocation.addOnSuccessListener(requireActivity()) { location ->
             val latitude = location?.latitude
             val longitude = location?.longitude
             val locationCoordinate = "$latitude, $longitude"
+            Log.d(TAG, "Location Coordinate $locationCoordinate")
 
-            val geocoder = Geocoder(requireActivity(), Locale.getDefault())
-            val address: Address
+            if (latitude != null && longitude != null) {
+                Log.d(TAG, "Location Coordinate $locationCoordinate")
 
-            val addresses: List<Address> = geocoder.getFromLocation(latitude!!, longitude!!, 1)
+                val geocoder = Geocoder(requireActivity(), Locale.getDefault())
+                val address: Address
+                val addresses: List<Address> = geocoder.getFromLocation(latitude, longitude, 1)
 
-            address = addresses[0]
-            val fullAddress = address.getAddressLine(0)
-            val subDistrict = address.locality
-            val province = address.adminArea
-            val country = address.countryName
-            val postalCode = address.postalCode
-            val knownName = address.featureName
-            val urbanVillage = address.subLocality
-            val countryCode = address.countryCode
-            val districtOrRegency = address.subAdminArea
-            val streetName = address.thoroughfare
+                address = addresses[0]
+                val fullAddress = address.getAddressLine(0)
+                val subDistrict = address.locality
+                val province = address.adminArea
+                val country = address.countryName
+                val postalCode = address.postalCode
+                val knownName = address.featureName
+                val urbanVillage = address.subLocality
+                val countryCode = address.countryCode
+                val districtOrRegency = address.subAdminArea
+                val streetName = address.thoroughfare
 
-            Log.i(TAG, "Urban Village(Kelurahan): $urbanVillage")
-            Log.i(TAG, "Country Code(Code Negara): $countryCode")
-            Log.i(TAG, "Phone: ${address.phone}")
-            Log.i(TAG, "Premises: ${address.premises}")
-            Log.i(TAG, "District/Regency(Kota/Kabupaten): $districtOrRegency")
-            Log.i(TAG, "subThoroughfare: ${address.subThoroughfare}")
-            Log.i(TAG, "Street Name(Nama Jalan): $streetName")
-            Log.i(TAG, "Url: ${address.url}")
-            Log.i(TAG, "Max Address: ${address.maxAddressLineIndex}")
-            Log.i(TAG, "Address: $address")
-            Log.i(TAG, "Address: $addresses")
-            Log.i(TAG, "=======================================================================")
+                Log.i(TAG, "Urban Village(Kelurahan): $urbanVillage")
+                Log.i(TAG, "Country Code(Code Negara): $countryCode")
+                Log.i(TAG, "Phone: ${address.phone}")
+                Log.i(TAG, "Premises: ${address.premises}")
+                Log.i(TAG, "District/Regency(Kota/Kabupaten): $districtOrRegency")
+                Log.i(TAG, "subThoroughfare: ${address.subThoroughfare}")
+                Log.i(TAG, "Street Name(Nama Jalan): $streetName")
+                Log.i(TAG, "Url: ${address.url}")
+                Log.i(TAG, "Max Address: ${address.maxAddressLineIndex}")
+                Log.i(TAG, "Address: $address")
+                Log.i(TAG, "Address: $addresses")
+                Log.i(
+                    TAG,
+                    "======================================================================="
+                )
 
-            Log.i(TAG, "FullAddress(Alamat Lengkap): $fullAddress")
-            Log.i(TAG, "Sub-District(Kecamatan): $subDistrict")
-            Log.i(TAG, "Province(Provinsi): $province")
-            Log.i(TAG, "Country(Negara): $country")
-            Log.i(TAG, "postal code(Kode Wilayah): $postalCode")
-            Log.i(TAG, "knowName: $knownName")
+                Log.i(TAG, "FullAddress(Alamat Lengkap): $fullAddress")
+                Log.i(TAG, "Sub-District(Kecamatan): $subDistrict")
+                Log.i(TAG, "Province(Provinsi): $province")
+                Log.i(TAG, "Country(Negara): $country")
+                Log.i(TAG, "postal code(Kode Wilayah): $postalCode")
+                Log.i(TAG, "knowName: $knownName")
 
-            storeDataLocation(fullAddress, subDistrict, province, country, locationCoordinate, urbanVillage, countryCode, districtOrRegency, streetName)
+                storeDataLocation(
+                    fullAddress,
+                    subDistrict,
+                    province,
+                    country,
+                    locationCoordinate = locationCoordinate,
+                    urbanVillage,
+                    countryCode,
+                    districtOrRegency,
+                    streetName
+                )
+
+            } else {
+                Log.d(TAG, "Location Coordinate $locationCoordinate")
+            }
+
 
         }
 
     }
 
     private fun storeDataLocation(
-        fullAddress: String,
-        subDistrict: String,
-        province: String,
-        country: String,
+        fullAddress: String ,
+        subDistrict: String ,
+        province: String ,
+        country: String ,
         locationCoordinate: String,
-        urbanVillage: String,
-        countryCode: String,
-        districtOrRegency: String,
-        streetName: String,
+        urbanVillage: String ,
+        countryCode: String ,
+        districtOrRegency: String ,
+        streetName: String ,
     ) {
         val uid = auth.currentUser!!.uid
         databaseReference =
@@ -398,10 +438,15 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
                 databaseReference.addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         if (snapshot.exists()) {
-                            val streetName  = snapshot.child("currentLocation").child("streetName").value.toString()
-                            val urbanVillage  = snapshot.child("currentLocation").child("urbanVillage").value.toString()
+                            val streetName = snapshot.child("currentLocation")
+                                .child("streetName").value.toString()
+                            val urbanVillage = snapshot.child("currentLocation")
+                                .child("urbanVillage").value.toString()
                             currentLocation.text = "$streetName, $urbanVillage..."
-                            Log.i(TAG, "current location: ${currentLocation.text}") // data location done
+                            Log.i(
+                                TAG,
+                                "current location: ${currentLocation.text}"
+                            ) // data location done
 
                         } else {
                             // Code not exist data
@@ -523,14 +568,21 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
                             val uid = auth.currentUser!!.uid
                             val randStr = randomString(25)
 
-                            databaseReference = firebaseDatabase.getReference("postRandom").child(randStr)
+                            databaseReference =
+                                firebaseDatabase.getReference("postRandom").child(randStr)
 
                             Log.i(TAG, "dataPostUid: $uid")
                             Log.i(TAG, "dataPostUsername: ${username.text}")
                             Log.i(TAG, "dataPostPhotoProfile: $photoProfileUri")
                             Log.i(TAG, "dataPostImage: $photoPostUriToDatabase")
-                            Log.i(TAG, "dataPostLocCoordinate: ${snapshot.child("locationCoordinate").value.toString()}")
-                            Log.i(TAG, "dataPostLocCityName: ${snapshot.child("fullAddress").value.toString()}")
+                            Log.i(
+                                TAG,
+                                "dataPostLocCoordinate: ${snapshot.child("locationCoordinate").value.toString()}"
+                            )
+                            Log.i(
+                                TAG,
+                                "dataPostLocCityName: ${snapshot.child("fullAddress").value.toString()}"
+                            )
                             Log.i(TAG, "dataPostText: ${inputContentDescPost.text}")
                             Log.i(TAG, "dataPostDate: $currentDateAndTime")
                             Log.i(TAG, "dataPostId: $randStr")
@@ -541,8 +593,10 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
                             hashMap["username"] = user?.displayName.toString()
                             hashMap["photoProfile"] = user?.photoUrl.toString()
                             hashMap["photoPost"] = photoPostUriToDatabase
-                            hashMap["postLocationCoordinate"] = snapshot.child("locationCoordinate").value.toString()
-                            hashMap["postLocationName"] = snapshot.child("districtOrRegency").value.toString()
+                            hashMap["postLocationCoordinate"] =
+                                snapshot.child("locationCoordinate").value.toString()
+                            hashMap["postLocationName"] =
+                                snapshot.child("districtOrRegency").value.toString()
                             hashMap["postText"] = inputContentDescPost.text.toString()
                             hashMap["postDate"] =
                                 "${SimpleDateFormat("dd MMM yyyy | HH:mm:ss zzz").format(Date(System.currentTimeMillis()))}"
@@ -600,7 +654,8 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
     private fun recyclerViewListRandPost() {
         rvPostRandom = binding.rvPostRandom
         rvPostRandom.setHasFixedSize(true)
-        rvPostRandom.layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
+        rvPostRandom.layoutManager =
+            LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
 
         listRandomPost = arrayListOf<ModelItemRandomPost>()
 
@@ -616,7 +671,10 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
                         animationView.visibility = View.INVISIBLE
                         rvPostRandom.visibility = View.VISIBLE
 
-                        Log.d(TAG, "=============================DATA POST ${list.username}===============================")
+                        Log.d(
+                            TAG,
+                            "=============================DATA POST ${list.username}==============================="
+                        )
                         Log.i(TAG, "post id: ${list.postId}")
                         Log.i(TAG, "post list size: ${listRandomPost.size}")
 
@@ -667,7 +725,8 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
     }
 
     private fun getCountReactPost(postId: String) {
-        databaseReference = firebaseDatabase.getReference("postRandom").child(postId).child("userReact")
+        databaseReference =
+            firebaseDatabase.getReference("postRandom").child(postId).child("userReact")
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val size: String = snapshot.childrenCount.toString()
@@ -712,7 +771,20 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
         deletePostBottomSheet.setOnClickListener {
             dialog.dismiss()
             Log.i(TAG, "delete post in post id : $postId")
-            databaseReference = firebaseDatabase.getReference("postRandom").child(postId).child("userReplyPost")
+            databaseReference =
+                firebaseDatabase.getReference("postRandom").child(postId).child("userReplyPost")
+            databaseReference.removeValue().addOnCompleteListener { removeSubChildPostId ->
+                if (removeSubChildPostId.isSuccessful) {
+                    databaseReference = firebaseDatabase.getReference("postRandom").child(postId)
+                    databaseReference.removeValue().addOnCompleteListener { removeChildPostId ->
+                        if (removeChildPostId.isSuccessful) {
+                            Toast.makeText(activity, "Post Deleted", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+            databaseReference =
+                firebaseDatabase.getReference("postRandom").child(postId).child("userReact")
             databaseReference.removeValue().addOnCompleteListener { removeSubChildPostId ->
                 if (removeSubChildPostId.isSuccessful) {
                     databaseReference = firebaseDatabase.getReference("postRandom").child(postId)
