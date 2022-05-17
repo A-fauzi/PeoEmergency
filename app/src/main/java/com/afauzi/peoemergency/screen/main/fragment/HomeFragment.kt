@@ -523,29 +523,23 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
                             val uid = auth.currentUser!!.uid
                             val randStr = randomString(25)
 
-                            databaseReference =
-                                firebaseDatabase.getReference("postRandom").child(randStr)
+                            databaseReference = firebaseDatabase.getReference("postRandom").child(randStr)
 
                             Log.i(TAG, "dataPostUid: $uid")
                             Log.i(TAG, "dataPostUsername: ${username.text}")
                             Log.i(TAG, "dataPostPhotoProfile: $photoProfileUri")
                             Log.i(TAG, "dataPostImage: $photoPostUriToDatabase")
-                            Log.i(
-                                TAG,
-                                "dataPostLocCoordinate: ${snapshot.child("locationCoordinate").value.toString()}"
-                            )
-                            Log.i(
-                                TAG,
-                                "dataPostLocCityName: ${snapshot.child("fullAddress").value.toString()}"
-                            )
+                            Log.i(TAG, "dataPostLocCoordinate: ${snapshot.child("locationCoordinate").value.toString()}")
+                            Log.i(TAG, "dataPostLocCityName: ${snapshot.child("fullAddress").value.toString()}")
                             Log.i(TAG, "dataPostText: ${inputContentDescPost.text}")
                             Log.i(TAG, "dataPostDate: $currentDateAndTime")
                             Log.i(TAG, "dataPostId: $randStr")
 
                             val hashMap: HashMap<String, String> = HashMap()
+                            val user = auth.currentUser
                             hashMap["userId"] = uid
-                            hashMap["username"] = username.text.toString()
-                            hashMap["photoProfile"] = photoProfileUri
+                            hashMap["username"] = user?.displayName.toString()
+                            hashMap["photoProfile"] = user?.photoUrl.toString()
                             hashMap["photoPost"] = photoPostUriToDatabase
                             hashMap["postLocationCoordinate"] = snapshot.child("locationCoordinate").value.toString()
                             hashMap["postLocationName"] = snapshot.child("districtOrRegency").value.toString()
@@ -605,9 +599,10 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
 
     private fun recyclerViewListRandPost() {
         rvPostRandom = binding.rvPostRandom
-        listRandomPost = arrayListOf()
         rvPostRandom.setHasFixedSize(true)
         rvPostRandom.layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
+
+        listRandomPost = arrayListOf<ModelItemRandomPost>()
 
         databaseReference = firebaseDatabase.getReference("postRandom")
         databaseReference.addValueEventListener(object : ValueEventListener {
@@ -617,20 +612,23 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
                     for (listRandPost in snapshot.children.sortedByDescending { it.child("postDate").value.toString() }) {
                         val list = listRandPost.getValue(ModelItemRandomPost::class.java)
                         listRandomPost.add(list!!)
+
                         animationView.visibility = View.INVISIBLE
                         rvPostRandom.visibility = View.VISIBLE
 
-                        Log.i("postId", "${list.postId}")
+                        Log.d(TAG, "=============================DATA POST ${list.username}===============================")
+                        Log.i(TAG, "post id: ${list.postId}")
+                        Log.i(TAG, "post list size: ${listRandomPost.size}")
+                        getCountCommentPost(list.postId.toString())
 
-                        postId = list.postId
-                        Log.i(TAG, "post id: $postId")
-                        getCountCommentPost(postId.toString())
+
 //                        getCountReactPost(postId.toString())
                     }
                     rvPostRandom.adapter = AdapterListRandPost(this@HomeFragment, listRandomPost)
                 } else {
                     animationView.visibility = View.VISIBLE
                     rvPostRandom.visibility = View.GONE
+                    Log.d(TAG, "Data List Random Post: ${listRandomPost.size}")
                 }
             }
 
@@ -716,19 +714,16 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
         deletePostBottomSheet.setOnClickListener {
             dialog.dismiss()
             Log.i(TAG, "delete post in post id : $postId")
-            databaseReference = firebaseDatabase.getReference("postRandom").child(postId)
-            databaseReference.removeValue().addOnCompleteListener { removeResult ->
-                if (removeResult.isSuccessful) {
-                    Toast.makeText(activity, "post success deleted", Toast.LENGTH_SHORT).show()
-                    Log.i(TAG, "Success delete post")
-                } else {
-                    Log.i(
-                        TAG,
-                        "Not Success delete post: ${removeResult.exception?.localizedMessage}"
-                    )
+            databaseReference = firebaseDatabase.getReference("postRandom").child(postId).child("userReplyPost")
+            databaseReference.removeValue().addOnCompleteListener { removeSubChildPostId ->
+                if (removeSubChildPostId.isSuccessful) {
+                    databaseReference = firebaseDatabase.getReference("postRandom").child(postId)
+                    databaseReference.removeValue().addOnCompleteListener { removeChildPostId ->
+                        if (removeChildPostId.isSuccessful) {
+                            Toast.makeText(activity, "Post Deleted", Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 }
-            }.addOnFailureListener { e ->
-                Log.i(TAG, "Failure remove post: ${e.localizedMessage}")
             }
         }
 

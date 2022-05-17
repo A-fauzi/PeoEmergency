@@ -30,14 +30,14 @@ class AdapterListRandPost(
 
         with(holder) {
             with(listItemRandomPost[position]) {
+
                 binding.itemName.text = username
                 binding.itemLocationPost.text = postLocationName
                 binding.itemDescriptionPost.text = postText
                 binding.itemDatePost.text = postDate
                 binding.itemTvCountComment.text = countCommentPostUser
 
-//                Picasso.get().load(photoProfile).placeholder(R.drawable.person_place_holder)
-//                    .into(binding.itemPhotoProfile)
+                Picasso.get().load(photoProfile).placeholder(R.drawable.person_place_holder).into(binding.itemPhotoProfile)
 
                 if (photoPost == null || photoPost == "") {
                     binding.itemImagePost.setImageResource(0)

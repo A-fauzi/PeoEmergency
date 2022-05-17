@@ -186,7 +186,7 @@
             <com.cooltechworks.views.shimmer.ShimmerRecyclerView
                 android:id="@+id/rv_post_random"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginTop="16dp"
                 tools:listitem="@layout/item_list_random_post" />
         </FrameLayout>
