@@ -69,6 +69,7 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
     companion object {
         private const val TAG = "HomeFragment"
         private const val REQUEST_CHECK_SETTINGS = 12345
+        private const val CHANNEL_ID = "10"
     }
 
     private lateinit var layout: View
@@ -246,7 +247,6 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
             )
         }
     }
-
 
     private fun checkGpsStatus() {
         locationManager = context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -849,7 +849,7 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
             if (data.photoPost != "" || data.photoPost != null) {
                 bundle.putString("photoPosting", "${data.photoPost}")
             }
-            bundle.putString("datePosting", "${data.postDate}")
+            bundle.putString("datePosting", "${data.postDate }")
 
             val intent = Intent(requireActivity(), CommentPostRandomActivity::class.java)
             intent.putExtras(bundle)

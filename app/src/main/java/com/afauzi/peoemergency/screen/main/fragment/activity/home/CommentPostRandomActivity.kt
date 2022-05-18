@@ -1,5 +1,11 @@
 package com.afauzi.peoemergency.screen.main.fragment.activity.home
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Intent
+import android.media.MediaPlayer
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -8,6 +14,9 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.adapter.AdapterListReplyPost
@@ -52,6 +61,12 @@ class CommentPostRandomActivity : AppCompatActivity(), AdapterListReplyPost.Call
 
     // Get data post
     private var postId: String? = null
+    private var usernamePost: String? = null
+    private var userIdPost: String? = null
+    private var photoProfilePost: String? = null
+    private var textPost: String? = null
+    private var photoPost: String? = null
+    private var datePost: String? = null
 
     private fun initView() {
         imageProfile = binding.ivDetailProfileUserPostRandom
@@ -96,23 +111,23 @@ class CommentPostRandomActivity : AppCompatActivity(), AdapterListReplyPost.Call
             photoProfileCurrentUserDataBundle = intent.extras?.getString("photoProfileCurrentUser")
             usernameCurrentUserDataBundle = intent.extras?.getString("usernameCurrentUser")
 
-            val username = intent.extras?.getString("username")
-            Log.i(TAG, username.toString())
+            usernamePost = intent.extras?.getString("username")
+            Log.i(TAG, usernamePost.toString())
 
-            val userId = intent.extras?.getString("userId")
-            Log.i(TAG, userId.toString())
+            userIdPost = intent.extras?.getString("userId")
+            Log.i(TAG, userIdPost.toString())
 
-            val photoProfile = intent.extras?.getString("photoProfile")
-            Log.i(TAG, photoProfile.toString())
+            photoProfilePost = intent.extras?.getString("photoProfile")
+            Log.i(TAG, photoProfilePost.toString())
 
-            val textPost = intent.extras?.getString("textPost")
+            textPost = intent.extras?.getString("textPost")
             Log.i(TAG, textPost.toString())
 
             postId = intent.extras?.getString("postId")
             Log.i(TAG, postId.toString())
 
-            val photoPosting = intent.extras?.getString("photoPosting")
-            val datePost = intent.extras?.getString("datePosting")
+            photoPost = intent.extras?.getString("photoPosting")
+            datePost = intent.extras?.getString("datePosting")
 
 
             Picasso
@@ -123,19 +138,19 @@ class CommentPostRandomActivity : AppCompatActivity(), AdapterListReplyPost.Call
 
             Picasso
                 .get()
-                .load(photoProfile)
+                .load(photoProfilePost)
                 .placeholder(R.drawable.person_place_holder)
                 .into(imageProfile)
-            tvUsername.text = username
+            tvUsername.text = usernamePost
             tvPostDate.text = datePost
             tvPostText.text = textPost
 
-            if (photoPosting == null || photoPosting == "") {
+            if (photoPost == null || photoPost == "") {
                 ivPostImage.visibility = View.GONE
             } else {
                 Picasso
                     .get()
-                    .load(photoPosting)
+                    .load(photoPost)
                     .resize(500, 500)
                     .centerCrop()
                     .placeholder(R.drawable.image_post_place_holder)
@@ -183,6 +198,7 @@ class CommentPostRandomActivity : AppCompatActivity(), AdapterListReplyPost.Call
         databaseReference.setValue(hashMap).addOnCompleteListener { replyPostResult ->
             if (replyPostResult.isSuccessful) {
                 Log.i(TAG, "Reply post success saved in database")
+                showNotification("New message", "$usernameCurrentUserDataBundle Komentar disebuah postingan milik $usernamePost  ")
             } else {
                 Log.i(
                     TAG,
@@ -239,6 +255,52 @@ class CommentPostRandomActivity : AppCompatActivity(), AdapterListReplyPost.Call
 
     override fun onClickRemove(data: ModelItemRandomPost) {
         TODO("Not yet implemented")
+    }
+
+    private fun showNotification(contentTitle: String, contentText: String) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel("n", "n", NotificationManager.IMPORTANCE_DEFAULT)
+            val manager =
+                ContextCompat.getSystemService(this, NotificationManager::class.java)
+            manager?.createNotificationChannel(channel)
+            val builder: NotificationCompat.Builder = NotificationCompat.Builder(this, "n")
+                .setContentTitle(contentTitle)
+                .setContentText(contentText)
+                .setSmallIcon(R.drawable.sample_logo)
+                .setAutoCancel(true)
+            val managerCompat = NotificationManagerCompat.from(this)
+            val mediaPlayer: MediaPlayer = MediaPlayer.create(this, R.raw.notify_music)
+            mediaPlayer.start()
+
+            // ============= this is click event for notification to open application =================//
+
+            val bundle = Bundle()
+            // Data CurrentUser
+            bundle.putString("photoProfileCurrentUser", photoProfileCurrentUserDataBundle)
+            bundle.putString("usernameCurrentUser", usernameCurrentUserDataBundle)
+
+            bundle.putString("username", "$usernamePost")
+            bundle.putString("userId", "$userIdPost")
+            bundle.putString("photoProfile", "$photoProfilePost")
+            bundle.putString("textPost", "$textPost")
+            bundle.putString("postId", "$postId")
+            bundle.putString("photoPosting", "$photoPost")
+            bundle.putString("datePosting", "$datePost")
+
+            val intenNotification = Intent(this, CommentPostRandomActivity::class.java)
+            intenNotification.putExtras(bundle)
+
+            val contentIntent = PendingIntent.getActivity(
+                this,
+                0,
+                intenNotification,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
+            builder.setContentIntent(contentIntent)
+
+            //======================================================================================
+            managerCompat.notify(999, builder.build())
+        }
     }
 
 
