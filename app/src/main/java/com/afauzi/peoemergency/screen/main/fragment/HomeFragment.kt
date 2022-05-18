@@ -31,7 +31,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.adapter.AdapterListRandPost
+import com.afauzi.peoemergency.adapter.AdapterListUserReact
 import com.afauzi.peoemergency.data_model.ModelItemRandomPost
+import com.afauzi.peoemergency.data_model.ModelReactPost
 import com.afauzi.peoemergency.databinding.FragmentHomeBinding
 import com.afauzi.peoemergency.screen.LandingActivity
 import com.afauzi.peoemergency.screen.auth.register_step.RegisterProfileStep2
@@ -93,6 +95,10 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
 
     private lateinit var rvPostRandom: ShimmerRecyclerView
     private lateinit var listRandomPost: ArrayList<ModelItemRandomPost>
+
+    private lateinit var rvUserReact: ShimmerRecyclerView
+    private lateinit var listUserReact: ArrayList<ModelReactPost>
+
     private lateinit var animationView: LottieAnimationView
     private var fillPath: Uri? = null
     private var postId: String? = null
@@ -868,6 +874,47 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
             currentUser?.displayName.toString(),
             currentUser?.photoUrl.toString()
         )
+    }
+
+    override fun onClickListenerListUserReact(data: ModelItemRandomPost) {
+        Log.d(TAG, "Clicked post milik ${data.username}")
+        Log.d(TAG, "Jumlah React ${data.countReactPostUser}")
+
+        val view: View = layoutInflater.inflate(R.layout.bottom_sheet_user_react, null)
+
+        val tvCount = view.findViewById<TextView>(R.id.tv_count_react_bottom_sheet)
+        tvCount.text = data.countReactPostUser
+
+        rvUserReact = view.findViewById(R.id.rv_list_user_reactions)
+        rvUserReact.setHasFixedSize(true)
+        rvUserReact.layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
+        listUserReact = arrayListOf<ModelReactPost>()
+
+        databaseReference = firebaseDatabase.getReference("postRandom").child(data.postId.toString()).child("userReact")
+        databaseReference.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    listUserReact.clear()
+                    for (listReact in snapshot.children){
+                        val list = listReact.getValue(ModelReactPost::class.java)
+                        listUserReact.add(list!!)
+                        rvUserReact.visibility = View.VISIBLE
+                    }
+                    rvUserReact.adapter = AdapterListUserReact(listUserReact)
+                } else {
+                    rvUserReact.visibility = View.INVISIBLE
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
+
+        val dialog = BottomSheetDialog(requireActivity())
+        dialog.setContentView(view)
+        dialog.show()
     }
 
     override fun onClickListenerPostShare(data: ModelItemRandomPost) {

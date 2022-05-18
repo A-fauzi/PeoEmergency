@@ -93,6 +93,9 @@ class AdapterListRandPost(
                 binding.itemToReactionsPost.setOnClickListener {
                     callClickListener.onClickListenerPostReact(listItemRandomPost[position])
                 }
+                binding.itemTvCountReact.setOnClickListener {
+                    callClickListener.onClickListenerListUserReact(listItemRandomPost[position])
+                }
             }
         }
 
@@ -107,6 +110,7 @@ class AdapterListRandPost(
         fun onClickListenerImageView(data: ModelItemRandomPost)
         fun onClickListenerPostReply(data: ModelItemRandomPost)
         fun onClickListenerPostReact(data: ModelItemRandomPost)
+        fun onClickListenerListUserReact(data: ModelItemRandomPost)
         fun onClickListenerPostShare(data: ModelItemRandomPost)
         fun onClickListenerPostMore(data: ModelItemRandomPost)
         fun onLongClickListener(data: ModelItemRandomPost)

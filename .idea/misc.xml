@@ -55,6 +55,7 @@
         <entry key="..\:/Users/akhma/Development/project android/Exercise/PeoEmergency/app/src/main/res/layout/activity_register_profile_step2.xml" value="0.25" />
         <entry key="..\:/Users/akhma/Development/project android/Exercise/PeoEmergency/app/src/main/res/layout/activity_sign_up.xml" value="0.17592592592592593" />
         <entry key="..\:/Users/akhma/Development/project android/Exercise/PeoEmergency/app/src/main/res/layout/activity_signin.xml" value="0.18" />
+        <entry key="..\:/Users/akhma/Development/project android/Exercise/PeoEmergency/app/src/main/res/layout/bottom_sheet_user_react.xml" value="0.19414414414414413" />
         <entry key="..\:/Users/akhma/Development/project android/Exercise/PeoEmergency/app/src/main/res/layout/dialog_errors.xml" value="0.19414414414414413" />
         <entry key="..\:/Users/akhma/Development/project android/Exercise/PeoEmergency/app/src/main/res/layout/dialog_post.xml" value="0.22" />
         <entry key="..\:/Users/akhma/Development/project android/Exercise/PeoEmergency/app/src/main/res/layout/dialog_reactions.xml" value="0.17592592592592593" />
@@ -67,6 +68,8 @@
         <entry key="..\:/Users/akhma/Development/project android/Exercise/PeoEmergency/app/src/main/res/layout/item_list_note.xml" value="0.22447916666666667" />
         <entry key="..\:/Users/akhma/Development/project android/Exercise/PeoEmergency/app/src/main/res/layout/item_list_random_post.xml" value="0.22" />
         <entry key="..\:/Users/akhma/Development/project android/Exercise/PeoEmergency/app/src/main/res/layout/item_list_reply_comment.xml" value="0.25" />
+        <entry key="..\:/Users/akhma/Development/project android/Exercise/PeoEmergency/app/src/main/res/layout/item_list_user_react.xml" value="0.19414414414414413" />
+        <entry key="..\:/Users/akhma/Development/project android/Exercise/PeoEmergency/app/src/main/res/layout/item_list_user_reactions.xml" value="0.17592592592592593" />
         <entry key="..\:/Users/akhma/Development/project android/Exercise/PeoEmergency/app/src/main/res/layout/modal_bottom_sheet_post_random.xml" value="0.19414414414414413" />
         <entry key="..\:/Users/akhma/Development/project android/Exercise/PeoEmergency/app/src/main/res/menu/account_more_menu.xml" value="0.19414414414414413" />
         <entry key="..\:/Users/akhma/Development/project android/Exercise/PeoEmergency/app/src/main/res/menu/bottom_nav_menu.xml" value="0.19414414414414413" />
