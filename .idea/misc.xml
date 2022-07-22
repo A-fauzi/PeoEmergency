@@ -75,10 +75,18 @@
         <entry key="..\:/Users/akhma/Development/project android/Exercise/PeoEmergency/app/src/main/res/menu/bottom_nav_menu.xml" value="0.19414414414414413" />
         <entry key="..\:/Users/akhma/Development/project android/Exercise/PeoEmergency/app/src/main/res/menu/post_more_menu.xml" value="0.19414414414414413" />
         <entry key="..\:/Users/akhma/Development/project android/Exercise/PeoEmergency/app/src/main/res/xml/style.xml" value="0.19414414414414413" />
+        <entry key="app/src/main/res/drawable/ic_edit.xml" value="0.1775" />
+        <entry key="app/src/main/res/layout/activity_comment_post_random.xml" value="0.19375" />
+        <entry key="app/src/main/res/layout/activity_edit_profile.xml" value="0.19375" />
+        <entry key="app/src/main/res/layout/activity_sign_up.xml" value="0.175" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_profile_account.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/item_list_reply_comment.xml" value="0.19375" />
+        <entry key="app/src/main/res/menu/account_more_menu.xml" value="0.19375" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="JDK" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

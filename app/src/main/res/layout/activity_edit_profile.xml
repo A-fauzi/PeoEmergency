@@ -1,8 +1,215 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="@dimen/root_view_padding"
     tools:context=".screen.main.fragment.activity.account_profile.EditProfileActivity">
 
-</FrameLayout>
+<!--  container 1  -->
+    <RelativeLayout
+        android:id="@+id/container1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="25dp"
+            android:elevation="0dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/iv_arrow_back"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:src="@drawable/ic_baseline_keyboard_arrow_left_24" />
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+<!--  container 2  -->
+    <RelativeLayout
+        android:id="@+id/container2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/container1"
+        app:layout_constraintStart_toStartOf="@id/container1"
+        app:layout_constraintEnd_toEndOf="@id/container1">
+
+       <FrameLayout
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_centerHorizontal="true">
+
+           <androidx.cardview.widget.CardView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_margin="8dp"
+               app:cardCornerRadius="25dp"
+               android:elevation="0dp">
+
+               <de.hdodenhof.circleimageview.CircleImageView
+                   android:id="@+id/iv_photo_profile_update"
+                   android:layout_width="100dp"
+                   android:layout_height="100dp"
+                   android:clickable="true"
+                   android:focusable="true"
+                   android:foreground="?attr/selectableItemBackground"
+                   android:src="@drawable/sample_logo" />
+           </androidx.cardview.widget.CardView>
+
+           <androidx.cardview.widget.CardView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_margin="8dp"
+               app:cardCornerRadius="25dp"
+               android:elevation="0dp">
+
+               <de.hdodenhof.circleimageview.CircleImageView
+                   android:id="@+id/iv_upload_prfile_update"
+                   android:layout_width="25dp"
+                   android:layout_height="25dp"
+                   android:clickable="true"
+                   android:focusable="true"
+                   android:foreground="?attr/selectableItemBackground"
+                   android:src="@drawable/ic_camera_capture" />
+           </androidx.cardview.widget.CardView>
+       </FrameLayout>
+    </RelativeLayout>
+<!--  container 3 "form"  -->
+    <LinearLayout
+        android:id="@+id/container3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/container2"
+        app:layout_constraintStart_toStartOf="@id/container2"
+        app:layout_constraintEnd_toEndOf="@id/container2">
+
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextFieldUsernameUpdate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:boxCornerRadiusBottomEnd="20dp"
+            app:boxCornerRadiusBottomStart="20dp"
+            app:boxCornerRadiusTopEnd="20dp"
+            app:boxCornerRadiusTopStart="20dp"
+            app:hintTextColor="@color/black"
+            android:hint="@string/txt_input_hint_username"
+            app:endIconMode="custom"
+            app:endIconDrawable="@drawable/ic_edit"
+            app:endIconCheckable="true"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_username_sign_up"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextFieldEmailUpdate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxCornerRadiusBottomEnd="20dp"
+            app:boxCornerRadiusBottomStart="20dp"
+            app:boxCornerRadiusTopEnd="20dp"
+            app:boxCornerRadiusTopStart="20dp"
+            app:hintTextColor="@color/black"
+            android:hint="@string/txt_input_hint_email"
+            app:endIconMode="custom"
+            app:endIconDrawable="@drawable/ic_edit"
+            app:endIconCheckable="true"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_email_sign_up"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:inputType="textEmailAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextFieldPassUpdate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxCornerRadiusBottomEnd="20dp"
+            app:boxCornerRadiusBottomStart="20dp"
+            app:boxCornerRadiusTopEnd="20dp"
+            app:boxCornerRadiusTopStart="20dp"
+            app:hintTextColor="@color/black"
+            android:hint="@string/txt_input_hint_password"
+            app:endIconMode="custom"
+            app:endIconDrawable="@drawable/ic_edit"
+            app:endIconCheckable="true"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_password_sign_up"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:inputType="textPassword"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextFieldPassConfirmUpdate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxCornerRadiusBottomEnd="20dp"
+            app:boxCornerRadiusBottomStart="20dp"
+            app:boxCornerRadiusTopEnd="20dp"
+            app:boxCornerRadiusTopStart="20dp"
+            app:hintTextColor="@color/black"
+            android:hint="@string/txt_input_hint_pass_conf"
+            app:endIconMode="custom"
+            app:endIconDrawable="@drawable/ic_edit"
+            app:endIconCheckable="true"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_password_confirm_sign_up"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+<!--  container 4  -->
+    <RelativeLayout
+        android:id="@+id/container4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="@id/container3"
+        app:layout_constraintTop_toBottomOf="@id/container3"
+        app:layout_constraintEnd_toEndOf="@id/container3">
+
+        <TextView
+            android:id="@+id/tv_date_join"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="date join" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_update_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="update"
+            app:cornerRadius="25dp"/>
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

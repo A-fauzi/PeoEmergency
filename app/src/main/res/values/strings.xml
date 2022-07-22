@@ -102,4 +102,5 @@
     <string name="emotion_love">&#x2764;</string>
     <string name="emotion_angry">&#x1f621;</string>
     <string name="iv_ic_reaction">iv_ic_reaction</string>
+    <string name="update_profile">Update</string>
 </resources>

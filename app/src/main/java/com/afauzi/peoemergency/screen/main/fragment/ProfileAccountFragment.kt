@@ -16,6 +16,7 @@ import com.afauzi.peoemergency.R
 import com.afauzi.peoemergency.databinding.FragmentProfileAccountBinding
 import com.afauzi.peoemergency.screen.LandingActivity
 import com.afauzi.peoemergency.screen.auth.SignInActivity
+import com.afauzi.peoemergency.screen.main.fragment.activity.account_profile.EditProfileActivity
 import com.afauzi.peoemergency.utils.FirebaseServiceInstance.auth
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
@@ -100,6 +101,9 @@ class ProfileAccountFragment : Fragment() {
                             activity?.finish()
                         }
                     }
+                }
+                R.id.update_account -> {
+                    startActivity(Intent(requireActivity(), EditProfileActivity::class.java))
                 }
             }
 

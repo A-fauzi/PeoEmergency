@@ -98,8 +98,12 @@ class CommentPostRandomActivity : AppCompatActivity(), AdapterListReplyPost.Call
         super.onResume()
 
         btnSendReply.setOnClickListener {
-            storeCommentReplyPostRandom()
-            etInputCommentReply.text.clear()
+            if (etInputCommentReply.text.isEmpty()) {
+                etInputCommentReply.hint = "is required!"
+            } else {
+                storeCommentReplyPostRandom()
+                etInputCommentReply.text.clear()
+            }
         }
 
     }

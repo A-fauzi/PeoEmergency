@@ -330,7 +330,7 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
                 Log.d(TAG, "Location Coordinate $locationCoordinate")
 
                 val geocoder = Geocoder(requireActivity(), Locale.getDefault())
-                val address: Address
+                val address: Address?
                 val addresses: List<Address> = geocoder.getFromLocation(latitude, longitude, 1)
 
                 address = addresses[0]
@@ -340,7 +340,10 @@ class HomeFragment : Fragment(), AdapterListRandPost.CallClickListener {
                 val country = address.countryName
                 val postalCode = address.postalCode
                 val knownName = address.featureName
-                val urbanVillage = address.subLocality
+                var urbanVillage = address.subLocality
+                if (urbanVillage == null) {
+                    urbanVillage = "not detected"
+                }
                 val countryCode = address.countryCode
                 val districtOrRegency = address.subAdminArea
                 val streetName = address.thoroughfare

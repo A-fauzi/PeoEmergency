@@ -121,6 +121,6 @@ object Library {
      */
     @SuppressLint("SimpleDateFormat")
     val currentDateAndTime: String =
-        SimpleDateFormat("dd MMM yyyy | HH:mm:ss zzz").format(Date(System.currentTimeMillis()))
+        SimpleDateFormat("dd MMM yyyy | HH:mm:ss").format(Date(System.currentTimeMillis()))
 
 }

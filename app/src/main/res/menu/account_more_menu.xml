@@ -3,4 +3,7 @@
     <item
         android:id="@+id/logout_account"
         android:title="@string/logout" />
+    <item
+        android:id="@+id/update_account"
+        android:title="@string/update_profile" />
 </menu>
